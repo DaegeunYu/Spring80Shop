@@ -14,6 +14,6 @@ public class StartController {
 	
 	@GetMapping(value="/index.do")
 	public String index(HttpServletRequest request, HttpSession sesstion) {
-		return "index.jsp";
+		return "index";
 	}
 }
