@@ -51,15 +51,15 @@
 
     <aop:config>
         <aop:pointcut id="txPointcut"
-                      expression="execution(* com.korea..*ServiceImpl.*(..))" />
+                      expression="execution(* com.eighty..*ServiceImpl.*(..))" />
         <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" />
     </aop:config>
 
-    <bean id="log" class="com.korea.log.LogAdvice"  />
+    <!-- <bean id="log" class="com.eighty.log.LogAdvice"  /> -->
 
 	<aop:config>
 	  <aop:pointcut id="allPointcut" 
-	                expression="execution(* com.korea.log..*BoardServiceLog.*(..))"  />
+	                expression="execution(* com.eighty.log..*BoardServiceLog.*(..))"  />
 	  <aop:aspect ref="log" >
 	    <aop:before pointcut-ref="allPointcut"  method="beforeLog"/>
 	    <aop:after pointcut-ref="allPointcut"  method="afterLog"/>
