@@ -55,7 +55,7 @@
         <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" />
     </aop:config>
 
-    <!-- <bean id="log" class="com.eighty.log.LogAdvice"  /> -->
+    <bean id="log" class="com.eighty.log.LogAdvice"  />
 
 	<aop:config>
 	  <aop:pointcut id="allPointcut" 

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 public class StartController {
 	StartController(){
@@ -14,6 +15,7 @@ public class StartController {
 	
 	@GetMapping(value="/index.do")
 	public String index(HttpServletRequest request, HttpSession sesstion) {
+		System.out.println("============= INDEX ===========");
 		return "index";
 	}
 }
