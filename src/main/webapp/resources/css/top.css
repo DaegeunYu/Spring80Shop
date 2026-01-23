@@ -22,14 +22,43 @@ nav{
  line-height:30px;
  vertical-align:middle;
 }
-section{
-	min-height:1200px;
-	background-image: url('resources/img/background.png');
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-size: cover;
-	background-position: center;
+section {
+    /* 배경색을 제거하거나 아주 연하게 변경 (이미지가 잘 보이도록) */
+    background-color: rgba(204, 204, 204, 0.3); 
+    min-height: 500px;
+    
+    /* 가상 요소(::before)가 위치를 잡을 수 있도록 기준점 설정 */
+    position: relative; 
+    overflow: hidden; /* 이미지가 section 밖으로 삐져나가지 않게 방지 */
 }
+
+/* section 본문 뒤에 희미하게 깔릴 이미지 설정 */
+section::before {
+    content: "";
+    /* 이미지 경로는 CSS 파일 위치 기준으로 잡거나 절대경로 사용 */
+    background-image: url('../img/art.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* 투명도 조절 */
+    opacity: 0.2; 
+    
+    /* section 전체를 덮도록 설정 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0; /* 배경으로 깔기 */
+}
+
+/* section 안의 실제 글자들이 배경 이미지에 묻히지 않도록 설정 */
+section * {
+    position: relative;
+    z-index: 1;
+}
+
 footer{
 	background-color:#5252A0;
 	width:100%;
