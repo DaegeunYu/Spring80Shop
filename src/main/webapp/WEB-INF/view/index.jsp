@@ -5,9 +5,8 @@
 <section>
 <br>
 <div align="center">
-<h1> Spring MVC </h1>
+<h1> 80's Coffee를 소개합니다. </h1>
 
-<a href=index.do> index 확인 </a>
 
 </div>
 <br>
