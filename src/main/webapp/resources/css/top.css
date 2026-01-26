@@ -36,7 +36,7 @@ section {
 section::before {
     content: "";
     /* 이미지 경로는 CSS 파일 위치 기준으로 잡거나 절대경로 사용 */
-    background-image: url('../img/background.png'); 
+    background-image: url('https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/background.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
