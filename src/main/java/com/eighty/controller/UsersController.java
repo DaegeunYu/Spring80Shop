@@ -23,9 +23,6 @@ public class UsersController {
 	private UsersService service;
 	
 	@Autowired
-    private UsersService userService;
-	
-	@Autowired
 	private ServletContext servletContext;
 	
 	String path ="";
@@ -50,7 +47,7 @@ public class UsersController {
 	
 	@PostMapping("/loginSuccess.do")
 	public String login(UsersVO vo, HttpSession session, Model model) {
-		UsersVO loginUser = userService.loginCheck(vo);
+		UsersVO loginUser = service.loginCheck(vo);
 		if (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw())) {
 			session.setAttribute("id", loginUser.getUser_id());
 			session.setAttribute("userName", loginUser.getUser_name());
