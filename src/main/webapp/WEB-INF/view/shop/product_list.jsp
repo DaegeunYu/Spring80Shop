@@ -5,11 +5,12 @@
 
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
+<% String tp = request.getParameter("is_single_origin"); %>
+
 <section>
-<% String title = request.getParameter("is_single_origin"); %>
 	<div align="center">
         <br>
-		<H2> <% if(title=="y"){ %> 싱글 오리진 리스트 <% } else { %> 블렌드 리스트 <% } %> </H2>
+		<H2> <% if("y".equals(tp)){ %> 싱글 오리진 리스트 <% } else { %> 블렌드 리스트 <% } %> </H2>
 		
 		<table border=1 width=800>
 			<tr>

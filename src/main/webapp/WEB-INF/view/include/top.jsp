@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>80's Roasters Coffee</title>
 <link href="${path}/resources/css/top.css" rel="stylesheet">
 <style type="text/css">
 
