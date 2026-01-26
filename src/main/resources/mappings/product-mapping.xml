@@ -15,8 +15,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                      #{product_img}, #{product_admin})
 	</insert>
 	
-	<select  id="SELECT" resultType ="ProductVO">
-	   SELECT * FROM product  order  by idx desc 
+	<select id="SELECT" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx
 	</select>
 	
 </mapper>

@@ -22,8 +22,8 @@
 </header>
 <nav>
 &emsp;&emsp;&emsp;<a href=${path}/index.do>홈으로 </a>
-&emsp;<a href=${path}/board/list.do> 싱글 원두 </a>
-&emsp;<a href=${path}/board/list.do> 블렌딩 원두 </a>
+&emsp;<a href=${path}/product/product_list.do?is_single_origin=y> 싱글 원두 </a>
+&emsp;<a href=${path}/product/product_list.do?is_single_origin=n> 블렌딩 원두 </a>
 
 &emsp;&emsp;&emsp;
 

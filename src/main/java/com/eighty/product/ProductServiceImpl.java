@@ -19,7 +19,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductVO> getSelect(ProductVO vo) {
-		
 		return dao.getSelect(vo);
 	}
 }
