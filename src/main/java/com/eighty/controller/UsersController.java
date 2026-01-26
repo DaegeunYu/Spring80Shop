@@ -10,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.eighty.users.UsersDao;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
@@ -38,20 +36,18 @@ public class UsersController {
 		// 가독성 때문에 init() 이란 이름 부여
 		path = servletContext.getRealPath("/resources/files/");
 	}
+	
 	@GetMapping(value="/login.do")
 	public String login() {
 		return "users/login";		
 	}
-	
-	
+		
 	@GetMapping(value="/users_list.do")
 	public String product_list(Model model, UsersVO vo){
         model.addAttribute("li", service.getSelect(vo));
 		return "shop/users_list";
 	}
 	
-	    
-
 	@PostMapping("/loginSuccess.do")
 	public String login(UsersVO vo, HttpSession session, Model model) {
 		UsersVO loginUser = userService.loginCheck(vo);

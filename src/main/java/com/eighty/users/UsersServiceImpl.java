@@ -14,7 +14,6 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public void insert(UsersVO vo) {
 		dao.insert(vo);
-		
 	}
 
 	@Override

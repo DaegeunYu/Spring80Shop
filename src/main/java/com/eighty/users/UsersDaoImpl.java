@@ -15,7 +15,6 @@ public class UsersDaoImpl implements UsersDao {
 	@Override
 	public void insert(UsersVO vo) {
 		mybatis.update("USERS.INSERT", vo);
-		
 	}
 
 	@Override
