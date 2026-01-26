@@ -2,13 +2,17 @@ package com.eighty.controller;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.eighty.users.UsersDao;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
@@ -19,6 +23,9 @@ public class UsersController {
 	
 	@Autowired
 	private UsersService service;
+	
+	@Autowired
+    private UsersService userService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -41,5 +48,26 @@ public class UsersController {
 	public String product_list(Model model, UsersVO vo){
         model.addAttribute("li", service.getSelect(vo));
 		return "shop/users_list";
+	}
+	
+	    
+
+	@PostMapping("/loginSuccess.do")
+	public String login(UsersVO vo, HttpSession session, Model model) {
+		UsersVO loginUser = userService.loginCheck(vo);
+		if (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw())) {
+			session.setAttribute("id", loginUser.getUser_id());
+			session.setAttribute("userName", loginUser.getUser_name());
+			return "redirect:/index.do";
+		} else {
+			model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
+			return "users/login";
+		}
+	}
+	
+	@GetMapping("/logout.do")
+	public String logout(HttpSession session) {	    
+	    session.invalidate();	   
+	    return "redirect:/index.do";
 	}
 }

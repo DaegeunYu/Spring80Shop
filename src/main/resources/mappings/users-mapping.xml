@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="USERS">
+ 
+	<insert id="INSERT" parameterType="UsersVO">
+	 
+	 insert  into product(product_id, product_name,category, 
+	                      product_price, product_desc, quantity, 
+	                      product_img, product_admin  )
+     values(#{product_id},#{product_name},#{category}, 
+	                      #{product_price}, #{product_desc}, #{quantity}, 
+	                      #{product_img}, #{product_admin})
+	</insert>
+	
+	<select id="SELECT" parameterType="UsersVO" resultType ="UsersVO">
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx
+	</select>
+	
+	<select id="getUserById" resultType="UsersVO">
+	    SELECT user_id, user_pw, user_name 
+	    FROM users 
+	    WHERE user_id = #{user_id}
+	</select>
+	
+</mapper>

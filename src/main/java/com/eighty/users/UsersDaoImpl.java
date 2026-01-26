@@ -14,13 +14,17 @@ public class UsersDaoImpl implements UsersDao {
 	
 	@Override
 	public void insert(UsersVO vo) {
-		mybatis.update("PRODUCT.INSERT", vo);
+		mybatis.update("USERS.INSERT", vo);
 		
 	}
 
 	@Override
 	public List<UsersVO> getSelect(UsersVO vo) {
-		// TODO Auto-generated method stub
-		return mybatis.selectList("PRODUCT.SELECT", vo);
+		return mybatis.selectList("USERS.SELECT", vo);
+	}
+
+	@Override
+	public UsersVO loginCheck(UsersVO vo) {
+		return mybatis.selectOne("USERS.getUserById", vo);
 	}
 }

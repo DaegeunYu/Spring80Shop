@@ -15,10 +15,10 @@
 					<td><H2> 80's MEMBER LOGIN </H2></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_id" name="user_id"></td>
+					<td><input type="text" id="user_id" name="user_id" placeholder="아이디"></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_pw" name="user_pw"></td>
+					<td><input type="text" id="user_pw" name="user_pw" placeholder="비밀번호"></td>
 				</tr>
 				<tr>
 					<td><input type="submit"  value="로그인"></td>
@@ -31,4 +31,10 @@
 	</div>
 	<BR>
 </section>
+<script type="text/javascript">
+	var message = "${msg}";
+	if (message !== "") {
+		alert(message);
+	}
+</script>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
