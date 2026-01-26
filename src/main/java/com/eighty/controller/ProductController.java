@@ -34,7 +34,13 @@ public class ProductController {
 	
 	@GetMapping(value="/product_list.do")
 	public String product_list(Model model, ProductVO vo){
-        model.addAttribute("li", service.getSelect(vo));
+        model.addAttribute("product_list", service.getProductList(vo));
 		return "shop/product_list";
+	}
+	
+	@GetMapping(value="/product_detail.do")
+	public String product_detail(Model model, ProductVO vo){
+        model.addAttribute("product", service.getProduct(vo));
+		return "shop/product_detail";
 	}
 }

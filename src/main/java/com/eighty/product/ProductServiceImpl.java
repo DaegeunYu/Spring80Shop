@@ -14,11 +14,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void insert(ProductVO vo) {
 		dao.insert(vo);
-		
 	}
 
 	@Override
-	public List<ProductVO> getSelect(ProductVO vo) {
-		return dao.getSelect(vo);
+	public List<ProductVO> getProductList(ProductVO vo) {
+		return dao.getProductList(vo);
+	}
+
+	@Override
+	public ProductVO getProduct(ProductVO vo) {
+		return dao.getProduct(vo);
 	}
 }

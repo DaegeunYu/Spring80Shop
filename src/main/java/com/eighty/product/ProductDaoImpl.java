@@ -19,8 +19,14 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public List<ProductVO> getSelect(ProductVO vo) {
+	public List<ProductVO> getProductList(ProductVO vo) {
 		// TODO Auto-generated method stub
-		return mybatis.selectList("PRODUCT.SELECT", vo);
+		return mybatis.selectList("PRODUCT.SELECT_PRODUCTS", vo);
+	}
+	
+	@Override
+	public ProductVO getProduct(ProductVO vo) {
+		// TODO Auto-generated method stub
+		return mybatis.selectOne("PRODUCT.SELECT_PRODUCT", vo);
 	}
 }
