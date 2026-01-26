@@ -30,10 +30,10 @@
 <div class="user">
 	<!--  null 과 공배 모두 체크  -->
 	<c:if test="${empty id}">
-	  <a href="${path}/member/login.do"> 로그인</a> 
+	  <a href="${path}/users/login.do"> 로그인</a> 
 	</c:if>
 	<c:if test="${not empty id}"> 
-	  <a href="${path}/member/logout.do"> ${id}(로그아웃)</a>  
+	  <a href="${path}/users/logout.do"> ${id}(로그아웃)</a>  
 	</c:if>
 </div>
 

@@ -9,16 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.eighty.product.ProductService;
-import com.eighty.product.ProductVO;
+import com.eighty.users.UsersService;
+import com.eighty.users.UsersVO;
 
 
-@RequestMapping("/product")
+@RequestMapping("/users")
 @Controller
-public class ProductController {
+public class UsersController {
 	
 	@Autowired
-	private ProductService service;
+	private UsersService service;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -31,10 +31,15 @@ public class ProductController {
 		// 가독성 때문에 init() 이란 이름 부여
 		path = servletContext.getRealPath("/resources/files/");
 	}
+	@GetMapping(value="/login.do")
+	public String login() {
+		return "users/login";		
+	}
 	
-	@GetMapping(value="/product_list.do")
-	public String product_list(Model model, ProductVO vo){
+	
+	@GetMapping(value="/users_list.do")
+	public String product_list(Model model, UsersVO vo){
         model.addAttribute("li", service.getSelect(vo));
-		return "shop/product_list";
+		return "shop/users_list";
 	}
 }

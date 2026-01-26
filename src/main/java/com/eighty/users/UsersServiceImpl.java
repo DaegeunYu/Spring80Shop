@@ -1,0 +1,24 @@
+package com.eighty.users;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UsersServiceImpl implements UsersService {
+
+	@Autowired
+	private UsersDao  dao;
+	
+	@Override
+	public void insert(UsersVO vo) {
+		dao.insert(vo);
+		
+	}
+
+	@Override
+	public List<UsersVO> getSelect(UsersVO vo) {
+		return dao.getSelect(vo);
+	}
+}
