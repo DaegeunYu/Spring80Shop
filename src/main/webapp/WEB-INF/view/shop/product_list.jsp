@@ -12,7 +12,27 @@
         <br>
 		<H2> <% if("y".equals(tp)){ %> 싱글 오리진 리스트 <% } else { %> 블렌드 리스트 <% } %> </H2>
 		
-		<table border=1 width=800>
+		<div class="product_list">
+			<div class="product">
+				<c:forEach var="m" items="${li}">
+					<div>
+						<div>
+							<a href="${path}/product/product_detail.do">
+								<img class="product_img" src="${m.product_img}">
+							</a>
+						</div>
+						<div class="product_name">
+							<strong class="product_price">${m.product_name} </strong>
+						</div>
+						<div class="product_price">
+							<strong class="product_price">${m.origin_price} 원</strong>
+						</div>
+					</div>			
+				</c:forEach>
+			</div>
+		</div>
+		
+		<%-- <table border=1 width=800>
 			<tr>
 				<td>번호</td>
 				<td>상품코드</td>
@@ -30,11 +50,9 @@
 				</tr>
 			</c:forEach>
 
-		</table>
+		</table> --%>
 		<BR> 
-		
-		<br>
 	</div>
-	<br>
+	<BR>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

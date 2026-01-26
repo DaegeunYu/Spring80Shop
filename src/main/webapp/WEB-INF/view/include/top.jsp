@@ -17,7 +17,7 @@
 </head>
 <body>
 <header>
-<a href=${path}/index.do><img src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+<a href=${path}/index.do><img id=logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
 80's Coffee 
 </header>
 <nav>

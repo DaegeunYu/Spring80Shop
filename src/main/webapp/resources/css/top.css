@@ -17,11 +17,12 @@ body{
 	margin:0;
 }
 nav{
- background-color:#7A7ACC;
- height:30px;
- line-height:30px;
- vertical-align:middle;
+	background-color:#7A7ACC;
+	height:30px;
+	line-height:30px;
+	vertical-align:middle;
 }
+
 section {
     /* 배경색을 제거하거나 아주 연하게 변경 (이미지가 잘 보이도록) */
     background-color: rgba(194, 194, 202, 0.3); 
@@ -68,18 +69,33 @@ footer{
 	vertical-align:middle;
 	color:#ffffff;
 }
-img{
-	vertical-align:middle;
-	width: 50px;
-	height: 50px;
-}
-a{
+
+nav > a {
 	font-size: 14px;
 	text-decoration: none;
 	color: #EEEEEE;
+}
+
+#logo {
+	width: 60px;
+	height: 60px;
 }
 
 .user {
 	float: right;
 	margin-right: 20px;
 }
+
+.product {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	width: 70%;
+	gap: 20px;
+}
+
+.product_img {
+	width: 200px;
+	height: 200px; 
+}
+
+
