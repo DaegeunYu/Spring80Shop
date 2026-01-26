@@ -21,7 +21,7 @@
 					<td><input type="text" id="user_pw" name="user_pw" placeholder="비밀번호"></td>
 				</tr>
 				<tr>
-					<td><input type="submit"  value="로그인"></td>
+					<td><input type="button" value="회원가입"><input type="submit"  value="로그인"></td>
 				</tr>
 			</table>
 		</form>
