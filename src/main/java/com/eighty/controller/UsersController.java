@@ -66,4 +66,18 @@ public class UsersController {
 	    session.invalidate();	   
 	    return "redirect:/index.do";
 	}
+	
+	@GetMapping(value="/users_form.do")
+	public String users_form() {
+		return "users/users_form";
+	}
+	
+	@PostMapping(value="/users_formOK.do")
+	public String users_formOK(UsersVO vo) {
+		
+		service.insert(vo);
+		
+		return "redirect:/users/users_list.do";
+	}
+
 }

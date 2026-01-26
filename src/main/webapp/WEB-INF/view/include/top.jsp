@@ -25,9 +25,12 @@
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=y> 싱글 원두 </a>
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=n> 블렌딩 원두 </a>
 
+
 &emsp;&emsp;&emsp;
 
 <div class="user">
+
+	<a href="${path}/users/users_form.do"> 회원가입 </a>&emsp;
 	<!--  null 과 공배 모두 체크  -->
 	<c:if test="${empty id}">
 	  <a href="${path}/users/login.do"> 로그인</a> 

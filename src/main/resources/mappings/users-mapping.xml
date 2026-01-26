@@ -7,12 +7,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 	<insert id="INSERT" parameterType="UsersVO">
 	 
-	 insert  into product(product_id, product_name,category, 
-	                      product_price, product_desc, quantity, 
-	                      product_img, product_admin  )
-     values(#{product_id},#{product_name},#{category}, 
-	                      #{product_price}, #{product_desc}, #{quantity}, 
-	                      #{product_img}, #{product_admin})
+	 insert  into users(idx, user_id, user_pw, user_name, user_age, user_birthday, 
+	 					user_tel, user_email, user_add, user_role, user_gender, recommender_id, join_date, login_date )
+     values(#{idx},#{user_id},#{user_pw},#{user_name},#{user_age},#{user_birthday},#{user_tel},#{user_email},#{user_add},
+     		#{user_role},#{user_gender},#{recommender_id},#{join_date},#{login_date})
 	</insert>
 	
 	<select id="SELECT" parameterType="UsersVO" resultType ="UsersVO">
