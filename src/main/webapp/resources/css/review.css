@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+    .review-table {
+    	width: 100%;
+    	border-collapse: collapse;
+    	margin-top: 20px; }
+    .review-table th {
+    	background: #f8f9fa;
+    	border-bottom: 2px solid #dee2e6;
+    	padding: 12px; }
+    .review-table td {
+    	padding: 12px;
+    	border-bottom: 1px solid #eee;
+    	text-align: center; }
+    
+    /* 상세 내용 칸 스타일 */
+    .detail-row {
+    	display: none;
+    	background-color: #fafafa; }
+    .detail-content {
+    	padding: 20px;
+    	text-align: left;
+    	line-height: 1.6; }
+    .review-img {
+    	max-width: 200px;
+    	margin-top: 10px;
+    	display: block; }
+    
+    /* 별점 색상 */
+    .star {
+    	color: #f39c12;
+    	font-weight: bold; }
+    .star-off {
+    	color: #ccc; }
+    
+    /* 제목 줄 마우스 커서 */
+    .title-row:hover {
+    	background-color: #f1f1f1;
+    	cursor: pointer; }

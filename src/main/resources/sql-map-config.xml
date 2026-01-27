@@ -6,10 +6,15 @@
 <configuration>
   <typeAliases>
     <typeAlias alias="ProductVO"  type="com.eighty.product.ProductVO" />
+    <typeAlias alias="UsersVO"  type="com.eighty.users.UsersVO" />
+    <typeAlias alias="PurchaseVO"  type="com.eighty.purchase.PurchaseVO" />
+    <typeAlias alias="ReviewVO"  type="com.eighty.review.ReviewVO" />
   </typeAliases>
 
   <mappers>  
     <mapper resource="mappings/product-mapping.xml"  />
+    <mapper resource="mappings/users-mapping.xml"  />
+    <mapper resource="mappings/review-mapping.xml"  />
   </mappers>
   
 </configuration>

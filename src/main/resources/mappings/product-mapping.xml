@@ -7,16 +7,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 	<insert id="INSERT" parameterType="ProductVO">
 	 
-	 insert  into product(product_id, product_name,category, 
-	                      product_price, product_desc, quantity, 
-	                      product_img, product_admin  )
-     values(#{product_id},#{product_name},#{category}, 
-	                      #{product_price}, #{product_desc}, #{quantity}, 
-	                      #{product_img}, #{product_admin})
+	 insert  into product(product_code, product_name, product_img, 
+	                      origin, brand, product_weight,
+	                      roast_dgree, crushing,
+	                      is_single_origin, is_decafe,
+	                      manufacturing, origin_price, sale_price, 
+	                      quantity, grade_point, expiration_date  )
+     values(#{product_code},#{product_name},#{product_img}, 
+	                      #{origin}, #{brand}, #{product_weight},
+	                      #{roast_dgree}, #{crushing},
+	                      #{is_single_origin}, #{is_decafe},
+	                      #{manufacturing}, #{origin_price}, #{sale_price}, 
+	                      #{quantity}, #{grade_point}, #{expiration_date})
 	</insert>
 	
-	<select  id="SELECT" resultType ="ProductVO">
-	   SELECT * FROM product  order  by idx desc 
+	<select id="IS_SINGLE" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{end}
+	</select>
+	
+	<select id="IS_SINGLE_COUNT" parameterType="ProductVO" resultType ="int">
+	   SELECT count(*) FROM product WHERE is_single_origin = #{is_single_origin}
+	</select>
+	
+	<select id="MANUPACT" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{end}
+	</select>
+	
+	<select id="MANUPACT_COUNT" parameterType="ProductVO" resultType ="int">
+	   SELECT count(*) FROM product WHERE manufacturing = #{manufacturing}
+	</select>
+	
+	<select id="DETAIL" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE product_code = #{product_code}
 	</select>
 	
 </mapper>
