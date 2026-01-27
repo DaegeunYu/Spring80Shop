@@ -26,4 +26,9 @@ public class UsersDaoImpl implements UsersDao {
 	public UsersVO loginCheck(UsersVO vo) {
 		return mybatis.selectOne("USERS.getUserById", vo);
 	}
+	
+	@Override
+	public int idCheck(String user_id) {
+		return mybatis.selectOne("USERS.idCheck", user_id);
+	}
 }
