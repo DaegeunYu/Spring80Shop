@@ -8,7 +8,7 @@
 
 <% String tp = request.getParameter("is_single_origin"); %>
 
-<section>
+<section class="list_section">
 	<div align="center">
         <BR>
 		<H2> <% if("y".equals(tp)){ %> 싱글 오리진 리스트 <% } else { %> 블렌드 리스트 <% } %> </H2>
