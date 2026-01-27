@@ -6,7 +6,7 @@
 
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
-<section>
+<section class="detail_section">
 	<div align="center">
         <BR>
         <div class="product_detail">
