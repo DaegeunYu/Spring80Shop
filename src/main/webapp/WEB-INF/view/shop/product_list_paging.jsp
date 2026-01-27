@@ -12,7 +12,7 @@
 
 <div class="pagination-container">
     <c:choose>
-		<c:when test="${type=='is'">
+		<c:when test="${type=='is'}">
 			<ul class="pagination">
 		        <c:if test="${current_page > 1}">
 		            <li><a href="?is_single_origin=${value}&page=1">&laquo; 처음으로</a></li>
@@ -35,7 +35,7 @@
 		        <c:if test="${current_page < total_page}">
 		            <li><a href="?is_single_origin=${value}&page=${total_page}">끝으로 &raquo;</a></li>
 		        </c:if>
-		    </ul>			
+		    </ul>
 		</c:when>
 		<c:otherwise>
 			<ul class="pagination">
