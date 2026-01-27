@@ -1,8 +1,5 @@
 package com.eighty.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +23,9 @@ public class StartController {
 	@GetMapping(value="/index.do")
 	public String index(Model model, ProductVO vo) {
 		vo.setManufacturing("(주)80s");
+		if (vo.getPage() < 1) {
+			vo.setPage(1);
+		}
 		
 		int count = service.count(vo, SQL_TYPE.MAN);
 		int currentPage = vo.getPage();
@@ -43,7 +43,6 @@ public class StartController {
 		
 		int start = (currentPage-1)*vo.getAmount();
 		vo.setStart(start);
-		vo.setEnd(start + vo.getAmount());
 		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.MAN));
 		model.addAttribute("start_page", startPage);

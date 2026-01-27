@@ -34,5 +34,4 @@ public class ProductVO {
 	private int page;
 	private int amount = 8;
 	private int start;
-	private int end;
 }

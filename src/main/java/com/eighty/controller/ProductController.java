@@ -35,6 +35,10 @@ public class ProductController {
 	
 	@GetMapping(value="/product_list.do")
 	public String product_list(Model model, ProductVO vo){
+		if (vo.getPage() < 1) {
+			vo.setPage(1);
+		}
+		
 		int count = service.count(vo, SQL_TYPE.TYPE);
 		int currentPage = vo.getPage();
 		int displayPage = 6;
@@ -51,7 +55,6 @@ public class ProductController {
 		
 		int start = (currentPage-1)*vo.getAmount();
 		vo.setStart(start);
-		vo.setEnd(start + vo.getAmount());
 		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.TYPE));
 		model.addAttribute("start_page", startPage);
