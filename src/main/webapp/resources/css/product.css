@@ -121,3 +121,28 @@
 	width: 35px;
 	height: 35px;
 }
+
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li.active a {
+    font-weight: bold;
+    color: red; /* 현재 페이지 강조 */
+    text-decoration: underline;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+    border: 1px solid #B0B0B0;
+}

@@ -19,13 +19,13 @@
 </head>
 <body>
 <header>
-<a href=${path}/index.do><img id=logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+<a href=${path}/index.do?page=1><img id=logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
 80's Coffee 
 </header>
 <nav>
-&emsp;&emsp;&emsp;<a href=${path}/index.do>홈으로 </a>
-&emsp;<a href=${path}/product/product_list.do?is_single_origin=y> 싱글 원두 </a>
-&emsp;<a href=${path}/product/product_list.do?is_single_origin=n> 블렌딩 원두 </a>
+&emsp;&emsp;&emsp;<a href=${path}/index.do&page=1>홈으로 </a>
+&emsp;<a href=${path}/product/product_list.do?is_single_origin=y&page=1> 싱글 원두 </a>
+&emsp;<a href=${path}/product/product_list.do?is_single_origin=n&page=1> 블렌딩 원두 </a>
 
 
 &emsp;&emsp;&emsp;

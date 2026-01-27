@@ -11,6 +11,8 @@
 		<BR> 
 	</div>
 	<BR>
+	<c:import url="/WEB-INF/view/shop/product_list_paging.jsp" />
+	<BR>
 </section>
 
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

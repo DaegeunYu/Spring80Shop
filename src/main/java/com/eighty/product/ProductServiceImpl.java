@@ -27,4 +27,9 @@ public class ProductServiceImpl implements ProductService {
 	public ProductVO getProduct(ProductVO vo) {
 		return dao.getProduct(vo);
 	}
+
+	@Override
+	public int count(ProductVO vo, SQL_TYPE type) {
+		return dao.count(vo, type);
+	}
 }

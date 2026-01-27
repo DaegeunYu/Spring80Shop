@@ -21,16 +21,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                      #{quantity}, #{grade_point}, #{expiration_date})
 	</insert>
 	
-	<select id="SELECT_PRODUCTS" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx
+	<select id="IS_SINGLE" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{end}
 	</select>
 	
-	<select id="SELECT_PRODUCT" parameterType="ProductVO" resultType ="ProductVO">
+	<select id="IS_SINGLE_COUNT" parameterType="ProductVO" resultType ="int">
+	   SELECT count(*) FROM product WHERE is_single_origin = #{is_single_origin}
+	</select>
+	
+	<select id="MANUPACT" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{end}
+	</select>
+	
+	<select id="MANUPACT_COUNT" parameterType="ProductVO" resultType ="int">
+	   SELECT count(*) FROM product WHERE manufacturing = #{manufacturing}
+	</select>
+	
+	<select id="DETAIL" parameterType="ProductVO" resultType ="ProductVO">
 	   SELECT * FROM product WHERE product_code = #{product_code}
-	</select>
-	
-	<select id="SELECT_PRODUCTS_ITS" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx
 	</select>
 	
 </mapper>

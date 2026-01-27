@@ -8,4 +8,5 @@ public interface ProductDao {
    void  insert(ProductVO vo);
    List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
    ProductVO getProduct(ProductVO vo);
+   int count(ProductVO vo, SQL_TYPE type);
 }

@@ -24,15 +24,25 @@ public class ProductDaoImpl implements ProductDao {
 	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {
 		// TODO Auto-generated method stub
 		if (type == SQL_TYPE.MAN) {
-			return mybatis.selectList("PRODUCT.SELECT_PRODUCTS_ITS", vo);
+			return mybatis.selectList("PRODUCT.MANUPACT", vo);
 		} else {
-			return mybatis.selectList("PRODUCT.SELECT_PRODUCTS", vo);
+			return mybatis.selectList("PRODUCT.IS_SINGLE", vo);
+		}
+	}
+	
+	@Override
+	public int count(ProductVO vo, SQL_TYPE type) {
+		// TODO Auto-generated method stub
+		if (type == SQL_TYPE.MAN) {
+			return mybatis.selectOne("PRODUCT.MANUPACT_COUNT", vo);
+		} else {
+			return mybatis.selectOne("PRODUCT.IS_SINGLE_COUNT", vo);
 		}
 	}
 	
 	@Override
 	public ProductVO getProduct(ProductVO vo) {
 		// TODO Auto-generated method stub
-		return mybatis.selectOne("PRODUCT.SELECT_PRODUCT", vo);
+		return mybatis.selectOne("PRODUCT.DETAIL", vo);
 	}
 }

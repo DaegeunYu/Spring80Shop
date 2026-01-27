@@ -51,7 +51,7 @@ public class UsersController {
 		if (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw())) {
 			session.setAttribute("id", loginUser.getUser_id());
 			session.setAttribute("userName", loginUser.getUser_name());
-			return "redirect:/index.do";
+			return "redirect:/index.do?page=1";
 		} else {
 			model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
 			return "users/login";
@@ -61,7 +61,7 @@ public class UsersController {
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session) {	    
 	    session.invalidate();	   
-	    return "redirect:/index.do";
+	    return "redirect:/index.do?page=1";
 	}
 	
 	@GetMapping(value="/users_form.do")

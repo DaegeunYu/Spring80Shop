@@ -26,7 +26,37 @@ public class StartController {
 	@GetMapping(value="/index.do")
 	public String index(Model model, ProductVO vo) {
 		vo.setManufacturing("(주)80s");
+		
+		int count = service.count(vo, SQL_TYPE.MAN);
+		int currentPage = vo.getPage();
+		int displayPage = 6;
+		
+		int totalPage = (int) Math.ceil((double) count / vo.getAmount());
+		int endPage = (int) (Math.ceil(currentPage / (double) displayPage) * displayPage);
+		int startPage = (endPage-displayPage) + 1;
+		
+		if (totalPage < endPage) {
+			endPage = totalPage;
+		}
+		boolean prev = startPage > 1;
+		boolean next = endPage < totalPage;
+		
+		int start = (currentPage-1)*vo.getAmount();
+		vo.setStart(start);
+		vo.setEnd(start + vo.getAmount());
+		
+		System.out.println("===============333333333333333==" + count);
+		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.MAN));
+		model.addAttribute("start_page", startPage);
+		model.addAttribute("end_page", endPage);
+		model.addAttribute("current_page", currentPage);
+		model.addAttribute("total_page", totalPage);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
+		
+		System.out.println("===============5555555555555555555==");
+		
 		return "index";
 	}
 }

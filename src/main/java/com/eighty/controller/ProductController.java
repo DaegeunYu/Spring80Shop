@@ -35,7 +35,32 @@ public class ProductController {
 	
 	@GetMapping(value="/product_list.do")
 	public String product_list(Model model, ProductVO vo){
+		int count = service.count(vo, SQL_TYPE.TYPE);
+		int currentPage = vo.getPage();
+		int displayPage = 6;
+		
+		int totalPage = (int) Math.ceil((double) count / vo.getAmount());
+		int endPage = (int) (Math.ceil(currentPage / (double) displayPage) * displayPage);
+		int startPage = (endPage-displayPage) + 1;
+		
+		if (totalPage < endPage) {
+			endPage = totalPage;
+		}
+		boolean prev = startPage > 1;
+		boolean next = endPage < totalPage;
+		
+		int start = (currentPage-1)*vo.getAmount();
+		vo.setStart(start);
+		vo.setEnd(start + vo.getAmount());
+		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.TYPE));
+		model.addAttribute("start_page", startPage);
+		model.addAttribute("end_page", endPage);
+		model.addAttribute("current_page", currentPage);
+		model.addAttribute("total_page", totalPage);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
+		
 		return "shop/product_list";
 	}
 	

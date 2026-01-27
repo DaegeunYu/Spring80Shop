@@ -6,7 +6,7 @@
 <section>
 	<div align="center">
         <br>
-		<a href=${path}/index.do><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+		<a href=${path}/index.do?page=1><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
 		<br><br>
 		<div class="login">
 		<form action="${path}/users/loginSuccess.do" method="post">
