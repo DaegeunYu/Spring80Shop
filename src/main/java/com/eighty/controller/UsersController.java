@@ -71,14 +71,13 @@ public class UsersController {
 	
 	@PostMapping(value="/users_formOK.do")
 	public String users_formOK(UsersVO vo) {
-		
-		String birth = vo.getUser_birthday(); // "19990101"
+		String birth = vo.getUser_birthday(); 
 	    
 	    if (birth != null && birth.length() == 8) {
-	        // 1. 나이 계산 (현재 연도 - 태어난 연도 + 1)
+	        // 1. 나이 계산 (현재 연도 - 태어난 연도 )
 	        int birthYear = Integer.parseInt(birth.substring(0, 4));
 	        int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
-	        int age = currentYear - birthYear + 1;
+	        int age = currentYear - birthYear;
 	        System.out.println("====== 나이계산 ======");
 	        // VO에 계산된 나이 설정 (사용자 입력값 덮어쓰기)
 	        vo.setUser_age(age);
@@ -88,10 +87,7 @@ public class UsersController {
 	                                birth.substring(6, 8);
 	        vo.setUser_birthday(formattedBirth);
 	    }
-	    System.out.println("====== DB 전송 직전 최종 검사 ======");
-	    System.out.println("VO 객체 해시코드: " + vo.hashCode());
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
-	    System.out.println("==================================");
 
 	    service.insert(vo);
 		
