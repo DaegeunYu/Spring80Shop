@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
-import com.eighty.review.ReviewVO;
+import com.eighty.shop.SQL_TYPE;
 
 
 @RequestMapping("/product")
@@ -35,7 +35,7 @@ public class ProductController {
 	
 	@GetMapping(value="/product_list.do")
 	public String product_list(Model model, ProductVO vo){
-        model.addAttribute("product_list", service.getProductList(vo));
+		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.TYPE));
 		return "shop/product_list";
 	}
 	

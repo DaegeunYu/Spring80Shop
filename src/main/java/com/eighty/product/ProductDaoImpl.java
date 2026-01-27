@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.eighty.shop.SQL_TYPE;
+
 @Repository
 public class ProductDaoImpl implements ProductDao {
 
@@ -19,9 +21,13 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public List<ProductVO> getProductList(ProductVO vo) {
+	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {
 		// TODO Auto-generated method stub
-		return mybatis.selectList("PRODUCT.SELECT_PRODUCTS", vo);
+		if (type == SQL_TYPE.MAN) {
+			return mybatis.selectList("PRODUCT.SELECT_PRODUCTS_ITS", vo);
+		} else {
+			return mybatis.selectList("PRODUCT.SELECT_PRODUCTS", vo);
+		}
 	}
 	
 	@Override

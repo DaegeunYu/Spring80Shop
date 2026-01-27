@@ -29,4 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   SELECT * FROM product WHERE product_code = #{product_code}
 	</select>
 	
+	<select id="SELECT_PRODUCTS_ITS" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx
+	</select>
+	
 </mapper>
