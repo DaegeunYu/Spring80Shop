@@ -61,6 +61,8 @@ public class ProductController {
 		model.addAttribute("end_page", endPage);
 		model.addAttribute("current_page", currentPage);
 		model.addAttribute("total_page", totalPage);
+		model.addAttribute("type", "is");
+		model.addAttribute("value", vo.getIs_single_origin());
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		

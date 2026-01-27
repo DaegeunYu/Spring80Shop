@@ -49,6 +49,7 @@ public class StartController {
 		model.addAttribute("end_page", endPage);
 		model.addAttribute("current_page", currentPage);
 		model.addAttribute("total_page", totalPage);
+		model.addAttribute("type", "man");
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		
