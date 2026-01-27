@@ -1,0 +1,8 @@
+package com.eighty.review;
+
+import java.util.List;
+
+public interface ReviewService {
+   List<ReviewVO> getReviewList(ReviewVO vo);
+   ReviewVO getReview(ReviewVO vo);
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="REVIEW">
+ 
+	<select id="SELECT_REVIEW_LIST" parameterType="ReviewVO" resultType ="ReviewVO">
+	   SELECT * FROM review order by idx
+	</select>
+	
+	<select id="SELECT_ONE_REVIEW" parameterType="ReviewVO" resultType ="ReviewVO">
+	   SELECT * FROM review WHERE order_code = #{order_code}
+	</select>
+	
+</mapper>

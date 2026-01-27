@@ -7,7 +7,7 @@
 	<div align="center">
         <br>
 		<a href=${path}/index.do><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
-		
+		<br><br>
 		<div class="login">
 		<form action="${path}/users/loginSuccess.do" method="post">
 			<table id="login_box">
@@ -21,7 +21,7 @@
 					<td><input type="text" id="user_pw" name="user_pw" placeholder="비밀번호"></td>
 				</tr>
 				<tr>
-					<td><input type="button" value="회원가입"><input type="submit"  value="로그인"></td>
+					<td><input type="button" OnClick="signForm()" value="회원가입"><input type="submit"  value="로그인"></td>
 				</tr>
 			</table>
 		</form>
@@ -35,6 +35,9 @@
 	var message = "${msg}";
 	if (message !== "") {
 		alert(message);
+	}
+	function signForm() {
+		location.href="${path}/users/users_form.do";
 	}
 </script>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

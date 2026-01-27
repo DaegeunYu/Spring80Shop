@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
+import com.eighty.review.ReviewService;
 import com.eighty.review.ReviewVO;
 
 
-@RequestMapping("/product")
+@RequestMapping("/review")
 @Controller
-public class ProductController {
+public class ReviewController {
 	
 	@Autowired
-	private ProductService service;
+	private ReviewService service;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -33,15 +34,11 @@ public class ProductController {
 		path = servletContext.getRealPath("/resources/files/");
 	}
 	
-	@GetMapping(value="/product_list.do")
-	public String product_list(Model model, ProductVO vo){
-        model.addAttribute("product_list", service.getProductList(vo));
-		return "shop/product_list";
-	}
 	
-	@GetMapping(value="/product_detail.do")
-	public String product_detail(Model model, ProductVO vo){
-        model.addAttribute("product", service.getProduct(vo));
-		return "shop/product_detail";
+	
+	@GetMapping(value="/review_list.do")
+	public String review_list(Model model, ReviewVO vo){
+        model.addAttribute("review_list", service.getReviewList(vo));
+		return "review/product_review";
 	}
 }
