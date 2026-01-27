@@ -11,6 +11,8 @@
 <meta charset="UTF-8">
 <title>80's Roasters Coffee</title>
 <link href="${path}/resources/css/top.css" rel="stylesheet">
+<link href="${path}/resources/css/login.css" rel="stylesheet">
+<link href="${path}/resources/css/product.css" rel="stylesheet">
 <style type="text/css">
 
 </style>
