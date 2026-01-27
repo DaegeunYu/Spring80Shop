@@ -6,12 +6,19 @@
 
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
-<% String tp = request.getParameter("is_single_origin"); %>
-
 <section class="list_section">
 	<div align="center">
         <BR>
-		<H2> <% if("y".equals(tp)){ %> 싱글 오리진 리스트 <% } else { %> 블렌드 리스트 <% } %> </H2>
+		<H2>
+			<c:choose>
+			    <c:when test="${param.is_single_origin eq 'y'}">
+			        싱글 오리진 리스트
+			    </c:when>
+			    <c:otherwise>
+			        블렌드 리스트
+			    </c:otherwise>
+			</c:choose>
+		</H2>
 		
 		<div class="product">
 			<c:forEach var="m" items="${product_list}">
