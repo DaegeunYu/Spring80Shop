@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
@@ -74,24 +75,41 @@ public class UsersController {
 		String birth = vo.getUser_birthday(); 
 	    
 	    if (birth != null && birth.length() == 8) {
-	        // 1. 나이 계산 (현재 연도 - 태어난 연도 )
+	        // 나이 계산 (현재 연도 - 태어난 연도 )
 	        int birthYear = Integer.parseInt(birth.substring(0, 4));
 	        int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 	        int age = currentYear - birthYear;
 	        System.out.println("====== 나이계산 ======");
 	        // VO에 계산된 나이 설정 (사용자 입력값 덮어쓰기)
 	        vo.setUser_age(age);
-	     // 2. 생일 날짜 포맷팅 (YYYY-MM-DD)
+	        // 생일 날짜 포맷팅 (YYYY-MM-DD)
 	        String formattedBirth = birth.substring(0, 4) + "-" + 
 	                                birth.substring(4, 6) + "-" + 
 	                                birth.substring(6, 8);
 	        vo.setUser_birthday(formattedBirth);
 	    }
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
+	    
+	    // 회원가입 시 기본 member로 권한 설정
+	    vo.setUser_role("member");
 
 	    service.insert(vo);
 		
 		return "redirect:/users/users_list.do";
 	}
+	
+	@ResponseBody
+	@GetMapping(value = "/idCheck.do")
+	String nameCheck(UsersVO vo) {
+		System.out.println("아이디확인(1):" + vo.getUser_id());
+		// DB에 id 존재 유무만 판단, 0=>중복값 없음 1=>중복값 존재
+		int id = service.idCheck(vo.getUser_id());
+		System.out.println("아이디확인(2):" + id);
+		if (id > 0) {
+			return "T"; // 중복값이 있다.
+		}else {
+			return "F"; // 중복값이 없다.
+		}		
+	}	
 
 }
