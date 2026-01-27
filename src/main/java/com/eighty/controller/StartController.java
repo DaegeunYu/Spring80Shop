@@ -45,8 +45,6 @@ public class StartController {
 		vo.setStart(start);
 		vo.setEnd(start + vo.getAmount());
 		
-		System.out.println("===============333333333333333==" + count);
-		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.MAN));
 		model.addAttribute("start_page", startPage);
 		model.addAttribute("end_page", endPage);
@@ -54,8 +52,6 @@ public class StartController {
 		model.addAttribute("total_page", totalPage);
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
-		
-		System.out.println("===============5555555555555555555==");
 		
 		return "index";
 	}
