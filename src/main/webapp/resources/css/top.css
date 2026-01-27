@@ -25,7 +25,7 @@ nav{
 
 section {
     /* 배경색을 제거하거나 아주 연하게 변경 (이미지가 잘 보이도록) */
-    background-color: rgba(194, 194, 202, 0.3); 
+    background-color: #f3f3f5;
     min-height: 600px;
     
     /* 가상 요소(::before)가 위치를 잡을 수 있도록 기준점 설정 */
