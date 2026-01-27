@@ -6,7 +6,7 @@
 <section>
 	<div align="center">
         <br>
-		<a href=${path}/index.do?page=1><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+		<a href=${path}/index.do><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
 		
 		<div class="join">
 		<form action="${path}/users/users_formOK.do" method="post" onSubmit="return formOK()">
@@ -16,7 +16,8 @@
 				</tr>
 				
 				<tr>
-					<td>아이디</td><td><input type="text" id="user_id" name="user_id"  required></td>
+					<td>아이디</td><td><input type="text" id="user_id" name="user_id"  required>
+					<br><button id="idCheck">아이디 중복 확인</button></td>
 				</tr>
 				<tr>
 					<td>비밀번호</td><td><input type="text" id="user_pw" name="user_pw" required></td>
@@ -63,6 +64,8 @@
 	<BR>
 </section>
 
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
 function formOK() {
     // 1. 입력 필드에서 값을 가져옵니다.
@@ -82,6 +85,46 @@ function formOK() {
     }
     return true;
 }
+
+
+$('#idCheck').click(function(e) {
+	
+	e.preventDefault(); // 버튼 클릭 시 폼이 Submit되는 것 방지
+	
+	//alert("아이디 중복체크");
+	
+	var user_id = $('#user_id').val().trim(); // 변수선언, trim() 앞 뒤 불필요한 공백 제거
+	
+	  if (user_id === "") {
+	        alert("아이디를 입력해주세요.");
+	        $('#user_id').focus();
+	        return; // AJAX 호출 중단
+	    }
+	
+	var path = '${path}';
+	
+	$.ajax({
+		type : "GET",
+		url : path + "/users/idCheck.do",
+		data : { user_id : user_id },  // 변수 전달
+		success : function(data) {
+			if(data == 'T'){
+			   alert("중복된 이름이 있습니다.");
+			   $('#user_id').val("")
+			} else {
+			   alert("사용 가능한 이름 입니다.");
+			}
+			// location.reload();
+		},
+		error : function(xhr, status, error) {
+			// 에러 처리 추가 권장
+			alert("저장 실패: " + status + " (" + error + ")");
+		}
+	})
+});
+
+
+
 </script>
 
 
