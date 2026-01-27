@@ -25,6 +25,13 @@
 			</div>
         </div>
 		<BR> 
+		<section class="review_section">
+    	<div align="center">
+        <hr>
+        <h3>상품 후기</h3>
+	        <c:import url="/review/review_list.do" />
+    	</div>
+		</section>
 	</div>
 	<BR>
 </section>

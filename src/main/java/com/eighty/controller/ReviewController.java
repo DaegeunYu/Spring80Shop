@@ -33,12 +33,16 @@ public class ReviewController {
 		// 가독성 때문에 init() 이란 이름 부여
 		path = servletContext.getRealPath("/resources/files/");
 	}
-	
-	
-	
+		
 	@GetMapping(value="/review_list.do")
-	public String review_list(Model model, ReviewVO vo){
-        model.addAttribute("review_list", service.getReviewList(vo));
-		return "review/product_review";
+	public String review_list(Model model, ReviewVO vo) {
+	    // 1. 파라미터가 잘 들어오는지 콘솔에서 꼭 확인해보세요!
+	    System.out.println("===> 상세페이지에서 넘어온 상품코드: " + vo.getProduct_code());
+
+	    // 2. 모델 이름을 반드시 review_list(언더바)로 지정!
+	    model.addAttribute("review_list", service.getReviewList(vo));
+	    
+	    return "review/review_list";
 	}
+		
 }

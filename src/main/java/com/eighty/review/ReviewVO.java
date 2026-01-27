@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ReviewVO {
     private Long idx;
-    private String userId;
+    private String user_id;
     private String order_code;
     private String product_code;
     private String grade_point;

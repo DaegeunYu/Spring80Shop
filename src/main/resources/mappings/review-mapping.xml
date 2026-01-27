@@ -5,12 +5,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="REVIEW">
  
-	<select id="SELECT_REVIEW_LIST" parameterType="ReviewVO" resultType ="ReviewVO">
-	   SELECT * FROM review order by idx
+	<select id="SELECT_ONE_REVIEW" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+    SELECT * FROM review 
+    WHERE order_code = #{order_code} 
+      AND product_code = #{product_code}
 	</select>
 	
-	<select id="SELECT_ONE_REVIEW" parameterType="ReviewVO" resultType ="ReviewVO">
-	   SELECT * FROM review WHERE order_code = #{order_code}
+	<select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+    SELECT * FROM review
+	    <where>
+	        <if test="product_code != null and product_code != ''">
+	            AND product_code = #{product_code}
+	        </if>
+	    </where>
+    ORDER BY idx DESC
 	</select>
 	
 </mapper>
