@@ -8,7 +8,7 @@ public class UsersVO {
 	private String user_id; // 유저 ID
 	private String user_pw; // 유저 비밀번호
 	private String user_name; // 이름
-	private String user_age; // 나이
+	private int user_age; // 나이
 	private String user_birthday; // 생일
 	private String user_tel; // 전화번호
 	private String user_email; // 이메일
