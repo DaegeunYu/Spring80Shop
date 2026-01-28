@@ -20,10 +20,10 @@
 					<br><button id="idCheck">아이디 중복 확인</button></td>
 				</tr>
 				<tr>
-					<td>비밀번호</td><td><input type="text" id="user_pw" name="user_pw" required></td>
+					<td>비밀번호</td><td><input type="password" id="user_pw" name="user_pw" required></td>
 				</tr>
 				<tr>
-					<td>비밀번호 확인</td><td><input type="text" id="user_pw2" name="user_pw2" required></td>
+					<td>비밀번호 확인</td><td><input type="password" id="user_pw2" name="user_pw2" required></td>
 				</tr>
 				<tr>
 					<td>이름</td><td><input type="text" id="user_name" name="user_name" required></td>
@@ -68,21 +68,52 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
 
-// 생일 입력
+
 function formOK() {
-    // 1. 입력 필드에서 값을 가져옵니다.
-    var birth = document.getElementById("user_birthday").value;
     
-    // 2. 정확한 날짜 형식인지 검사하는 정규식
+	
+	
+	// 전화번호 정규식 검사
+	var telInput = document.getElementById("user_tel").value;
+	var cleanTel = telInput.replace(/-/g, ''); // 하이픈 제거 
+	var regTel = /^(01[016789]|02|0[3-9][0-9])\d{3,4}\d{4}$/; // 010, 지역번호, 070등 포함
+
+	if (!regTel.test(cleanTel)) {
+	    alert("올바른 전화번호 형식이 아닙니다. 숫자만 입력해주세요.");
+	    return false;
+	}
+
+    // 이름 정규식 검사
+    var name = document.getElementById("user_name").value;
+    var regName = /^[가-힣]{2,5}$/;
+    
+    if (!regName.test(name)) {
+        alert("이름은 한글 2~5자 이내로 입력해주세요.");
+        document.getElementById("user_name").focus();
+        return false;
+    }
+    
+    // 비밀번호 일치 확인
+    var pw = document.getElementById("user_pw").value;
+    var pw2 = document.getElementById("user_pw2").value;
+    
+    if(pw !== pw2){
+    	alert("비밀번호가 일치하지 않습니다.");
+        document.getElementById("user_pw2").focus();
+        return false; // 폼 제출 막기
+    }
+    
+    
+    // 생일 입력, 정확한 날짜 형식인지 검사하는 정규식
+    var birth = document.getElementById("user_birthday").value;
     const regBirth = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 
-    // 3. 검증 수행
-    if(!regBirth.test(birth)) {
+    if(!regBirth.test(birth)) {                               // PJ TODO : 미래날짜 선택불가, 미성년 가입불가 추가 예정
         alert('정확한 생년월일 8자리를 입력해주세요\n(예: 19990101)');
         document.getElementById("user_birthday").focus();
         
         // return false가 있어야 서버로 넘어가지 않음
-        return false; 											// PJ TODO : 미래날짜 선택불가, 미성년 가입불가 추가 예정
+        return false; 											
         
     }
     return true;
@@ -124,6 +155,7 @@ $('#idCheck').click(function(e) {
 		}
 	})
 });
+
 
 
 
