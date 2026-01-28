@@ -13,6 +13,7 @@
 <link href="${path}/resources/css/top.css" rel="stylesheet">
 <link href="${path}/resources/css/login.css" rel="stylesheet">
 <link href="${path}/resources/css/product.css" rel="stylesheet">
+<link href="${path}/resources/css/user_form.css" rel="stylesheet">
 <style type="text/css">
 
 </style>

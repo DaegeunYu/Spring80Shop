@@ -10,58 +10,57 @@
 		
 		<div class="join">
 		<form action="${path}/users/users_formOK.do" method="post" onSubmit="return formOK()">
-			<table id="member_join">
+			<table id="users_join">
 				<tr>
 					<td><H2> 80's MEMBER JOIN </H2></td>
 				</tr>
 				
 				<tr>
-					<td>아이디</td><td><input type="text" id="user_id" name="user_id" required>
-					<br><button id="idCheck">아이디 중복 확인</button></td>
+					<td><input type="text" id="user_id" name="user_id" placeholder="아이디" required>
+					<button id="idCheck">아이디 중복 확인</button></td>
 				</tr>
 				<tr>
-					<td>비밀번호</td><td><input type="password" id="user_pw" name="user_pw" required></td>
+					<td><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호" required></td>
 				</tr>
 				<tr>
-					<td>비밀번호 확인</td><td><input type="password" id="user_pw2" name="user_pw2" required></td>
+					<td><input type="password" id="user_pw2" name="user_pw2" placeholder="비밀번호 확인" required></td>
 				</tr>
 				<tr>
-					<td>이름</td><td><input type="text" id="user_name" name="user_name" required></td>
+					<td><input type="text" id="user_name" name="user_name" placeholder="이름" required></td>
 				</tr>
 				<tr>
-					<td>생일</td><td><input type="text" id="user_birthday" name="user_birthday" 
-              						 placeholder="예: 20260101" maxlength="8" required value="19991111"> <!-- PJ TODO : 테스트 완료 후 value 삭제 -->
-       								 <small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
-       								 </td>
+					<td><input type="text" id="user_birthday" name="user_birthday" 
+              			placeholder="예: 20260101" maxlength="8" placeholder="생년월일" required value="19991111"> <!-- PJ TODO : 테스트 완료 후 value 삭제 -->
+       					<small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
+       				</td>
 				</tr>
 				<tr>
-					<td>전화번호</td><td><input type="text" id="user_tel" name="user_tel" required></td>
+					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호" required></td>
 				</tr>
 				<tr>
-					<td>이메일</td><td><input type="text" id="user_email" name="user_email" required></td>
+					<td><input type="text" id="user_email" name="user_email" placeholder="이메일" required></td>
 				</tr>
 				<tr>
-					<td>주소</td>
-								<td>
-									<input type="text" id="user_add" name="user_add" required> <!-- PJ TODO : 테스트 완료 후 type="hidden"으로 교체 -->
-									<input type="text" id="sample6_postcode" placeholder="우편번호">
-									<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-									<input type="text" id="sample6_address" placeholder="주소"><br>
-									<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-									<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+					<td><input type="text" id="user_add" name="user_add" placeholder="주소" required> <!-- PJ TODO : 테스트 완료 후 type="hidden"으로 교체 placeholder="주소" 삭제-->
+						<input type="text" id="sample6_postcode" placeholder="우편번호">
+						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+						<input type="text" id="sample6_address" placeholder="주소"><br>
+						<input type="text" id="sample6_detailAddress" placeholder="상세주소">
+						<input type="text" id="sample6_extraAddress" placeholder="참고항목">
 					
 					</td>
 				</tr>
 				<tr>
-					<td>성별</td>
-					<td><select name="user_gender">
-  							<option value="M">남</option>
-  							<option value="W">여</option>
-						</select>
-					</td>
+					<td class="gender_row">
+       					 <label>성별</label>
+       					 <select name="user_gender">
+        				    <option value="M">남</option>
+           					<option value="W">여</option>
+        </select>
+    </td>
 				</tr>
 				<tr>
-					<td>추천자 아이디</td><td><input type="text" id="recommender_id" name="recommender_id"></td>
+					<td><input type="text" id="recommender_id" name="recommender_id" placeholder="추천자 아이디"></td>
 				</tr>
 				<tr><td colspan="2" align="center"><input type="submit" value="회원가입" ></td></tr>
 			</table>
