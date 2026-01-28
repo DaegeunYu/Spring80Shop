@@ -5,6 +5,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ public class UsersController {
 	
 	@Autowired
 	private UsersService service;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -51,7 +55,7 @@ public class UsersController {
 	@PostMapping("/loginSuccess.do")
 	public String login(UsersVO vo, HttpSession session, Model model) {
 		UsersVO loginUser = service.loginCheck(vo);
-		if (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw())) {
+		if (loginUser != null && passwordEncoder.matches(vo.getUser_pw(), loginUser.getUser_pw())) {
 			session.setAttribute("id", loginUser.getUser_id());
 			session.setAttribute("userName", loginUser.getUser_name());
 			return "redirect:/index.do?page=1";
@@ -60,7 +64,7 @@ public class UsersController {
 			return "users/login";
 		}
 	}
-	
+	// (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw()))
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session) {	    
 	    session.invalidate();	   
@@ -84,9 +88,12 @@ public class UsersController {
 	        return "users/users_form"; // 다시 가입 페이지
 	    }
 		
-		
-		String birth = vo.getUser_birthday(); 
+	    // 비밀번호 암호화 설정
+	    String encodePw = passwordEncoder.encode(vo.getUser_pw());
+	    vo.setUser_pw(encodePw);
 	    
+	   	// 생일 입력 시 나이 계산 후 DB에 입력 
+		String birth = vo.getUser_birthday(); 
 	    if (birth != null && birth.length() == 8) {
 	        // 나이 계산 (현재 연도 - 태어난 연도 )
 	        int birthYear = Integer.parseInt(birth.substring(0, 4));
