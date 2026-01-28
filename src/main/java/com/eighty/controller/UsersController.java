@@ -64,7 +64,7 @@ public class UsersController {
 			return "users/login";
 		}
 	}
-	// (loginUser != null && loginUser.getUser_pw().equals(vo.getUser_pw()))
+	
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session) {	    
 	    session.invalidate();	   
@@ -80,6 +80,11 @@ public class UsersController {
 	public String users_formOK(UsersVO vo, Model model) {
 		
 		
+		// 비밀번호 암호화 설정
+	    String encodePw = passwordEncoder.encode(vo.getUser_pw());
+	    vo.setUser_pw(encodePw);
+		
+	    /*  PJ TODO : 테스트 완료 후 주석 삭제 =============
 		 // 아이디 중복 검사
 	    int id = service.idCheck(vo.getUser_id());
 
@@ -88,10 +93,6 @@ public class UsersController {
 	        return "users/users_form"; // 다시 가입 페이지
 	    }
 		
-	    // 비밀번호 암호화 설정
-	    String encodePw = passwordEncoder.encode(vo.getUser_pw());
-	    vo.setUser_pw(encodePw);
-	    
 	   	// 생일 입력 시 나이 계산 후 DB에 입력 
 		String birth = vo.getUser_birthday(); 
 	    if (birth != null && birth.length() == 8) {
@@ -109,6 +110,8 @@ public class UsersController {
 	        vo.setUser_birthday(formattedBirth);
 	    }
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
+	    
+	    ==================== */
 	    
 	    vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 

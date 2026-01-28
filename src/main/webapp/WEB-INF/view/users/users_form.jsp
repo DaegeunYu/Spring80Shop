@@ -16,7 +16,7 @@
 				</tr>
 				
 				<tr>
-					<td>아이디</td><td><input type="text" id="user_id" name="user_id"  required>
+					<td>아이디</td><td><input type="text" id="user_id" name="user_id" required>
 					<br><button id="idCheck">아이디 중복 확인</button></td>
 				</tr>
 				<tr>
@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td>생일</td><td><input type="text" id="user_birthday" name="user_birthday" 
-              						 placeholder="예: 20260101" maxlength="8" required>
+              						 placeholder="예: 20260101" maxlength="8" required value="19991111"> <!-- PJ TODO : 테스트 완료 후 value 삭제 -->
        								 <small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
        								 </td>
 				</tr>
@@ -68,10 +68,19 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
 
-
+/* PJ TODO : 테스트 완료 후 주석 삭제 ==============
 function formOK() {
-    
 	
+    
+	// 이메일 정규식 검사
+	var f = document.forms[0];
+	var userEmail = f.user_email.value;
+	var regEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	if (!regEmail.test(userEmail)) {
+        alert("이메일 형식이 올바르지 않습니다.");
+        f.user_email.focus(); 
+        return false;
+    }
 	
 	// 전화번호 정규식 검사
 	var telInput = document.getElementById("user_tel").value;
@@ -79,7 +88,7 @@ function formOK() {
 	var regTel = /^(01[016789]|02|0[3-9][0-9])\d{3,4}\d{4}$/; // 010, 지역번호, 070등 포함
 
 	if (!regTel.test(cleanTel)) {
-	    alert("올바른 전화번호 형식이 아닙니다. 숫자만 입력해주세요.");
+	    alert("올바른 전화번호 형식이 아닙니다. 확인 후 입력해주세요.");
 	    return false;
 	}
 
@@ -116,6 +125,18 @@ function formOK() {
         return false; 											
         
     }
+    
+ 	// 추천자 아이디 검사 (선택 사항)
+    var recommender_id = document.getElementById("recommender_id").value.trim();
+    if (recommender_id !== "") { // 입력값이 있을 때만 검사 진행
+        var regId = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,16}$/;
+        if (!regId.test(recommender_id)) {
+            alert("추천자 아이디 형식이 올바르지 않습니다.\n(영문 소문자/숫자 조합 6~16자)");
+            document.getElementById("recommender_id").focus();
+            return false;
+        }
+    }
+    
     return true;
 }
 
@@ -132,7 +153,17 @@ $('#idCheck').click(function(e) {
 	        alert("아이디를 입력해주세요.");
 	        $('#user_id').focus();
 	        return; // AJAX 호출 중단
-	    }
+	  }
+	
+	// 아이디 정규식 검사 (소문자+숫자 조합, 6~16자)
+	var userId = document.getElementById("user_id").value;
+	var regId = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,16}$/;
+
+	if (!regId.test(userId)) {
+		   alert("아이디는 영문 소문자와 숫자를 조합하여 6~16자로 입력해주세요.");
+		   document.getElementById("user_id").focus();
+		   return false;
+	}
 	
 	var path = '${path}';
 	
@@ -156,6 +187,7 @@ $('#idCheck').click(function(e) {
 	})
 });
 
+===========================================  */
 
 
 
