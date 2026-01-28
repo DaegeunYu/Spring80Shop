@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
@@ -77,7 +78,7 @@ public class UsersController {
 	}
 	
 	@PostMapping(value="/users_formOK.do")
-	public String users_formOK(UsersVO vo, Model model) {
+	public String users_formOK(UsersVO vo, Model model, HttpSession session, RedirectAttributes rttr) {
 		
 		
 		// 비밀번호 암호화 설정
@@ -111,11 +112,17 @@ public class UsersController {
 	    }
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
 	    
-	    ==================== */
+	    ====================테스트 완료 후 주석 삭제 */
 	    
 	    vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 
 	    service.insert(vo);
+	    
+	    	// 가입 성공 직후 즉시 로그인
+	 		session.setAttribute("id", vo.getUser_id());
+	 		session.setAttribute("userName", vo.getUser_name());
+	 		
+	 		rttr.addFlashAttribute("msg", vo.getUser_name() + "님, 회원가입을 축하합니다!");
 		
 		return "redirect:/index.do?page=1";
 	}
