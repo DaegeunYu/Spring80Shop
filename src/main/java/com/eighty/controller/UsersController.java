@@ -39,12 +39,14 @@ public class UsersController {
 	public String login() {
 		return "users/login";		
 	}
-		
+	
+	/*  PJ TODO : 회원 리스트 만들어야 함 
 	@GetMapping(value="/users_list.do")
 	public String product_list(Model model, UsersVO vo){
         model.addAttribute("li", service.getSelect(vo));
 		return "shop/users_list";
 	}
+	*/
 	
 	@PostMapping("/loginSuccess.do")
 	public String login(UsersVO vo, HttpSession session, Model model) {
@@ -71,7 +73,18 @@ public class UsersController {
 	}
 	
 	@PostMapping(value="/users_formOK.do")
-	public String users_formOK(UsersVO vo) {
+	public String users_formOK(UsersVO vo, Model model) {
+		
+		
+		 // 아이디 중복 검사
+	    int id = service.idCheck(vo.getUser_id());
+
+	    if (id > 0) {
+	        model.addAttribute("msg", "이미 사용 중인 아이디입니다.");
+	        return "users/users_form"; // 다시 가입 페이지
+	    }
+		
+		
 		String birth = vo.getUser_birthday(); 
 	    
 	    if (birth != null && birth.length() == 8) {
@@ -90,12 +103,11 @@ public class UsersController {
 	    }
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
 	    
-	    // 회원가입 시 기본 member로 권한 설정
-	    vo.setUser_role("member");
+	    vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 
 	    service.insert(vo);
 		
-		return "redirect:/users/users_list.do";
+		return "redirect:/index.do?page=1";
 	}
 	
 	@ResponseBody

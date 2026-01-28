@@ -67,6 +67,8 @@
 
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
+
+// 생일 입력
 function formOK() {
     // 1. 입력 필드에서 값을 가져옵니다.
     var birth = document.getElementById("user_birthday").value;
@@ -80,18 +82,18 @@ function formOK() {
         document.getElementById("user_birthday").focus();
         
         // return false가 있어야 서버로 넘어가지 않음
-        return false; 											// 미래날짜 선택불가, 미성년 가입불가 추가 예정
+        return false; 											// PJ TODO : 미래날짜 선택불가, 미성년 가입불가 추가 예정
         
     }
     return true;
 }
 
 
+
+// 아이디 중복체크
 $('#idCheck').click(function(e) {
 	
 	e.preventDefault(); // 버튼 클릭 시 폼이 Submit되는 것 방지
-	
-	//alert("아이디 중복체크");
 	
 	var user_id = $('#user_id').val().trim(); // 변수선언, trim() 앞 뒤 불필요한 공백 제거
 	
@@ -103,7 +105,7 @@ $('#idCheck').click(function(e) {
 	
 	var path = '${path}';
 	
-	$.ajax({
+	$.ajax({                                   // PJ TODO : 아이디 중복 확인 없이 가입완료되는 현상 수정예정
 		type : "GET",
 		url : path + "/users/idCheck.do",
 		data : { user_id : user_id },  // 변수 전달
