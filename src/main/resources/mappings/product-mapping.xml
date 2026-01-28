@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="IS_SINGLE" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{end}
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{amount}
 	</select>
 	
 	<select id="IS_SINGLE_COUNT" parameterType="ProductVO" resultType ="int">
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="MANUPACT" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{end}
+	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{amount}
 	</select>
 	
 	<select id="MANUPACT_COUNT" parameterType="ProductVO" resultType ="int">

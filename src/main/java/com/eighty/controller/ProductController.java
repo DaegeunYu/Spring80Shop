@@ -35,13 +35,16 @@ public class ProductController {
 	
 	@GetMapping(value="/product_list.do")
 	public String product_list(Model model, ProductVO vo){
+		if (vo.getPage() < 1) {
+			vo.setPage(1);
+		}
+		
 		int count = service.count(vo, SQL_TYPE.TYPE);
 		int currentPage = vo.getPage();
-		int displayPage = 6;
 		
 		int totalPage = (int) Math.ceil((double) count / vo.getAmount());
-		int endPage = (int) (Math.ceil(currentPage / (double) displayPage) * displayPage);
-		int startPage = (endPage-displayPage) + 1;
+		int endPage = (int) (Math.ceil(currentPage / (double) vo.getDisplayPage()) * vo.getDisplayPage());
+		int startPage = (endPage-vo.getDisplayPage()) + 1;
 		
 		if (totalPage < endPage) {
 			endPage = totalPage;
@@ -51,13 +54,14 @@ public class ProductController {
 		
 		int start = (currentPage-1)*vo.getAmount();
 		vo.setStart(start);
-		vo.setEnd(start + vo.getAmount());
 		
 		model.addAttribute("product_list", service.getProductList(vo, SQL_TYPE.TYPE));
 		model.addAttribute("start_page", startPage);
 		model.addAttribute("end_page", endPage);
 		model.addAttribute("current_page", currentPage);
 		model.addAttribute("total_page", totalPage);
+		model.addAttribute("type", "is");
+		model.addAttribute("value", vo.getIs_single_origin());
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		
