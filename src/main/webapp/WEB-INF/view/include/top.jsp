@@ -33,12 +33,14 @@
 
 <div class="user">
 
-	<a href="${path}/users/users_form.do"> 회원가입 </a>&emsp;
+	
 	<!--  null 과 공배 모두 체크  -->
 	<c:if test="${empty id}">
+	  <a href="${path}/users/users_form.do"> 회원가입 </a>&emsp;
 	  <a href="${path}/users/login.do"> 로그인</a> 
 	</c:if>
 	<c:if test="${not empty id}"> 
+	  <a href="${path}/users/mypage.do"> 마이페이지 </a>&emsp;
 	  <a href="${path}/users/logout.do"> ${id}(로그아웃)</a>  
 	</c:if>
 </div>
