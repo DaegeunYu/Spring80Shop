@@ -15,6 +15,7 @@
     <mapper resource="mappings/product-mapping.xml"  />
     <mapper resource="mappings/users-mapping.xml"  />
     <mapper resource="mappings/review-mapping.xml"  />
+    <mapper resource="mappings/purchase-mapping.xml"  />
   </mappers>
   
 </configuration>

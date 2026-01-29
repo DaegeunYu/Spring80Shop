@@ -14,16 +14,17 @@
     margin-bottom: 10px;
 }
 
-
 #login_box input[type="button"] {
     width: 48%;
-    margin-right: 4%;
-    cursor: pointer;
+    cursor: pointer;    
 }
+
 #login_box input[type="submit"] {
     width: 48%;
-    cursor: pointer;
+    margin-right: 4%;
+    cursor: pointer;    
 }
+
 #login_box_logo {
 	width: 150px;
 	height: 150px;
