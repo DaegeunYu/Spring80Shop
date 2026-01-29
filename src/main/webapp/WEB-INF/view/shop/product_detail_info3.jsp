@@ -57,7 +57,7 @@
 
 <div class="purchase_button">
 	<div>
-		<a class="button" href=${path}/purchase/purchase.do?product_code=${product.product_code}>바로구매</a>
+		<a class="button" id="buyNow" href="#">바로구매</a>
 	</div>
 	<div>
 		<a class="button" id="addToBasket" href="#">장바구니</a>
@@ -83,6 +83,26 @@
 	    if (current > 1) {
 	        countInput.value = current - 1;
 	    }
+	});
+	
+	document.getElementById('buyNow').addEventListener('click', function(e) {
+	    e.preventDefault();
+
+	    const crushingSelect = document.getElementById('crushing');
+	    const weightSelect = document.getElementById('weight');
+	    const productCount = document.getElementById('product_count');
+	    
+	    // 유효성 검사 (옵션 선택 여부)
+	    if (crushingSelect.value === 'not') { alert('분쇄도를 선택해 주세요.'); crushingSelect.focus(); return; }
+	    if (weightSelect.value === 'not') { alert('무게를 선택해 주세요.'); weightSelect.focus(); return; }
+
+	    // 최종 URL 구성
+	    const url = "${path}/purchase/purchase.do?product_code=${product.product_code}" +
+	                "&product_count=" + productCount.value +
+	                "&crushing=" + crushingSelect.value +
+	                "&product_weight=" + weightSelect.value;
+	 	// 3. 페이지 이동
+	    location.href = url;
 	});
 	
 	document.getElementById('addToBasket').addEventListener('click', function(e) {
