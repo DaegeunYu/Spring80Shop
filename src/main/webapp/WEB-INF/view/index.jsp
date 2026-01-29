@@ -15,4 +15,12 @@
 	<BR>
 </section>
 
+<script>
+    // 회원가입 완료 환영 메시지
+    var msg = "${msg}";
+    if(msg !== "") {
+        alert(msg);
+    }
+</script>
+
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

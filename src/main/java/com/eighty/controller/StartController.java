@@ -29,11 +29,11 @@ public class StartController {
 		
 		int count = service.count(vo, SQL_TYPE.MAN);
 		int currentPage = vo.getPage();
-		int displayPage = 6;
+		
 		
 		int totalPage = (int) Math.ceil((double) count / vo.getAmount());
-		int endPage = (int) (Math.ceil(currentPage / (double) displayPage) * displayPage);
-		int startPage = (endPage-displayPage) + 1;
+		int endPage = (int) (Math.ceil(currentPage / (double) vo.getDisplayPage()) * vo.getDisplayPage());
+		int startPage = (endPage-vo.getDisplayPage()) + 1;
 		
 		if (totalPage < endPage) {
 			endPage = totalPage;
@@ -49,6 +49,7 @@ public class StartController {
 		model.addAttribute("end_page", endPage);
 		model.addAttribute("current_page", currentPage);
 		model.addAttribute("total_page", totalPage);
+		model.addAttribute("type", "man");
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		

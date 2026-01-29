@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+#users_join {
+    width: 300px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 1. 모든 버튼 공통 스타일 (아이디중복확인, 우편번호찾기, 회원가입 버튼 통합) */
+#idCheck, 
+#users_join input[type="button"], 
+#users_join input[type="submit"] {
+    width: 100%;
+    height: 30px;
+    font-size: 13px; /* 로그인 박스 기준 폰트 크기 */
+    cursor: pointer;
+    background-color: #efefef; /* 로그인 버튼과 동일한 밝은 회색 */
+    color: #000;              /* 검정색 글자 */
+    border: 1px solid #767676; /* 시스템 표준 테두리 */
+    border-radius: 2px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. 회원가입 제출 버튼 전용 (위치 및 간격만 조정) */
+#users_join input[type="submit"] {
+    margin-top: 10px;
+    height: 30px; /* 다른 버튼과 높이 동일하게 고정 */
+}
+
+/* 3. 수평 배치를 위한 행 설정 (아이디, 우편번호 라인) */
+.input_row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.input_row input[type="text"] {
+    flex: 7;
+    margin-bottom: 0 !important;
+}
+
+.input_row #idCheck, 
+.input_row input[type="button"] {
+    flex: 3;
+}
+
+/* 일반 입력창 스타일 */
+#users_join input[type="text"], 
+#users_join input[type="password"], 
+#users_join select {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+/* 성별 왼쪽 정렬 */
+.gender_row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.gender_row label {
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+.gender_row select {
+    width: 60px !important;
+    margin-bottom: 0;
+}
+
+#login_box_logo {
+    width: 150px;
+    height: 150px;
+}

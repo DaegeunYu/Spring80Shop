@@ -25,4 +25,9 @@ public class UsersServiceImpl implements UsersService {
 	public UsersVO loginCheck(UsersVO vo) {
 		return dao.loginCheck(vo);
 	}
+	
+	@Override
+	public int idCheck(String user_id) {
+		return dao.idCheck(user_id);
+	}
 }

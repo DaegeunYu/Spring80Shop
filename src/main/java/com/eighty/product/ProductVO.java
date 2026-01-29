@@ -31,7 +31,8 @@ public class ProductVO {
 	private String expiration_date; // 유통기한
 	private String reg_date; // 판매글 업로드 시간 
 	
+	private int start;
 	private int page;
 	private int amount = 8;
-	private int start;
+	private int displayPage = 8;
 }
