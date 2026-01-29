@@ -26,7 +26,21 @@
 				
 				<td></td> <!-- 11. is_review -->
 			</tr>
-			
+			<c:forEach var="li" items="${purchaselist}">
+				<tr>
+					<td>${li.order_code}</td>
+					<td>${li.user_id}</td>
+					<td>${li.product_code}</td>
+					<td>${li.product_name}</td>
+					<td>${li.product_weight}</td>
+					<td>${li.crushing}</td>
+					<td>${li.order_count}</td>
+					<td>${li.order_price}</td>
+					<td>${li.order_date}</td>
+					<td>${li.order_status}</td>
+					<td>${li.is_review}</td>
+				</tr>
+			</c:forEach>
 		</table>
 			
 			  

@@ -10,15 +10,15 @@ import lombok.AllArgsConstructor;
 public class PurchaseVO {
 	
     private Long idx;
-    private String order_code;
-    private String user_id;
-    private String product_code;
-    private String product_name;
-    private String product_weight;
+    private String orderCode;
+    private String userId;
+    private String productCode;
+    private String productName;
+    private String productWeight;
     private String crushing;
-    private String order_price;
-    private String order_count;
-    private String order_status;
-    private String order_date;
-    private String is_review;
+    private String orderPrice;
+    private String orderCount;
+    private String orderStatus;
+    private String orderDate;
+    private String isReview;
 }
