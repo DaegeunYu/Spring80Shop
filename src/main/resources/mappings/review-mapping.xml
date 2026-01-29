@@ -11,14 +11,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       AND product_code = #{product_code}
 	</select>
 	
-	<select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
-    SELECT * FROM review
-	    <where>
-	        <if test="product_code != null and product_code != ''">
-	            AND product_code = #{product_code}
-	        </if>
-	    </where>
-    ORDER BY idx DESC
+	<select id="SELECT_AVG_GRADE" parameterType="String" resultType="double">
+	    SELECT COALESCE(ROUND(AVG(grade_point), 1), 0.0) 
+	    FROM review 
+	    WHERE product_code = #{product_code}
 	</select>
+	
+	<select id="SELECT_REVIEW_COUNT" parameterType="String" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM review
+	    WHERE product_code = #{product_code}
+	</select>
+
+    <select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+        SELECT * FROM review
+        <where>
+            <if test="product_code != null and product_code != ''">
+                AND product_code = #{product_code}
+            </if>
+        </where>
+        ORDER BY idx DESC
+    </select>
 	
 </mapper>

@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
+import com.eighty.review.ReviewService;
 import com.eighty.shop.SQL_TYPE;
 
 
 @RequestMapping("/product")
 @Controller
 public class ProductController {
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	@Autowired
 	private ProductService service;
@@ -69,7 +73,10 @@ public class ProductController {
 	
 	@GetMapping(value="/product_detail.do")
 	public String product_detail(Model model, ProductVO vo){
-        model.addAttribute("product", service.getProduct(vo));
-		return "shop/product_detail";
+	    ProductVO product = service.getProduct(vo);
+	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
+	    model.addAttribute("product", product);
+	    model.addAttribute("reviewCount", reviewCount); // 여기서 넘겨줌
+	    return "shop/product_detail";
 	}
 }

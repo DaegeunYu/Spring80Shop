@@ -41,4 +41,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   SELECT * FROM product WHERE product_code = #{product_code}
 	</select>
 	
+	<update id="UPDATE_PRODUCT_GRADE" parameterType="map">
+        UPDATE product 
+        SET grade_point = #{avgScore} 
+        WHERE product_code = #{productCode}
+    </update>
+	
 </mapper>

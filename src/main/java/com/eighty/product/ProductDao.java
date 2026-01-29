@@ -9,4 +9,6 @@ public interface ProductDao {
    List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
    ProductVO getProduct(ProductVO vo);
    int count(ProductVO vo, SQL_TYPE type);
+   void updateProductGrade(String productCode, String avgScore);
+   int selectReviewCount(String productCode);
 }

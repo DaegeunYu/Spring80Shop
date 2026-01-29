@@ -1,6 +1,8 @@
 package com.eighty.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +46,18 @@ public class ProductDaoImpl implements ProductDao {
 	public ProductVO getProduct(ProductVO vo) {
 		// TODO Auto-generated method stub
 		return mybatis.selectOne("PRODUCT.DETAIL", vo);
+	}
+	
+	@Override
+	public void updateProductGrade(String productCode, String avgScore) {
+		Map<String, String> map = new HashMap<String, String>();
+	    map.put("productCode", productCode);
+	    map.put("avgScore", avgScore);
+	    mybatis.update("PRODUCT.UPDATE_PRODUCT_GRADE", map);
+	}
+
+	@Override
+	public int selectReviewCount(String product_code) {
+		return mybatis.selectOne("mapping.SELECT_REVIEW_COUNT", product_code);
 	}
 }

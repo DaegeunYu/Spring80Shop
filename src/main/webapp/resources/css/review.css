@@ -1,39 +1,183 @@
 @charset "UTF-8";
 
-    .review-table {
-    	width: 100%;
-    	border-collapse: collapse;
-    	margin-top: 20px; }
-    .review-table th {
-    	background: #f8f9fa;
-    	border-bottom: 2px solid #dee2e6;
-    	padding: 12px; }
-    .review-table td {
-    	padding: 12px;
-    	border-bottom: 1px solid #eee;
-    	text-align: center; }
-    
-    /* 상세 내용 칸 스타일 */
-    .detail-row {
-    	display: none;
-    	background-color: #fafafa; }
-    .detail-content {
-    	padding: 20px;
-    	text-align: left;
-    	line-height: 1.6; }
-    .review-img {
-    	max-width: 200px;
-    	margin-top: 10px;
-    	display: block; }
-    
-    /* 별점 색상 */
-    .star {
-    	color: #f39c12;
-    	font-weight: bold; }
-    .star-off {
-    	color: #ccc; }
-    
-    /* 제목 줄 마우스 커서 */
-    .title-row:hover {
-    	background-color: #f1f1f1;
-    	cursor: pointer; }
+.review-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+.review-table th {
+	background: #f8f9fa;
+	border-bottom: 2px solid #dee2e6;
+	padding: 12px;
+}
+
+.review-table td {
+	padding: 12px;
+	border-bottom: 1px solid #eee;
+	text-align: center;
+}
+
+.detail-row {
+	display: none;
+	background-color: #fafafa;
+}
+
+.detail-content {
+	padding: 20px;
+	text-align: left;
+	line-height: 1.6;
+}
+
+.review-img {
+	max-width: 200px;
+	margin-top: 10px;
+	display: block;
+}
+
+.star {
+	color: #f39c12;
+	font-weight: bold;
+}
+
+.star-off {
+	color: #ccc;
+}
+
+.title-row:hover {
+	background-color: #f1f1f1;
+	cursor: pointer;
+}
+
+.total-review-wrapper {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+}
+
+.total-star-rating.large {
+    font-size: 50px;
+}
+
+.total-star-rating {
+	display: inline-block;
+	position: relative;
+	font-size: 24px;
+	color: #ddd;
+}
+
+.total-star-fill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	color: #f39c12;
+	white-space: nowrap;
+}
+
+.avg-text {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.review-summary-container {
+	display: flex;
+	justify-content: space-around;
+	padding: 20px;
+	background-color: #f9f9f9;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+.summary-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+
+.summary-label {
+	font-size: 14px;
+	color: #333;
+	font-weight: 600;
+}
+
+.summary-value {
+	font-size: 28px;
+	font-weight: 800;
+	color: #222;
+}
+
+.chat-icon {
+	width: 40px;
+	height: 40px;
+	background: #e0e0e0;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 18px;
+}
+
+.review-stats-container {
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	gap: 100px;
+	padding: 40px 0;
+	text-align: center;
+	border-bottom: 1px solid #eee;
+	background-color: #fafafa;
+}
+
+.stat-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-width: 160px;
+}
+
+.stat-label {
+	font-size: 18px;
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+
+.stat-value {
+	font-size: 30px;
+	font-weight: 800;
+	color: #222;
+	margin-top: 15px;
+}
+
+.stat-value small {
+	font-size: 18px;
+	font-weight: normal;
+	color: #aaa;
+}
+
+.star-box {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.icon-box {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60px;
+}
+
+.review-icon-img {
+	width: 60px;
+	height: auto;
+	mix-blend-mode: multiply;
+}

@@ -13,5 +13,4 @@ public class ReviewVO {
     private String review_content;
     private String review_img;
     private String reg_date;
-
 }

@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/review.css">
 
+
 <table class="review-table">
     <thead>
         <tr>
@@ -20,17 +21,14 @@
                     <span class="star">
                         <c:forEach var="i" begin="1" end="5">
                             <c:choose>
-                                <%-- grade_point 변수명에 맞춤 --%>
                                 <c:when test="${i <= review.grade_point}">★</c:when>
                                 <c:otherwise><span class="star-off">★</span></c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </span>
                 </td>
-                <%-- review_title 변수명에 맞춤 --%>
                 <td style="text-align: left;">${review.review_title}</td>
                 <td>${review.user_id}</td>
-                <%-- reg_date 변수명에 맞춤 --%>
                 <td>${review.reg_date}</td>
             </tr>
 
@@ -38,10 +36,7 @@
                 <td colspan="4">
                     <div class="detail-content">
                         <strong>[상세 후기]</strong><br>
-                        <%-- review_content 변수명에 맞춤 --%>
                         ${review.review_content}
-                        
-                        <%-- review_img 변수명에 맞춤 --%>
                         <c:if test="${not empty review.review_img}">
 						    <img src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/${review.review_img}" class="review-img">
 						</c:if>

@@ -26,11 +26,15 @@
         </div>
 		<BR> 
 		<section class="review_section">
-    	<div align="center">
-        <hr>
-        <h3>상품 후기</h3>
-	        <c:import url="/review/review_list.do" />
-    	</div>
+		    <div align="center">
+		        <hr>
+		        <h2>상품 후기</h2>
+		        <c:import url="/WEB-INF/view/review/total_review.jsp">
+				    <c:param name="totalAvg" value="${product.grade_point}" />
+				    <c:param name="reviewCount" value="${reviewCount}" /> 
+		        </c:import>
+		        <c:import url="/review/review_list.do" />
+		    </div>
 		</section>
 	</div>
 	<BR>

@@ -21,4 +21,19 @@ public class ReviewDaoImpl implements ReviewDao {
 	public ReviewVO getReview(ReviewVO vo) {
 		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", vo);
 	}
+
+	@Override
+	public double getAverageGrade(String product_code) {
+		return mybatis.selectOne("REVIEW.SELECT_AVG_GRADE", product_code);
+	}
+
+	@Override
+	public void insertReview(ReviewVO vo) {
+		mybatis.insert("REVIEW.INSERT_REVIEW", vo);
+	}
+
+	@Override
+	public int selectReviewCount(String product_code) {
+		return mybatis.selectOne("REVIEW.SELECT_REVIEW_COUNT", product_code);
+	}
 }

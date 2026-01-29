@@ -26,7 +26,7 @@
 &emsp;&emsp;&emsp;<a href=${path}/index.do?page=1>홈으로 </a>
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=y&page=1> 싱글 원두 </a>
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=n&page=1> 블렌딩 원두 </a>
-
+<!-- &emsp;&emsp;&emsp;<a href=${path}/review/review_list.do>전체 리뷰</a>  -->
 
 &emsp;&emsp;&emsp;
 
