@@ -30,4 +30,9 @@ public class UsersServiceImpl implements UsersService {
 	public int idCheck(String user_id) {
 		return dao.idCheck(user_id);
 	}
+
+	@Override
+	public UsersVO getSelectOne(UsersVO vo) {
+		return dao.getSelectOne(vo);
+	}
 }

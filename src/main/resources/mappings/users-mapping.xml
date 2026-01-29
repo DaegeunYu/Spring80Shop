@@ -23,4 +23,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from users where user_id = #{user_id}
 	</select>
 	
+    <select id="getSelectOne" resultType="com.eighty.users.UsersVO">
+        SELECT * FROM users 
+        WHERE user_id = #{user_id}
+    </select>
+
+	
 </mapper>
