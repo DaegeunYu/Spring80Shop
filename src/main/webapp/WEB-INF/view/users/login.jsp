@@ -18,10 +18,10 @@
 					<td><input type="text" id="user_id" name="user_id" placeholder="아이디"></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_pw" name="user_pw" placeholder="비밀번호"></td>
+					<td><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호"></td>
 				</tr>
 				<tr>
-					<td><input type="button" OnClick="signForm()" value="회원가입"><input type="submit"  value="로그인"></td>
+					<td><input type="submit"  value="로그인"><input type="button" OnClick="signForm()" value="회원가입"></td>
 				</tr>
 			</table>
 		</form>
