@@ -122,7 +122,58 @@
 	height: 35px;
 }
 
+/* 수량 */
 
+/* 1. 전체 감싸는 박스: 가로로 배치(flex) */
+.quantity-stepper {
+    display: inline-flex;    /* 딱 필요한 만큼만 가로 너비 가짐 */
+    border: 1px solid #ccc;  /* 전체 외곽 테두리 */
+    height: 30px;            /* 전체 높이 */
+    width: 80px;             /* 전체 너비 */
+}
+
+/* 2. 왼쪽 숫자 입력창 */
+.product_count {
+    width: 60%;              /* 60% 차지 */
+    border: none;            /* 내부 테두리 제거 */
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    outline: none;           /* 클릭 시 파란 테두리 제거 */
+}
+
+/* 3. 오른쪽 버튼 묶음 박스: 세로로 배치(flex + column) */
+.button-container {
+    display: flex;
+    flex-direction: column;  /* 위아래로 쌓기 */
+    width: 40%;              /* 40% 차지 */
+    border-left: 1px solid #ccc; /* 숫자창과 구분선 */
+}
+
+/* 4. 개별 버튼 공통 */
+.count-btn {
+    flex: 1;                 /* 위아래가 높이를 똑같이 나눠 가짐 */
+    background: #fff;
+    border: none;            /* 기본 버튼 테두리 제거 */
+    cursor: pointer;
+    font-size: 8px;          /* 화살표 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+/* 5. 위쪽 버튼에만 아래쪽 경계선 추가 */
+.up-btn {
+    border-bottom: 1px solid #ccc;
+}
+
+.count-btn:hover {
+    background: #f5f5f5;
+}
+
+
+/* 페이징 */
 .pagination {
     display: flex;
     list-style: none;

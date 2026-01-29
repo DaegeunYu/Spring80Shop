@@ -19,9 +19,6 @@
 				<c:import url="/WEB-INF/view/shop/product_detail_info2.jsp" />
 				<hr>
 				<c:import url="/WEB-INF/view/shop/product_detail_info3.jsp" />
-				<hr>
-				<c:import url="/WEB-INF/view/shop/product_detail_info4.jsp" />
-				
 			</div>
         </div>
 		<BR> 

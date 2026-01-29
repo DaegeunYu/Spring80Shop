@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BASKET">
+ 
+	<insert id="INSERT" parameterType="BasketVO">
+	 
+	 insert  into basket(user_id, product_code, product_name, 
+	                      product_img, product_weight, crushing, 
+	                      product_count )
+     values(#{user_id},#{product_code},#{product_name},
+     					#{product_img}, #{product_weight}, #{crushing},
+	                    #{product_count})
+	</insert>
+	
+	<select id="SELECT" parameterType="BasketVO" resultType ="BasketVO">
+	   SELECT * FROM basket WHERE user_id = #{user_id}
+	</select>
+	
+	<select id="DELETE" parameterType="BasketVO">
+	   DELETE FROM basket WHERE user_id = #{user_id} AND product_code = #{product_code};
+	</select>
+	
+</mapper>
