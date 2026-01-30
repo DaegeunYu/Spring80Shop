@@ -55,16 +55,15 @@ public class PurchaseController {
 	    // 로그인 검증
 	    if (id != null) {
 	        UsersVO buyer = new UsersVO();
-	        buyer.setUser_id(id);
-	        model.addAttribute("users", uservice.getSelectOne(buyer)); 
+	        buyer.setUser_id(id);//유저 조회 대상 지정
+	        model.addAttribute("users", uservice.getSelectOne(buyer)); //DB에서 회원 정보 조회 후 객체를 model에 저장
 	        
 	        ProductVO pvo = new ProductVO();
-	        pvo.setProduct_code(product_code);
+	        pvo.setProduct_code(product_code); //제품 조회 대상 지정
 	        
-	        ProductVO resultProduct = proservice.getProduct(pvo); 
-	        model.addAttribute("product", resultProduct);
-	        
-	        model.addAttribute("product_count", product_count);
+	        model.addAttribute("product", proservice.getProduct(pvo));//DB에서 상품 정보 조회 후 객체를 model에 저장
+	        	        
+	        model.addAttribute("product_count", product_count);//제품 선택 수량
 	        
 	        return "purchase/purchase_detail"; 
 	    } else {

@@ -26,7 +26,7 @@
 					<td><input type="password" id="user_pw2" name="user_pw2" placeholder="비밀번호 확인" required></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_name" name="user_name" placeholder="이름" required></td>
+					<td><input type="text" id="user_name" name="user_name" placeholder="이름" maxlength="5" required></td>
 				</tr>
 				<tr>
 					<td><input type="text" id="user_birthday" name="user_birthday" 
@@ -35,7 +35,7 @@
        				</td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호" required></td>
+					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호" maxlength="13" required></td>
 				</tr>
 				<tr>
 					<td><input type="text" id="user_email" name="user_email" placeholder="이메일" required></td>
