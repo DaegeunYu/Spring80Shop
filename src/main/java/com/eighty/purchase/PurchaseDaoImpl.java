@@ -16,6 +16,4 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public List<PurchaseVO> getPurchaseList(PurchaseVO vo) {
 		return mybatis.selectList("PURCHASE.getPurchaseList", vo);
 	}
-
-
 }

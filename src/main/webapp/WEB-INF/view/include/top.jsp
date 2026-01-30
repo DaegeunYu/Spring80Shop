@@ -14,9 +14,6 @@
 <link href="${path}/resources/css/login.css" rel="stylesheet">
 <link href="${path}/resources/css/product.css" rel="stylesheet">
 <link href="${path}/resources/css/user_form.css" rel="stylesheet">
-<style type="text/css">
-
-</style>
 </head>
 <body>
 <header>
@@ -27,7 +24,6 @@
 &emsp;&emsp;&emsp;<a href=${path}/index.do?page=1>홈으로 </a>
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=y&page=1> 싱글 원두 </a>
 &emsp;<a href=${path}/product/product_list.do?is_single_origin=n&page=1> 블렌딩 원두 </a>
-<!-- &emsp;&emsp;&emsp;<a href=${path}/review/review_list.do>전체 리뷰</a>  -->
 
 &emsp;&emsp;&emsp;
 
@@ -40,12 +36,9 @@
 	</c:if>
 	<c:if test="${not empty id}"> 
 	  <a href="${path}/basket/basket_list.do"> 장바구니(임시) </a>&emsp;
+	  <a href="${path}/purchase/purchaseList.do">구매내역</a>&emsp;
 	  <a href="${path}/users/mypage.do"> 마이페이지 </a>&emsp;
 	  <a href="${path}/users/logout.do"> ${id}(로그아웃)</a>  
 	</c:if>
 </div>
-
-
-
-
 </nav>

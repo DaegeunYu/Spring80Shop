@@ -5,8 +5,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="PURCHASE">
  
-	<select id="getPurchaseList" resultType="PurchaseVO">
-	    SELECT * FROM purchase
+	<select id="getPurchaseList" resultType="com.eighty.purchase.PurchaseVO">
+    	SELECT * FROM purchase
+    	<where>
+        	<if test="userId != null and userId != ''">
+            	AND userId = #{userId}
+        	</if>
+    	</where>
+    	ORDER BY orderCode DESC
 	</select>
 	
+	<insert id="insertReview" parameterType="ReviewVO">
+    	INSERT INTO review (reviewId, orderCode, productCode, userId, content, reg_date)
+    	VALUES (review_seq.NEXTVAL, #{orderCode}, #{productCode}, #{userId}, #{content}, SYSDATE)
+	</insert>
+
 </mapper>

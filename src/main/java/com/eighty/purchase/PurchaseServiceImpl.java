@@ -17,6 +17,4 @@ public class PurchaseServiceImpl implements PurchaseService {
 	public List<PurchaseVO> getPurchaseList(PurchaseVO vo) {
 		return dao.getPurchaseList(vo);
 	}
-
-
 }

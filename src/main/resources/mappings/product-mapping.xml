@@ -46,5 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET grade_point = #{avgScore} 
         WHERE product_code = #{productCode}
     </update>
+    
+    <!-- 리뷰 작성시 제품정보 불러오기용 -->
+    <select id="getProductForReview" parameterType="ProductVO" resultType="ProductVO">
+	    SELECT product_code, product_name, product_img, brand
+	    FROM product 
+	    WHERE product_code = #{product_code}
+	</select>
 	
 </mapper>

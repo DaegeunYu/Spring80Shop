@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
@@ -42,9 +43,18 @@ public class PurchaseController {
 	}
 	
 	@GetMapping(value="/purchaseList.do")
-	public String product_detail(Model model, PurchaseVO vo){
-        model.addAttribute("purchaselist", service.getPurchaseList(vo));
-		return "purchase/purchase_list";
+	public String getPurchaseList(
+	    Model model, 
+	    @SessionAttribute(name = "id", required = false) String loginId, 
+	    PurchaseVO vo) {
+
+	    if (loginId == null) {
+	        return "redirect:/users/login.do";
+	    }
+	    
+	    vo.setUserId(loginId);
+	    model.addAttribute("purchaseList", service.getPurchaseList(vo));
+	    return "purchase/purchase_list";
 	}
 	
 	@GetMapping("/purchase.do")

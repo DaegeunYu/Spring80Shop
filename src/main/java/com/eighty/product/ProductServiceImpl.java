@@ -32,4 +32,11 @@ public class ProductServiceImpl implements ProductService {
 	public int count(ProductVO vo, SQL_TYPE type) {
 		return dao.count(vo, type);
 	}
+
+	@Override
+	public ProductVO getProductDetail(String productCode) {
+		ProductVO vo = new ProductVO();
+	    vo.setProduct_code(productCode);
+	    return dao.getProduct(vo);
+	}
 }

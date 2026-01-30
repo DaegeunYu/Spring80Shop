@@ -181,3 +181,139 @@
 	height: auto;
 	mix-blend-mode: multiply;
 }
+
+
+/* review_form 시작  */
+
+.review-write-container {
+    max-width: 700px; /* 전체 틀의 기준 */
+    margin: 60px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+}
+
+/* 1. 상품 정보 카드와 하단 섹션들의 너비를 100%로 통일 */
+.product-info-header, 
+.rating-section, 
+.content-section, 
+.file-section, 
+form {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 2. 상품 정보 헤더 디자인 (상단 여유공간 부여) */
+.product-info-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 16px;
+}
+
+.product-info-header img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.info-text {
+    text-align: left;
+}
+
+/* 3. 별점 섹션 (동그라미 제거 및 호버 로직 유지) */
+.rv-write__star-wrap {
+    display: flex;
+    flex-direction: row-reverse; 
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.rv-write__star-wrap input[type="radio"] {
+    display: none !important;
+}
+
+.rv-write__star-wrap label {
+    font-size: 50px;
+    color: #e9ecef;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rv-write__star-wrap label:hover,
+.rv-write__star-wrap label:hover ~ label,
+.rv-write__star-wrap input:checked ~ label {
+    color: #ffcc00 !important;
+}
+
+/* 4. 리뷰 텍스트 입력 칸 (가로 꽉 차게) */
+.content-section textarea {
+    width: 100%; /* 부모 너비에 맞춤 */
+    min-height: 200px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: none;
+    box-sizing: border-box;
+    outline: none;
+    display: block;
+}
+
+/* 5. 사진 첨부하기 버튼 (버튼다운 스타일 + 가로 꽉 차게) */
+.file-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%; /* 가로 너비 확장 */
+    padding: 20px;
+    background-color: #fff;
+    border: 2px dashed #ccc; /* 업로드 존 느낌 강조 */
+    border-radius: 12px;
+    color: #555;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.file-label:hover {
+    background-color: #f0f4ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+/* 6. 등록하기 버튼 (가로 꽉 차게) */
+.submit-btn {
+    width: 100%; /* 가로 너비 확장 */
+    padding: 20px;
+    background-color: #222;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #000;
+}
+
+/* 별점 메시지 스타일 */
+#star-message {
+    margin-bottom: 15px;
+    font-size: 15px;
+    height: 20px; /* 메시지 변경 시 레이아웃 흔들림 방지 */
+    text-align: center;
+}

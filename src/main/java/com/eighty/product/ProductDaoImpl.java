@@ -24,7 +24,6 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {
-		// TODO Auto-generated method stub
 		if (type == SQL_TYPE.MAN) {
 			return mybatis.selectList("PRODUCT.MANUPACT", vo);
 		} else {
@@ -34,7 +33,6 @@ public class ProductDaoImpl implements ProductDao {
 	
 	@Override
 	public int count(ProductVO vo, SQL_TYPE type) {
-		// TODO Auto-generated method stub
 		if (type == SQL_TYPE.MAN) {
 			return mybatis.selectOne("PRODUCT.MANUPACT_COUNT", vo);
 		} else {
@@ -44,7 +42,6 @@ public class ProductDaoImpl implements ProductDao {
 	
 	@Override
 	public ProductVO getProduct(ProductVO vo) {
-		// TODO Auto-generated method stub
 		return mybatis.selectOne("PRODUCT.DETAIL", vo);
 	}
 	
@@ -59,5 +56,10 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public int selectReviewCount(String product_code) {
 		return mybatis.selectOne("mapping.SELECT_REVIEW_COUNT", product_code);
+	}
+
+	@Override
+	public ProductVO getProductForReview(ProductVO vo) {
+		return mybatis.selectOne("PRODUCT.getProductForReview", vo);
 	}
 }
