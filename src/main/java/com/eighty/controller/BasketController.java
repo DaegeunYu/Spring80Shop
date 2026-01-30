@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.basket.BasketService;
 import com.eighty.basket.BasketVO;
@@ -50,16 +52,44 @@ public class BasketController {
 		vo.setProduct_img(pVo.getProduct_img());
 		service.insert(vo);
 		
-		service.getProductList(vo);
-		
 		model.addAttribute("basket_list", service.getProductList(vo));
 		return "basket/basket_list";
 	}
 	
 	@GetMapping(value="/basket_list.do")
-	public String basket_list(Model model, BasketVO vo){
-		model.addAttribute("product_list", service.getProductList(vo));
+	public String basket_list(HttpSession session, Model model, BasketVO vo){
+		String id = (String) session.getAttribute("id");
+		vo.setUser_id(id);
+		model.addAttribute("basket_list", service.getProductList(vo));
 		return "basket/basket_list";
 	}
 	
+	@GetMapping(value="/basket_delete.do")
+	public String basket_delete(HttpSession session, Model model, BasketVO vo){
+		String id = (String) session.getAttribute("id");
+		vo.setUser_id(id);
+		
+		return "basket/basket_list";
+	}
+	
+	@RequestMapping("/basket_delete.do")
+	@ResponseBody // AJAX 응답을 위해 필요
+	public String basket_delete(@RequestParam("product_code") String productCodes, HttpSession session) {
+		BasketVO vo = new BasketVO();
+		String id = (String) session.getAttribute("id");
+		vo.setUser_id(id);
+		try {
+	        // 1,2,3 형태의 문자열을 배열로 분리
+	        String[] codes = productCodes.split(",");
+	        
+	        for(String code : codes) {
+	        	vo.setProduct_code(code);
+	        	service.delete(vo);
+	        }
+	        
+	        return "success";
+	    } catch (Exception e) {
+	        return "fail";
+	    }
+	}
 }

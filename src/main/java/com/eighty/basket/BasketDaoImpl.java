@@ -6,8 +6,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.eighty.shop.SQL_TYPE;
-
 @Repository
 public class BasketDaoImpl implements BasketDao {
 
@@ -31,7 +29,6 @@ public class BasketDaoImpl implements BasketDao {
 
 	@Override
 	public void delete(BasketVO vo) {
-		mybatis.delete("BASKET.SELECT", vo);
+		mybatis.delete("BASKET.DELETE", vo);
 	}
-	
 }
