@@ -15,7 +15,7 @@
 				<hr>
 				<c:import url="/WEB-INF/view/purchase/purchase_detail_productInfo.jsp" />
 				<hr>
-				<c:import url="/WEB-INF/view/purchase/purchase_detail_order.jsp" />
+				<c:import url="/WEB-INF/view/purchase/purchase_detail_payment.jsp" />
 				<hr>
 				
 				
