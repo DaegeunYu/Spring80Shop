@@ -312,7 +312,7 @@ function formOK() {
     var detail = document.getElementById("sample6_detailAddress").value.trim();
     var extra = document.getElementById("sample6_extraAddress").value.trim();
 
-    var fullAddress = postcode + " " + addr + " " + detail;
+    var fullAddress = "[" + postcode + "] " + addr + " " + detail;
     if(extra !== "") {
         fullAddress += " " + extra;
     }

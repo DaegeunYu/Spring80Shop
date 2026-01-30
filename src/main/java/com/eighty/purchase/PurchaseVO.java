@@ -21,4 +21,13 @@ public class PurchaseVO {
     private String orderStatus;
     private String orderDate;
     private String isReview;
+    
+    // 배송을 위한 수령인 정보 추가, 결제 수단 추가
+    private String receiverName;    // 수령인 성명
+    private String receiverPhone;   // 수령인 연락처
+    private String zipCode;         // 우편번호
+    private String address;         // 합쳐진 주소 (기본+상세+참고)
+    private String orderMemo;       // 배송 요청사항
+    private String paymentMethod;   // 결제 수단 (기본값: CARD)
 }
+

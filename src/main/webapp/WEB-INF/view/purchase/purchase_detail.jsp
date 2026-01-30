@@ -8,7 +8,6 @@
 <section>
 	<div align="center">
 		<H2> 주문 결제 </H2>
-		<div > ${product.product_name} </div>
 		
 			        
 			<div id="purchase_info" align="center">
