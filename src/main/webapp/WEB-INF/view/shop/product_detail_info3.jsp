@@ -87,6 +87,8 @@
 	const weightSelect = document.getElementById('weight');
 	const productCode = "${param.product_code}";
 	
+	let price = 0;
+	
 	async function fetchPriceFromServer() {
 	    const selectedWeight = weightSelect.value;
 	    const count = parseInt(countInput.value) || 1;
@@ -104,10 +106,10 @@
 	        
 	        if (response.ok) {
 	        	const priceText = await response.text(); 
-	            const unitPrice = parseInt(priceText); 
+	            price = parseInt(priceText);
 
 	            if (!isNaN(unitPrice)) {
-	                const totalPrice = unitPrice * count;
+	                const totalPrice = price * count;
 	                priceDisplay.innerText = totalPrice.toLocaleString();
 	            }
 	        }
@@ -165,8 +167,6 @@
 	    const selectedCount = productCount.value;
 	    const productCode = "${product.product_code}"; // 서버에서 받아온 코드
 	    const path = "${path}"; // 서버 기본 경로
-	    
-	    const price = parseInt(priceDisplay.innerText.replace(/[^0-9]/g, ""));
 
 	    // 1. 유효성 검사 (선택 안함 방지)
 	    if (selectedCrushing === 'not') {

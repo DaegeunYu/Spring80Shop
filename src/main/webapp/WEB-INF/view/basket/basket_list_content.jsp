@@ -12,7 +12,7 @@
         </div>
         <div class="price_detail">
             <span>배송비 : </span>
-            <span>5,000</span>원
+            <span id="delivery_price">5,000</span>원
         </div>
         <div class="price_total">
             <span>총 결제 금액 : </span>
@@ -40,7 +40,10 @@
 	<c:forEach var="m" items="${basket_list}">
 		<div class="basket_item">
 			<div class="check_box">
-                <input type="checkbox" name="select_item" value="${m.product_code}">
+                <input type="checkbox" name="select_item"
+                 value="${m.product_code}"
+                 data-price="${m.basket_price}" 
+       		     data-count="${m.product_count}" >
             </div>
 			<div class="image_box">
 				<a href="${path}/product/product_detail.do?product_code=${m.product_code}">
@@ -54,6 +57,7 @@
 				<p> <span> 중 량 : </span> <span> ${m.product_weight} </span> </p>
 				<p> <span> 분 쇄 : </span> <span> ${m.crushing} </span> </p>
 				<p> <span> 개 수 : </span> <span> ${m.product_count} </span> </p>
+				<p> <span> 가 격 : </span> <span> <fmt:formatNumber value="${m.basket_price}" pattern="#,###" /> 원 </span> </p>
 			</div>
 		</div>
 	</c:forEach>
@@ -61,83 +65,63 @@
 
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function() {
-		// 1. 사용할 요소들 정의
-		const allCheck = document.getElementById('all_check');
+	    const allCheck = document.getElementById('all_check');
 	    const itemChecks = document.querySelectorAll('input[name="select_item"]');
-	    const countDisplay = document.getElementById('checked_count'); // 전체선택 옆 숫자
-	    const purchaseCountDisplay = document.getElementById('purchase_count'); // 버튼 안 숫자
-	    const sumPriceDisplay = document.getElementById('sum_price');
-	    const finalPriceDisplay = document.getElementById('final_total_price');
-	    const deleteBtn = document.querySelector('.btn_delete_selected');
 	    
-	    // 2. [함수] 금액 및 개수 업데이트 로직
-	    function updateAllStatus() {
+	    // 상단 업데이트용 요소들
+	    const sumPriceDisplay = document.getElementById('sum_price');
+	    const deliveryPriceDisplay = document.getElementById('delivery_price');
+	    const finalPriceDisplay = document.getElementById('final_total_price');
+	    const purchaseCountDisplay = document.getElementById('purchase_count');
+	    const checkedCountDisplay = document.getElementById('checked_count'); // 전체선택 옆 숫자
+	
+	    // [함수] 가격 및 개수 계산 및 화면 업데이트
+	    function updateCalculations() {
 	        const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
-	        const deliveryFee = 5000;
+	        let deliveryFee = 0;
 	        let sumPrice = 0;
 	        let totalCount = checkedItems.length;
-
+	
 	        checkedItems.forEach(item => {
-	            // value 외에 data-price 속성 등을 활용해 계산 (필요시 추가)
+	            // 체크박스의 data-price와 data-count 속성에서 값을 가져옴
 	            const price = parseInt(item.getAttribute('data-price')) || 0;
-	            const count = parseInt(item.getAttribute('data-count')) || 1;
+	            const count = parseInt(item.getAttribute('data-count')) || 0;
 	            sumPrice += (price * count);
 	        });
-
-	        const finalDelivery = (totalCount === 0) ? 0 : deliveryFee;
+	
+	        // 상품이 0개면 배송비도 0원, 있으면 5,000원
 	        
-	        // 화면 글자 교체
-	        countDisplay.innerText = totalCount;
-	        purchaseCountDisplay.innerText = totalCount;
+	        deliveryFee = (totalCount === 0) ? 0 : 5000;
+	        const finalTotal = sumPrice + deliveryFee;
+	
+	        // 화면에 천단위 콤마 적용하여 출력
 	        sumPriceDisplay.innerText = sumPrice.toLocaleString();
-	        finalPriceDisplay.innerText = (sumPrice + finalDelivery).toLocaleString();
+	        deliveryPriceDisplay.innerText = deliveryFee.toLocaleString();
+	        finalPriceDisplay.innerText = finalTotal.toLocaleString();
+	        purchaseCountDisplay.innerText = totalCount;
+	        checkedCountDisplay.innerText = totalCount;
 	    }
 	
-	    // 3. 전체 선택 클릭 시 이벤트
+	    // 1. 전체 선택 클릭 이벤트
 	    allCheck.addEventListener('change', function() {
 	        itemChecks.forEach(check => {
 	            check.checked = allCheck.checked;
 	        });
+	        updateCalculations();
 	    });
 	
-	    // 4. 개별 체크박스 변경 시 이벤트
+	    // 2. 개별 체크박스 클릭 이벤트
 	    itemChecks.forEach(check => {
 	        check.addEventListener('change', function() {
+	            // 모든 개별 체크박스가 선택되었는지 확인하여 전체선택 체크박스 상태 조절
 	            const checkedCount = document.querySelectorAll('input[name="select_item"]:checked').length;
 	            allCheck.checked = (checkedCount === itemChecks.length);
+	            
+	            updateCalculations();
 	        });
 	    });
-	    
-	    // 5. 선택 삭제 버튼 클릭 시 (Fetch API)
-	    deleteBtn.addEventListener('click', function() {
-	        const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
-	        
-	        if (checkedItems.length === 0) {
-	            alert("선택한 상품이 없습니다.");
-	            return;
-	        }
-
-	        if (confirm("선택한 상품 " + checkedItems.length + "개를 장바구니에서 삭제하시겠습니까?")) {
-	            // 선택된 상품 코드들을 배열로 수집
-	            const codes = Array.from(checkedItems).map(cb => cb.value);
-
-	            // 서버로 데이터 전송
-	            fetch('${path}/product/delete_cart.do', {
-	                method: 'POST',
-	                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-	                body: 'product_codes=' + codes.join(',')
-	            })
-	            .then(response => response.text())
-	            .then(data => {
-	                if (data === "success") {
-	                    alert("삭제되었습니다.");
-	                    location.reload(); // 페이지 새로고침하여 리스트 갱신
-	                } else {
-	                    alert("삭제에 실패했습니다.");
-	                }
-	            })
-	            .catch(error => console.error('Error:', error));
-	        }
-	    });
+	
+	    // 초기 실행 (페이지 로드 시 기본적으로 0 또는 초기 상태 반영)
+	    updateCalculations();
 	});
 </script>
