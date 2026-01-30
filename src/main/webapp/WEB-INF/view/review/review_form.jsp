@@ -17,28 +17,28 @@
     </div>
 
     <form action="${pageContext.request.contextPath}/review/insertReview.do" method="post" id="reviewForm" enctype="multipart/form-data">
-        <input type="hidden" name="product_code" value="${productCode}">
-        <input type="hidden" name="order_code" value="${orderCode}">
+        <input type="hidden" name="productCode" value="${productCode}">
+        <input type="hidden" name="orderCode" value="${orderCode}">
 
         <div class="rating-section">
             
             <div class="rv-write__star-wrap">
-                <input type="radio" id="star5" name="grade_point" value="5" /><label for="star5" title="5점">★</label>
-                <input type="radio" id="star4" name="grade_point" value="4" /><label for="star4" title="4점">★</label>
-                <input type="radio" id="star3" name="grade_point" value="3" /><label for="star3" title="3점">★</label>
-                <input type="radio" id="star2" name="grade_point" value="2" /><label for="star2" title="2점">★</label>
-                <input type="radio" id="star1" name="grade_point" value="1" /><label for="star1" title="1점">★</label>
+                <input type="radio" id="star5" name="gradePoint" value="5" /><label for="star5" title="5점">★</label>
+                <input type="radio" id="star4" name="gradePoint" value="4" /><label for="star4" title="4점">★</label>
+                <input type="radio" id="star3" name="gradePoint" value="3" /><label for="star3" title="3점">★</label>
+                <input type="radio" id="star2" name="gradePoint" value="2" /><label for="star2" title="2점">★</label>
+                <input type="radio" id="star1" name="gradePoint" value="1" /><label for="star1" title="1점">★</label>
             </div>
             <div id="star-message">별점을 선택해주세요.</div>
         </div>
 		<p>상품은 어떠셨나요?</p>
         <div class="title-section">
-		    <input type="text" name="review_title" placeholder="한 줄 평을 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;">
+		    <input type="text" name="reviewTitle" placeholder="한 줄 평을 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;">
 		</div>
 		
 		<p>상세 후기</p>
 		<div class="content-section">
-		    <textarea name="review_content" placeholder="다른 구매자에게 도움이 되도록 상세한 리뷰를 작성해주세요. (최소 10자)"></textarea>
+		    <textarea name="reviewContent" placeholder="다른 구매자에게 도움이 되도록 상세한 리뷰를 작성해주세요. (최소 10자)"></textarea>
 		</div>
 
         <div class="file-section">
@@ -59,9 +59,9 @@
 
 	//기존 스크립트 하단에 추가
 	document.querySelector('form').addEventListener('submit', function(e) {
-	    const grade = document.querySelector('input[name="grade_point"]:checked');
-	    const title = document.querySelector('input[name="review_title"]').value.trim();
-	    const content = document.querySelector('textarea[name="review_content"]').value.trim();
+	    const grade = document.querySelector('input[name="gradePoint"]:checked');
+	    const title = document.querySelector('input[name="reviewTitle"]').value.trim();
+	    const content = document.querySelector('textarea[name="reviewContent"]').value.trim();
 	
 	    if (!grade) {
 	        alert("별점을 선택해주세요!");
@@ -100,7 +100,7 @@
     });
 
     // 별점 메시지 변경 로직
-    const radioButtons = document.querySelectorAll('input[name="grade_point"]');
+    const radioButtons = document.querySelectorAll('input[name="gradePoint"]');
     const starMsg = document.getElementById('star-message');
     const messages = {
         '5': '최고예요! 아주 만족합니다.',

@@ -27,20 +27,20 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public double getAverageGrade(String product_code) {
-		return dao.getAverageGrade(product_code);
+	public double getAverageGrade(String productCode) {
+		return dao.getAverageGrade(productCode);
 	}
 
 	@Override
 	public void insertReview(ReviewVO vo) {
 		dao.insertReview(vo);
-        double avg = dao.getAverageGrade(vo.getProduct_code());
-        productDao.updateProductGrade(vo.getProduct_code(), String.valueOf(avg));
+        double avg = dao.getAverageGrade(vo.getProductCode());
+        productDao.updateProductGrade(vo.getProductCode(), String.valueOf(avg));
         dao.updateReviewStatus(vo);
     }
 	
 	@Override
-	public int getReviewCount(String product_code) {
-	    return dao.selectReviewCount(product_code);
+	public int getReviewCount(String productCode) {
+	    return dao.selectReviewCount(productCode);
 	}
 }

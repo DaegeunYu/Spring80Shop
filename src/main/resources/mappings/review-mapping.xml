@@ -7,27 +7,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 	<select id="SELECT_ONE_REVIEW" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
     SELECT * FROM review 
-    WHERE order_code = #{order_code} 
-      AND product_code = #{product_code}
+    WHERE orderCode = #{orderCode} 
+      AND productCode = #{productCode}
 	</select>
 	
 	<select id="SELECT_AVG_GRADE" parameterType="String" resultType="double">
-	    SELECT COALESCE(ROUND(AVG(grade_point), 1), 0.0) 
+	    SELECT COALESCE(ROUND(AVG(gradePoint), 1), 0.0) 
 	    FROM review 
-	    WHERE product_code = #{product_code}
+	    WHERE productCode = #{productCode}
 	</select>
 	
 	<select id="SELECT_REVIEW_COUNT" parameterType="String" resultType="int">
 	    SELECT COUNT(*) 
 	    FROM review
-	    WHERE product_code = #{product_code}
+	    WHERE productCode = #{productCode}
 	</select>
 
     <select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
         SELECT * FROM review
         <where>
-            <if test="product_code != null and product_code != ''">
-                AND product_code = #{product_code}
+            <if test="productCode != null and productCode != ''">
+                AND productCode = #{productCode}
             </if>
         </where>
         ORDER BY idx DESC
@@ -35,11 +35,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <insert id="insertReview" parameterType="com.eighty.review.ReviewVO">
 	    INSERT INTO review (
-	        user_id, order_code, product_code, grade_point, 
-	        review_title, review_content, review_img, reg_date
+	        userId, orderCode, productCode, gradePoint, 
+	        reviewTitle, reviewContent, reviewImg, regDate
 	    ) VALUES (
-	        #{user_id}, #{order_code}, #{product_code}, #{grade_point}, 
-	        #{review_title}, #{review_content}, #{review_img}, NOW()
+	        #{userId}, #{orderCode}, #{productCode}, #{gradePoint}, 
+	        #{reviewTitle}, #{reviewContent}, #{reviewImg}, NOW()
 	    )
 	    <selectKey keyProperty="idx" resultType="long" order="AFTER">
 	        SELECT LAST_INSERT_ID()
@@ -49,8 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="UPDATE_REVIEW_STATUS" parameterType="com.eighty.review.ReviewVO">
 	    UPDATE purchase 
 	    SET isReview = 'y' 
-	    WHERE orderCode = #{order_code} 
-	      AND productCode = #{product_code}
+	    WHERE orderCode = #{orderCode} 
+	      AND productCode = #{productCode}
 	</update>
 	
 </mapper>

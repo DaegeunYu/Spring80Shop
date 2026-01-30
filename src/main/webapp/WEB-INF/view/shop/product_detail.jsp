@@ -32,7 +32,9 @@
 				    <c:param name="totalAvg" value="${product.grade_point}" />
 				    <c:param name="reviewCount" value="${reviewCount}" /> 
 		        </c:import>
-		        <c:import url="/review/review_list.do" />
+		        <c:import url="/review/review_list.do">
+				    <c:param name="productCode" value="${product.product_code}" />
+				</c:import>
 		    </div>
 		</section>
 	</div>

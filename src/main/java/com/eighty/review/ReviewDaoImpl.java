@@ -23,8 +23,8 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 
 	@Override
-	public double getAverageGrade(String product_code) {
-		return mybatis.selectOne("REVIEW.SELECT_AVG_GRADE", product_code);
+	public double getAverageGrade(String productCode) {
+		return mybatis.selectOne("REVIEW.SELECT_AVG_GRADE", productCode);
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
 	@Override
-	public int selectReviewCount(String product_code) {
-		return mybatis.selectOne("REVIEW.SELECT_REVIEW_COUNT", product_code);
+	public int selectReviewCount(String productCode) {
+		return mybatis.selectOne("REVIEW.SELECT_REVIEW_COUNT", productCode);
 	}
 
 	@Override

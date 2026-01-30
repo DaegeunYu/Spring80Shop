@@ -43,13 +43,15 @@ public class ReviewController {
 	@PostConstruct  
 	public void init() {
 		path = servletContext.getRealPath("/resources/files/");
+		
 	}
 		
 	@GetMapping(value="/review_list.do")
 	public String review_list(Model model, ReviewVO vo) {
-	    model.addAttribute("review_list", reviewService.getReviewList(vo));
-	    double avgScore = reviewService.getAverageGrade(vo.getProduct_code());
-	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
+		System.out.println("이미지가 실제로 저장되는 절대 경로: " + path);
+	    model.addAttribute("reviewList", reviewService.getReviewList(vo));
+	    double avgScore = reviewService.getAverageGrade(vo.getProductCode());
+	    int reviewCount = reviewService.getReviewCount(vo.getProductCode());
 	    System.out.println("avgScore==>" + avgScore);
 	    System.out.println("reviewCount==>" + reviewCount);
 	    
@@ -78,7 +80,7 @@ public class ReviewController {
 	    if (loginId == null) {
 	        return "redirect:/users/login.do"; 
 	    }
-	    reviewVO.setUser_id(loginId); 
+	    reviewVO.setUserId(loginId); 
 	    if (file != null && !file.isEmpty()) {
 	        String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
 	        File datePath = new File(path, today);
@@ -87,7 +89,7 @@ public class ReviewController {
 	        String saveName = uuid + "_" + file.getOriginalFilename();
 	        try {
 	            file.transferTo(new File(datePath, saveName));
-	            reviewVO.setReview_img(today + "/" + saveName);
+	            reviewVO.setReviewImg(today + "/" + saveName);
 	        } catch (IOException e) {
 	            System.out.println("파일 저장 중 오류 발생: " + e.getMessage());
 	            e.printStackTrace();
@@ -95,7 +97,7 @@ public class ReviewController {
 	    }
 	    reviewService.insertReview(reviewVO);
 
-	    rttr.addAttribute("product_code", reviewVO.getProduct_code());
+	    rttr.addAttribute("product_code", reviewVO.getProductCode());
 	    rttr.addFlashAttribute("msg", "리뷰가 등록되었습니다.");
 
 	    return "redirect:/product/product_detail.do";
@@ -103,8 +105,8 @@ public class ReviewController {
 	
 	@GetMapping(value="/reviewCheck.do")
 	public String reviewCheck(ReviewVO vo, RedirectAttributes rttr) {
-		String productCode = vo.getProduct_code();
-		System.out.println("productCode===>" + productCode);
+		String productCode = vo.getProductCode();
+		System.out.println("productcode==>" + productCode);
 	    rttr.addAttribute("product_code", productCode);
 	    
 	    return "redirect:/product/product_detail.do";
