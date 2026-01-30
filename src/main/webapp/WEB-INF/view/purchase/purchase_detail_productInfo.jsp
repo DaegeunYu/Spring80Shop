@@ -18,10 +18,13 @@
                     <img id="product_detail_img" src="${product.product_img}" > <!-- PJ TODO : css 스타일에서 사이즈 조정 -->
                 </td>
                 <td><strong>${product.product_name}</strong></td>
-                <td>
-                    <fmt:formatNumber value="${product.sale_price}" type="number"/>원
-                </td>
+                
+                <td><fmt:formatNumber value="${product.sale_price}" type="number"/>원</td>
+                
                 <td>${product_count}개</td>
+                <td>
+                    <fmt:formatNumber value="${product.sale_price * product_count}" type="number"/>원
+                </td>
             </tr>
        
     </table>

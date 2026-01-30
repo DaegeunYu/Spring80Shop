@@ -8,7 +8,6 @@
 <section>
 	<div align="center">
 		<H2> 주문 결제 </H2>
-		<div > ${product.product_name} </div>
 		
 			        
 			<div id="purchase_info" align="center">
@@ -16,7 +15,7 @@
 				<hr>
 				<c:import url="/WEB-INF/view/purchase/purchase_detail_productInfo.jsp" />
 				<hr>
-				<c:import url="/WEB-INF/view/purchase/purchase_detail_order.jsp" />
+				<c:import url="/WEB-INF/view/purchase/purchase_detail_payment.jsp" />
 				<hr>
 				
 				
