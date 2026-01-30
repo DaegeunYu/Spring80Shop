@@ -1,7 +1,14 @@
 package com.eighty.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.product.ProductService;
 import com.eighty.review.ReviewService;
@@ -61,6 +69,45 @@ public class ReviewController {
 	    return "review/review_form";
 	}
 	
+	@PostMapping("/insertReview.do")
+	public String insertReview(ReviewVO reviewVO, 
+	                           @RequestParam("review_file") MultipartFile file, RedirectAttributes rttr,
+	                           HttpSession session) {
+	    String loginId = (String) session.getAttribute("id"); 
+	    
+	    if (loginId == null) {
+	        return "redirect:/users/login.do"; 
+	    }
+	    reviewVO.setUser_id(loginId); 
+	    if (file != null && !file.isEmpty()) {
+	        String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
+	        File datePath = new File(path, today);
+	        if (!datePath.exists()) datePath.mkdirs();
+	        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+	        String saveName = uuid + "_" + file.getOriginalFilename();
+	        try {
+	            file.transferTo(new File(datePath, saveName));
+	            reviewVO.setReview_img(today + "/" + saveName);
+	        } catch (IOException e) {
+	            System.out.println("파일 저장 중 오류 발생: " + e.getMessage());
+	            e.printStackTrace();
+	        }
+	    }
+	    reviewService.insertReview(reviewVO);
+
+	    rttr.addAttribute("product_code", reviewVO.getProduct_code());
+	    rttr.addFlashAttribute("msg", "리뷰가 등록되었습니다.");
+
+	    return "redirect:/product/product_detail.do";
+	}
 	
+	@GetMapping(value="/reviewCheck.do")
+	public String reviewCheck(ReviewVO vo, RedirectAttributes rttr) {
+		String productCode = vo.getProduct_code();
+		System.out.println("productCode===>" + productCode);
+	    rttr.addAttribute("product_code", productCode);
+	    
+	    return "redirect:/product/product_detail.do";
+	}
 		
 }

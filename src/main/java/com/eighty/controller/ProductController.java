@@ -78,7 +78,7 @@ public class ProductController {
 	    ProductVO product = service.getProduct(vo);
 	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
 	    model.addAttribute("product", product);
-	    model.addAttribute("reviewCount", reviewCount); // 여기서 넘겨줌
+	    model.addAttribute("reviewCount", reviewCount);
 	    return "shop/product_detail";
 	}
 	

@@ -28,12 +28,18 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 
 	@Override
-	public void insertReview(ReviewVO vo) {
-		mybatis.insert("REVIEW.INSERT_REVIEW", vo);
-	}
+    public void insertReview(ReviewVO vo) {
+        mybatis.insert("REVIEW.insertReview", vo);
+    }
 
 	@Override
 	public int selectReviewCount(String product_code) {
 		return mybatis.selectOne("REVIEW.SELECT_REVIEW_COUNT", product_code);
+	}
+
+	@Override
+	public void updateReviewStatus(ReviewVO vo) {
+		mybatis.update("REVIEW.UPDATE_REVIEW_STATUS", vo);
+		
 	}
 }

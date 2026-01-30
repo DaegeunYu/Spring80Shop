@@ -8,4 +8,5 @@ public interface ReviewDao {
 	   double getAverageGrade(String product_code);
 	   void insertReview(ReviewVO vo);
 	   int selectReviewCount(String product_code);
+	   void updateReviewStatus(ReviewVO vo);
 }

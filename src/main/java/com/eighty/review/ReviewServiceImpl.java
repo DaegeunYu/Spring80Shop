@@ -36,6 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
 		dao.insertReview(vo);
         double avg = dao.getAverageGrade(vo.getProduct_code());
         productDao.updateProductGrade(vo.getProduct_code(), String.valueOf(avg));
+        dao.updateReviewStatus(vo);
     }
 	
 	@Override

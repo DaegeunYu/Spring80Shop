@@ -32,5 +32,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ORDER BY idx DESC
     </select>
+    
+    <insert id="insertReview" parameterType="com.eighty.review.ReviewVO">
+	    INSERT INTO review (
+	        user_id, order_code, product_code, grade_point, 
+	        review_title, review_content, review_img, reg_date
+	    ) VALUES (
+	        #{user_id}, #{order_code}, #{product_code}, #{grade_point}, 
+	        #{review_title}, #{review_content}, #{review_img}, NOW()
+	    )
+	    <selectKey keyProperty="idx" resultType="long" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<update id="UPDATE_REVIEW_STATUS" parameterType="com.eighty.review.ReviewVO">
+	    UPDATE purchase 
+	    SET isReview = 'y' 
+	    WHERE orderCode = #{order_code} 
+	      AND productCode = #{product_code}
+	</update>
 	
 </mapper>

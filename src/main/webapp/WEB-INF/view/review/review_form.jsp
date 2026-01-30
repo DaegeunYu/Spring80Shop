@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <form action="${pageContext.request.contextPath}/review/insertReview.do" method="post" enctype="multipart/form-data">
+    <form action="${pageContext.request.contextPath}/review/insertReview.do" method="post" id="reviewForm" enctype="multipart/form-data">
         <input type="hidden" name="product_code" value="${productCode}">
         <input type="hidden" name="order_code" value="${orderCode}">
 
@@ -32,9 +32,14 @@
             <div id="star-message">별점을 선택해주세요.</div>
         </div>
 		<p>상품은 어떠셨나요?</p>
-        <div class="content-section">
-            <textarea name="review_content" placeholder="다른 구매자에게 도움이 되도록 상세한 리뷰를 작성해주세요. (최소 10자)"></textarea>
-        </div>
+        <div class="title-section">
+		    <input type="text" name="review_title" placeholder="한 줄 평을 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;">
+		</div>
+		
+		<p>상세 후기</p>
+		<div class="content-section">
+		    <textarea name="review_content" placeholder="다른 구매자에게 도움이 되도록 상세한 리뷰를 작성해주세요. (최소 10자)"></textarea>
+		</div>
 
         <div class="file-section">
             <label for="file-input" class="file-label">
@@ -51,6 +56,32 @@
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
 
 <script>
+
+	//기존 스크립트 하단에 추가
+	document.querySelector('form').addEventListener('submit', function(e) {
+	    const grade = document.querySelector('input[name="grade_point"]:checked');
+	    const title = document.querySelector('input[name="review_title"]').value.trim();
+	    const content = document.querySelector('textarea[name="review_content"]').value.trim();
+	
+	    if (!grade) {
+	        alert("별점을 선택해주세요!");
+	        e.preventDefault(); // 전송 중단
+	        return;
+	    }
+	    if (title === "") {
+	        alert("제목(한 줄 평)을 입력해주세요!");
+	        e.preventDefault();
+	        return;
+	    }
+	    if (content.length < 10) {
+	        alert("상세 후기를 10자 이상 작성해주세요!");
+	        e.preventDefault();
+	        return;
+	    }
+	    if (!confirm("리뷰를 등록하시겠습니까?")) {
+	        e.preventDefault(); // '취소' 클릭 시 전송 중단
+	    }
+	});
     // 이미지 미리보기 로직
     document.getElementById('file-input').addEventListener('change', function(e) {
         const preview = document.getElementById('image-preview');
