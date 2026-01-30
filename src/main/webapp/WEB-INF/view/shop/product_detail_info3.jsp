@@ -102,8 +102,6 @@
 	        const url = "${path}/product/get_price.do?product_code=" + productCode + "&product_weight=" + selectedWeight; 
 	        const response = await fetch(url);
 	        
-	        
-	        
 	        if (response.ok) {
 	        	const priceText = await response.text(); 
 	            const unitPrice = parseInt(priceText); 
@@ -167,11 +165,14 @@
 	    const selectedCount = productCount.value;
 	    const productCode = "${product.product_code}"; // 서버에서 받아온 코드
 	    const path = "${path}"; // 서버 기본 경로
+	    
+	    const price = parseInt(priceDisplay.innerText.replace(/[^0-9]/g, ""));
 
 	    // 1. 유효성 검사 (선택 안함 방지)
 	    if (selectedCrushing === 'not') {
 	    	alert('분쇄도를 선택해 주세요.');
 	    	crushingSelect.focus();
+	    	
 	        return;
 	    }
 	    
@@ -206,8 +207,9 @@
 	    // 2. 최종 URL 구성
 	    const finalUrl = path + "/basket/basket_in.do?product_code=" + productCode + 
         "&crushing=" + fincrushing +
-        "&product_weight=" + selectedWeight + 
-        "&product_count=" + selectedCount;
+        "&product_weight=" + selectedWeight +
+        "&product_count=" + selectedCount +
+        "&basket_price=" + price;
 	    
 	    // 3. 페이지 이동
 	    location.href = finalUrl;

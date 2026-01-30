@@ -9,10 +9,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	 insert  into basket(user_id, product_code, product_name, 
 	                      product_img, product_weight, crushing, 
-	                      product_count )
+	                      product_count, basket_price )
      values(#{user_id},#{product_code},#{product_name},
      					#{product_img}, #{product_weight}, #{crushing},
-	                    #{product_count})
+	                    #{product_count}, #{basket_price})
 	</insert>
 	
 	<select id="SELECT" parameterType="BasketVO" resultType ="BasketVO">

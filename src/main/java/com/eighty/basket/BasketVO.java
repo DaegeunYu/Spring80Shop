@@ -12,5 +12,6 @@ public class BasketVO {
     private String product_weight;
     private String crushing;
     private String product_count;
+    private String basket_price;
     private String basket_date;
 }
