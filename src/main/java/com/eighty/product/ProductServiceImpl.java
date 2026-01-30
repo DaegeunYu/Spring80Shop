@@ -38,5 +38,9 @@ public class ProductServiceImpl implements ProductService {
 		ProductVO vo = new ProductVO();
 	    vo.setProduct_code(productCode);
 	    return dao.getProduct(vo);
+	
+	@Override
+	public int getPrice(String product_code, String product_weight) {
+		return dao.getPrice(product_code, product_weight);
 	}
 }

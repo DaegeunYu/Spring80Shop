@@ -12,4 +12,5 @@ public interface ProductDao {
    void updateProductGrade(String productCode, String avgScore);
    int selectReviewCount(String productCode);
    ProductVO getProductForReview(ProductVO vo);
+   int getPrice(String product_code, String product_weight);
 }

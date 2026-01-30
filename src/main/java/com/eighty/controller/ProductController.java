@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
@@ -79,5 +80,12 @@ public class ProductController {
 	    model.addAttribute("product", product);
 	    model.addAttribute("reviewCount", reviewCount); // 여기서 넘겨줌
 	    return "shop/product_detail";
+	}
+	
+	@RequestMapping("/get_price.do")
+	@ResponseBody // JSON이나 일반 텍스트로 값만 반환
+	public String get_price(String product_code, String product_weight) {
+		int price = service.getPrice(product_code, product_weight); 
+	    return String.valueOf(price);
 	}
 }
