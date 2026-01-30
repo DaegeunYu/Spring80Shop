@@ -9,4 +9,6 @@ public interface ProductService {
    List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
    ProductVO getProduct(ProductVO vo);
    int count(ProductVO vo, SQL_TYPE type);
+   
+   int getPrice(String product_code, String product_weight);
 }

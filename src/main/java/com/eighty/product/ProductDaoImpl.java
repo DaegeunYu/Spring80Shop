@@ -55,9 +55,19 @@ public class ProductDaoImpl implements ProductDao {
 	    map.put("avgScore", avgScore);
 	    mybatis.update("PRODUCT.UPDATE_PRODUCT_GRADE", map);
 	}
+	
+	@Override
+	public int getPrice(String product_code, String product_weight) {
+		Map<String, Object> params = new HashMap<String, Object>();
+	    params.put("product_code", product_code);
+	    params.put("product_weight", product_weight);
+		return mybatis.selectOne("PRODUCT.PRICE", params);
+	}
 
 	@Override
 	public int selectReviewCount(String product_code) {
 		return mybatis.selectOne("mapping.SELECT_REVIEW_COUNT", product_code);
 	}
+
+	
 }

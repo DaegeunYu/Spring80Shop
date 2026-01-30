@@ -18,7 +18,9 @@
 				<hr>
 				<c:import url="/WEB-INF/view/shop/product_detail_info2.jsp" />
 				<hr>
-				<c:import url="/WEB-INF/view/shop/product_detail_info3.jsp" />
+				<c:import url="/WEB-INF/view/shop/product_detail_info3.jsp" >
+					<c:param name="productCode" value="${product.product_code}" />
+				</c:import>
 			</div>
         </div>
 		<BR> 

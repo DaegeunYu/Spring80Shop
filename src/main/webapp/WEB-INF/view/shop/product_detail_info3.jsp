@@ -50,6 +50,16 @@
 		</div>					
 	</div>
 </div>
+<BR>
+
+<div class="product_detail" id="prices">
+    <div class="info_title">
+		가격
+	</div>
+	<div class="info_detail">
+		<span id="price">0</span>원					
+	</div>
+</div>
 
 <BR>
 <hr>
@@ -73,15 +83,56 @@
     const downBtn = document.querySelector('.down-btn');
 	const countInput = document.querySelector('.product_count');
 	
-    upBtn.addEventListener('click', () => {
+	const priceDisplay = document.getElementById('price');
+	const weightSelect = document.getElementById('weight');
+	const productCode = "${param.product_code}";
+	
+	async function fetchPriceFromServer() {
+	    const selectedWeight = weightSelect.value;
+	    const count = parseInt(countInput.value) || 1;
+
+	    // '선택 안함'일 경우 0원 처리
+	    if (selectedWeight === 'not') {
+	        priceDisplay.innerText = '0';
+	        return;
+	    }
+	    
+	    try {
+	        // 서버의 Controller로 상품코드와 무게를 보냄
+	        const url = "${path}/product/get_price.do?product_code=" + productCode + "&product_weight=" + selectedWeight; 
+	        const response = await fetch(url);
+	        
+	        
+	        
+	        if (response.ok) {
+	        	const priceText = await response.text(); 
+	            const unitPrice = parseInt(priceText); 
+
+	            if (!isNaN(unitPrice)) {
+	                const totalPrice = unitPrice * count;
+	                priceDisplay.innerText = totalPrice.toLocaleString();
+	            }
+	        }
+	    } catch (error) {
+	        console.error("가격 정보를 가져오는데 실패했습니다.", error);
+	    }
+	}
+
+	// 이벤트 연결: 무게 변경 시 서버 요청
+	weightSelect.addEventListener('change', fetchPriceFromServer);
+
+	// 수량 버튼 클릭 시에도 호출 (기존 코드에 추가)
+	upBtn.addEventListener('click', () => {
         let current = parseInt(countInput.value);
         countInput.value = current + 1;
+        fetchPriceFromServer(); 
     });
 	
 	downBtn.addEventListener('click', () => {
 	    let current = parseInt(countInput.value);
 	    if (current > 1) {
 	        countInput.value = current - 1;
+	        fetchPriceFromServer();
 	    }
 	});
 	

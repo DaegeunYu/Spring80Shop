@@ -7,6 +7,10 @@
 	<div align="center">
         <BR>
 		<h1> 80's Coffee를 소개합니다! </h1>
+		<div>
+			<h5> 커피 가격은 1kg 기준 가격입니다. </h5>
+		</div>
+		<BR>
 		<c:import url="/WEB-INF/view/shop/product_list_content.jsp" />
 		<BR> 
 	</div>

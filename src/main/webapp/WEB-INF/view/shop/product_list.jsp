@@ -17,7 +17,11 @@
 			        블렌드 리스트
 			    </c:otherwise>
 			</c:choose>
-		</H1>		
+		</H1>
+		<div>
+			<h5> 커피 가격은 1kg 기준 가격입니다. </h5>
+		</div>
+		<BR>
 			<c:import url="/WEB-INF/view/shop/product_list_content.jsp" />
 		<BR> 
 	</div>
