@@ -6,6 +6,11 @@
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
 <section>
+<form id="orderForm" action="${path}/purchase/purchase_insert.do" method="post" onsubmit="return orderFormOK()">
+    <input type="hidden" name="product_code" value="${product.product_code}">
+    <input type="hidden" name="product_count" value="${product_count}">
+    <input type="hidden" name="total_price" value="${product.sale_price * product_count}">
+
 	<div align="center">
 		<H2> 주문 결제 </H2>
 		
@@ -22,7 +27,7 @@
 			</div>
 			
 		</div>
-	
+</form>
 	<BR>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
