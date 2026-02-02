@@ -8,7 +8,7 @@
 <div class="address_area">
     <h3>배송지</h3>
     <hr>
-    
+        
     <div >
         <label>
             <input type="radio" name="addrOption" value="DEFAULT" checked 
@@ -24,18 +24,14 @@
         <p><strong>받는사람:</strong> ${users.user_name}</p>
         <p><strong>연락처:</strong> ${users.user_tel}</p>
         <p><strong>주소:</strong> ${users.user_add}</p>
-        
-        <input type="hidden" name="order_name" value="${users.user_name}">
-        <input type="hidden" name="order_tel" value="${users.user_tel}">
-        <input type="hidden" name="order_add" value="${users.user_add}">
     </div>
 
     <div id="addr_NEW" class="addr_box" style="display: none;">
         <div >
-            <input type="text" name="order_name_new" id="new_name" placeholder="받는사람" maxlength="5" required>
+            <input type="text" name="order_name_new" id="new_name" placeholder="받는사람" maxlength="5" >
         </div>
         <div >
-            <input type="text" name="order_tel_new" id="new_tel" placeholder="010-0000-0000" maxlength="13" required>
+            <input type="text" name="order_tel_new" id="new_tel" placeholder="010-0000-0000" maxlength="13" >
         </div>
         <div >
             <input type="text" id="sample6_postcode" placeholder="우편번호">
@@ -67,7 +63,10 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 //카카오 주소 API
 function sample6_execDaumPostcode() {
@@ -132,6 +131,12 @@ function toggleAddr(type) {
     if(type === 'NEW') {
         document.getElementById('new_name').focus();
     }
+    
+    if (type === 'DEFAULT') {
+        document.getElementById("order_name").value = "${users.user_name}";
+        document.getElementById("order_tel").value  = "${users.user_tel}";
+        document.getElementById("order_add").value  = "${users.user_add}";
+    }
 }
 
 //배송 메모 제어 함수
@@ -155,7 +160,7 @@ function checkForm() {
     const addrOption = document.querySelector('input[name="addrOption"]:checked').value;
 
     if (addrOption === 'NEW') {
-        // 1. 이름 검증 (한글 2~5자)
+        // 이름 검증 (한글 2~5자)
         const name = document.getElementById("new_name").value;
         const regName = /^[가-힣]{2,5}$/;
         if (!regName.test(name)) {
@@ -164,7 +169,7 @@ function checkForm() {
             return false;
         }
 
-        // 2. 전화번호 검증 (하이픈 자동 제거 후 형식 확인)
+        // 전화번호 검증 (하이픈 자동 제거 후 형식 확인)
         const telInput = document.getElementById("new_tel").value;
         const cleanTel = telInput.replace(/-/g, ''); 
         const regTel = /^(01[016789]|02|0[3-9][0-9])\d{3,4}\d{4}$/;
@@ -174,7 +179,7 @@ function checkForm() {
             return false;
         }
 
-        // 3. 주소 검증 (우편번호 및 상세주소 입력 확인)
+        // 주소 검증 (우편번호 및 상세주소 입력 확인)
         const postcode = document.getElementById("sample6_postcode").value.trim();
         const detail = document.getElementById("sample6_detailAddress").value.trim();
         if (postcode === "" || detail === "") {
@@ -183,18 +188,44 @@ function checkForm() {
             else document.getElementById("sample6_detailAddress").focus();
             return false;
         }
+        
+        
+        // 주소 합치기
+        var postcode = document.getElementById("sample6_postcode").value.trim();
+        var addr = document.getElementById("sample6_address").value.trim();
+        var detail = document.getElementById("sample6_detailAddress").value.trim();
+        var extra = document.getElementById("sample6_extraAddress").value.trim();
+
+        var fullAddress = "[" + postcode + "] " + addr + " " + detail;
+        if(extra !== "") {
+            fullAddress += " " + extra;
+        }
+
+        document.getElementById("order_add").value = fullAddress;
+     	   
+     	// 전화번호 
+        document.getElementById("order_name").value =
+            document.getElementById("new_name").value.trim();
+
+        document.getElementById("order_tel").value =
+            document.getElementById("new_tel").value.trim();
     }
     
-    // 배송 메모 직접 입력 시 검증
-    const memoSelect = document.getElementById("delivery_memo_select").value;
-    if (memoSelect === "direct") {
-        const directMemo = document.getElementById("delivery_memo_direct").value.trim();
-        if (directMemo === "") {
-            alert("배송 메모를 입력해주세요.");
-            document.getElementById("delivery_memo_direct").focus();
-            return false;
-        }
+ 	// 배송 메모 취합 로직 추가
+    const selectBox = document.getElementById("delivery_memo_select");
+    const directInput = document.getElementById("delivery_memo_direct");
+    let finalMemo = "";
+
+    if (selectBox.value === "direct") {
+        finalMemo = directInput.value.trim();
+    } else {
+        finalMemo = selectBox.value;
     }
+    
+    document.getElementById("order_memo").value = finalMemo;
+ 	
+    
+    
 
     return true; // 모든 검증 통과 시 전송
 }
