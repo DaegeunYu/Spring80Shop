@@ -67,23 +67,6 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-/**
- * 배송지 선택에 따른 영역 전환
- */
-function toggleAddr(type) {
-    // 1. 모든 배송지 박스 숨김
-    document.querySelectorAll('.addr_box').forEach(el => {
-        el.style.display = 'none';
-    });
-
-    // 2. 선택된 타입(DEFAULT/NEW)의 박스만 노출
-    document.getElementById('addr_' + type).style.display = 'block';
-    
-    // 3. (선택사항) 직접 입력 선택 시 입력창에 포커스
-    if(type === 'NEW') {
-        document.getElementById('new_name').focus();
-    }
-}
 
 //카카오 주소 API
 function sample6_execDaumPostcode() {
@@ -172,7 +155,7 @@ function orderFormOK() {
     const addrOption = document.querySelector('input[name="addrOption"]:checked').value;
 
     if (addrOption === 'NEW') {
-        // 1. 이름 검증 (한글 2~5자)
+        // 이름 검증 (한글 2~5자)
         const name = document.getElementById("new_name").value;
         const regName = /^[가-힣]{2,5}$/;
         if (!regName.test(name)) {
@@ -181,7 +164,7 @@ function orderFormOK() {
             return false;
         }
 
-        // 2. 전화번호 검증 (하이픈 자동 제거 후 형식 확인)
+        // 전화번호 검증 (하이픈 자동 제거 후 형식 확인)
         const telInput = document.getElementById("new_tel").value;
         const cleanTel = telInput.replace(/-/g, ''); 
         const regTel = /^(01[016789]|02|0[3-9][0-9])\d{3,4}\d{4}$/;
@@ -191,7 +174,7 @@ function orderFormOK() {
             return false;
         }
 
-        // 3. 주소 검증 (우편번호 및 상세주소 입력 확인)
+        // 주소 검증 (우편번호 및 상세주소 입력 확인)
         const postcode = document.getElementById("sample6_postcode").value.trim();
         const detail = document.getElementById("sample6_detailAddress").value.trim();
         if (postcode === "" || detail === "") {
