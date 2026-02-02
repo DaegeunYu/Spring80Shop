@@ -8,5 +8,5 @@ public interface BasketService {
 	void insert(BasketVO vo);
 	List<BasketVO> getProductList(BasketVO vo);
 	void update(BasketVO vo);
-	void delete(BasketVO vo);
+	int delete(List<BasketVO> voList);
 }

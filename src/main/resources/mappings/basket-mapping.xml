@@ -19,8 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   SELECT * FROM basket WHERE user_id = #{user_id}
 	</select>
 	
-	<select id="DELETE" parameterType="BasketVO">
-	   DELETE FROM basket WHERE user_id = #{user_id} AND product_code = #{product_code};
-	</select>
+	<delete id="DELETE" parameterType="java.util.List">
+	    DELETE FROM basket WHERE (idx) IN 
+    	<foreach collection="list" item="item" open="(" separator="," close=")">
+        	(#{item.idx})
+    	</foreach>
+	</delete>
 	
 </mapper>

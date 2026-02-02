@@ -26,9 +26,9 @@ public class BasketDaoImpl implements BasketDao {
 	public void update(BasketVO vo) {
 		mybatis.update("BASKET.UPDATE", vo);
 	}
-
+	
 	@Override
-	public void delete(BasketVO vo) {
-		mybatis.delete("BASKET.DELETE", vo);
+	public int delete(List<BasketVO> voList) {
+		return mybatis.delete("BASKET.DELETE", voList);
 	}
 }

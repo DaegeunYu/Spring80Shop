@@ -29,7 +29,7 @@ public class BasketServiceImpl implements BasketService {
 	}
 
 	@Override
-	public void delete(BasketVO vo) {
-		dao.delete(vo);
+	public int delete(List<BasketVO> voList) {
+		return dao.delete(voList);
 	}
 }

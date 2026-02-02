@@ -106,9 +106,9 @@
 	        
 	        if (response.ok) {
 	        	const priceText = await response.text(); 
-	            price = parseInt(priceText);
-
-	            if (!isNaN(unitPrice)) {
+	        	price = parseInt(priceText);
+	            
+	            if (!isNaN(price)) {
 	                const totalPrice = price * count;
 	                priceDisplay.innerText = totalPrice.toLocaleString();
 	            }
@@ -208,8 +208,7 @@
 	    const finalUrl = path + "/basket/basket_in.do?product_code=" + productCode + 
         "&crushing=" + fincrushing +
         "&product_weight=" + selectedWeight +
-        "&product_count=" + selectedCount +
-        "&basket_price=" + price;
+        "&product_count=" + selectedCount;
 	    
 	    // 3. 페이지 이동
 	    location.href = finalUrl;
