@@ -8,8 +8,8 @@
     <h3>결제 수단</h3>
     <hr>
     			   <!-- radio: 여러옵션중 하나만 선택, name속성이 같을경우 하나의 그룹으로 묶음, value는 하나만 선택됨 -->
-    <label><input type="radio" name="paymentMethod" value="CARD" checked onclick="updateStatus('COMPLETED', 'CARD')"> 신용카드</label>
-    <label><input type="radio" name="paymentMethod" value="BANK" onclick="updateStatus('WAITING', 'BANK')"> 계좌이체</label>
+    <label><input type="radio" name="paymentMethod" value="CARD" checked onclick="updateStatus('결제완료', 'CARD')"> 신용카드</label>
+    <label><input type="radio" name="paymentMethod" value="BANK" onclick="updateStatus('결제대기', 'BANK')"> 계좌이체</label>
 
     <div id="display_CARD" class="payment_info" style="display: block;"><br>카드 결제 시스템을 이용합니다.</div>
     <div id="display_BANK" class="payment_info" style="display: none;"><br>계좌번호: 80커피은행 123-456-789012</div>

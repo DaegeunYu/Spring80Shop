@@ -20,4 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	VALUES (review_seq.NEXTVAL, #{orderCode}, #{productCode}, #{userId}, #{content}, SYSDATE)
 	</insert>
 
+	<insert id="insertPurchase" parameterType="java.util.List">
+    INSERT INTO purchase (orderCode, userId, productCode, productName, productWeight, crushing, orderPrice, 
+                        orderCount, receiverName,  receiverPhone, address, orderMemo, paymentMethod, orderStatus, isReview) 
+                VALUES 
+    <foreach collection="list" item="item" separator=",">
+    (#{item.orderCode},#{item.userId},#{item.productCode},#{item.productName},#{item.productWeight}, #{item.crushing},#{item.orderPrice},
+        #{item.orderCount},#{item.receiverName},#{item.receiverPhone},#{item.address},#{item.orderMemo},#{item.paymentMethod}, #{item.orderStatus}, #{item.isReview})
+    </foreach>
+</insert>
+
 </mapper>

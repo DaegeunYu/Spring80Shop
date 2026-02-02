@@ -10,11 +10,18 @@
     <input type="hidden" name="product_code" value="${product.product_code}">
     <input type="hidden" name="product_count" value="${product_count}">
     <input type="hidden" name="total_price" value="${product.sale_price * product_count}">
-    <input type="hidden" name="order_name" id="order_name" value="${users.user_name}">
-    <input type="hidden" name="order_tel" id="order_tel" value="${users.user_tel}">
-    <input type="hidden" name="order_add" id="order_add" value="${users.user_add}">
+    
+    <input type="hidden" name="receiverName"  id="order_name" value="${users.user_name}">
+	<input type="hidden" name="receiverPhone" id="order_tel"  value="${users.user_tel}">
+	<input type="hidden" name="address"       id="order_add"  value="${users.user_add}">
     <input type="hidden" name="order_memo" id="order_memo" value="">
-
+    
+    <input type="hidden" name="orderCode" id="orderCode" 
+       value="ORD<%= new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()) %><%= (int)(Math.random() * 1000) %>">
+    <input type="hidden" name="productName" id="productName" value="${product.product_name}">
+    <input type="hidden" name="productWeight" id="productWeight" value="${product.quantity}"> 
+    <input type="hidden" name="crushing" value="${param.crushing}">
+    
 	<div align="center">
 		<H2> 주문 결제 </H2>
 		

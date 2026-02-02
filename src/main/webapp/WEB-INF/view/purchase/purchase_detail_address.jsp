@@ -19,17 +19,14 @@
                    onclick="toggleAddr('NEW')"> 직접 입력
         </label>
     </div>
-
+	<!-- 기본 배송지 -->
     <div id="addr_DEFAULT" class="addr_box" >
         <p><strong>받는사람:</strong> ${users.user_name}</p>
         <p><strong>연락처:</strong> ${users.user_tel}</p>
         <p><strong>주소:</strong> ${users.user_add}</p>
         
-        <input type="hidden" name="order_name" value="${users.user_name}">
-        <input type="hidden" name="order_tel" value="${users.user_tel}">
-        <input type="hidden" name="order_add" value="${users.user_add}">
     </div>
-
+	<!-- 새 배송지 -->
     <div id="addr_NEW" class="addr_box" >
         <div >
             <input type="text" name="order_name_new" id="new_name" placeholder="받는사람">
@@ -46,15 +43,16 @@
         </div>
     </div>
 </div>
-<div class="delivery_memo_area">
-    <label><strong>배송 메모</strong></label><br>
-    <select name="delivery_memo_select" id="delivery_memo_select" onchange="toggleMemoInput()">
-        <option value="">배송 메모를 선택해주세요</option>
-        <option value="direct">직접 입력</option>
-        <option value="배송 전 미리 연락 바랍니다.">배송 전 미리 연락 바랍니다.</option>
-        <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
-        <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
-        <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
+	<!-- 배송 메모 -->
+	<div class="delivery_memo_area">
+    	<label><strong>배송 메모</strong></label><br>
+    	<select name="delivery_memo_select" id="delivery_memo_select" onchange="toggleMemoInput()">
+       	 	<option value="">배송 메모를 선택해주세요</option>
+	        <option value="direct">직접 입력</option>
+	        <option value="배송 전 미리 연락 바랍니다.">배송 전 미리 연락 바랍니다.</option>
+       		<option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+        	<option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
+        	<option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
         
     </select>
     
@@ -131,6 +129,11 @@ function toggleAddr(type) {
     // (선택사항) 직접 입력 선택 시 입력창에 포커스
     if(type === 'NEW') {
         document.getElementById('new_name').focus();
+    } else {
+        // DEFAULT 선택 시 hidden 값 초기화
+        document.getElementById("order_name").value = "${users.user_name}";
+        document.getElementById("order_tel").value = "${users.user_tel}";
+        document.getElementById("order_add").value = "${users.user_add}";
     }
 }
 
@@ -183,19 +186,38 @@ function orderFormOK() {
             else document.getElementById("sample6_detailAddress").focus();
             return false;
         }
+        var postcode = document.getElementById("sample6_postcode").value.trim();
+        var addr = document.getElementById("sample6_address").value.trim();
+        var detail = document.getElementById("sample6_detailAddress").value.trim();
+        var extra = document.getElementById("sample6_extraAddress").value.trim();
+
+        var fullAddress = "[" + postcode + "] " + addr + " " + detail;
+        if(extra !== "") {
+            fullAddress += " " + extra;
+        }
+
+        document.getElementById("order_add").value = fullAddress; 
     }
     
     // 배송 메모 직접 입력 시 검증
     const memoSelect = document.getElementById("delivery_memo_select").value;
+    const directMemo = document.getElementById("delivery_memo_direct").value.trim();
     if (memoSelect === "direct") {
-        const directMemo = document.getElementById("delivery_memo_direct").value.trim();
         if (directMemo === "") {
             alert("배송 메모를 입력해주세요.");
             document.getElementById("delivery_memo_direct").focus();
             return false;
         }
     }
+    document.getElementById("order_memo").value = (memoSelect === "direct") ? directMemo : memoSelect;
 
+    // 새 배송지 선택 시, 입력된 이름과 연락처를 전송용 hidden 필드에 복사
+    if (addrOption === 'NEW') {
+        document.getElementById("order_name").value = document.getElementById("new_name").value;
+        document.getElementById("order_tel").value = document.getElementById("new_tel").value;
+        // (주소는 이미 fullAddress 로직으로 order_add에 들어가 있으므로 생략 가능)
+    }
+    
     return true; // 모든 검증 통과 시 전송
 }
 

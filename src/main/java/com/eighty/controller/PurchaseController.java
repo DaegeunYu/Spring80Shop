@@ -109,4 +109,50 @@ public class PurchaseController {
 	        return "redirect:/index.do?page=1";
 	    }
     }
+	
+	@PostMapping("/purchase_insert.do")
+	public String insertPurchase(
+	        @RequestParam("product_code") String productCode,
+	        @RequestParam("productName") String productName,
+	        @RequestParam("productWeight") String productWeight,
+	        @RequestParam("product_count") int productCount,
+	        @RequestParam("total_price") int totalPrice,
+	        @RequestParam("paymentMethod") String paymentMethod,
+	        @RequestParam("paymentStatus") String paymentStatus,
+	        @RequestParam("crushing") String crushing,
+	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
+	        HttpSession session) {
+
+	    String userId = (String) session.getAttribute("id");
+	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
+
+	    PurchaseVO item = new PurchaseVO();
+	    
+	    // 공통 및 배송 정보 (PurchaseVO에서 실제 존재하는 메서드 호출)
+	    item.setOrderCode(buyerInfo.getOrderCode());
+	    item.setUserId(userId);
+	    item.setReceiverName(buyerInfo.getReceiverName());   
+	    item.setReceiverPhone(buyerInfo.getReceiverPhone()); 
+	    item.setAddress(buyerInfo.getAddress());             
+	    item.setOrderMemo(buyerInfo.getOrderMemo());         
+	    
+	    // 결제 상태 정보
+	    item.setPaymentMethod(paymentMethod);
+	    item.setOrderStatus(paymentStatus);
+	    item.setIsReview("n");
+
+	    // 개별 상품 정보 
+	    item.setProductCode(productCode);
+	    item.setProductName(productName);
+	    item.setProductWeight(productWeight);
+	    item.setCrushing(crushing);
+	    item.setOrderCount(String.valueOf(productCount)); 
+	    item.setOrderPrice(String.valueOf(totalPrice));  
+
+	    purchaseList.add(item);
+
+	    service.insertPurchase(purchaseList);
+
+	    return "redirect:/purchase/purchaseList.do";
+	}
 }
