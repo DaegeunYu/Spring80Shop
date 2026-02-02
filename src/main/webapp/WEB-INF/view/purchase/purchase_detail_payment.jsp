@@ -11,8 +11,8 @@
     <label><input type="radio" name="paymentMethod" value="CARD" checked onclick="updateStatus('COMPLETED', 'CARD')"> 신용카드</label>
     <label><input type="radio" name="paymentMethod" value="BANK" onclick="updateStatus('WAITING', 'BANK')"> 계좌이체</label>
 
-    <div id="display_CARD" class="payment_info" ><br>카드 결제 시스템을 이용합니다.</div>
-    <div id="display_BANK" class="payment_info" ><br>계좌번호: 80커피은행 123-456-789012</div>
+    <div id="display_CARD" class="payment_info" style="display: block;"><br>카드 결제 시스템을 이용합니다.</div>
+    <div id="display_BANK" class="payment_info" style="display: none;"><br>계좌번호: 80커피은행 123-456-789012</div>
 
     <input type="hidden" id="paymentStatus" name="paymentStatus" value="COMPLETED">
     
