@@ -43,6 +43,12 @@
                 <input type="checkbox" name="select_item"
                  value="${m.product_code}"
                  data-idx="${m.idx}"
+                 data-id="${m.user_id}"
+                 data-code="${m.product_code}"
+                 data-name="${m.product_name}"
+                 data-img="${m.product_img}"
+                 data-weight="${m.product_weight}"
+                 data-chrushing="${m.crushing}"
                  data-price="${m.basket_price}" 
        		     data-count="${m.product_count}"
        		     checked>
@@ -70,6 +76,7 @@
 		const allCheck = document.getElementById('all_check');
 	    const itemChecks = document.querySelectorAll('input[name="select_item"]');
 	    const btnDelete = document.querySelector('.btn_delete_selected');
+	    const btnPurchase = document.querySelector('.btn_purchase');
 	    
 	    const sumPriceDisplay = document.getElementById('sum_price');
 	    const deliveryPriceDisplay = document.getElementById('delivery_price');
@@ -124,43 +131,82 @@
 	    });
 
 	    // 3. 삭제 버튼 이벤트
-	    if (btnDelete) {
-	        btnDelete.addEventListener('click', function() {
-	            const selectedList = [];
-	            const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
+        btnDelete.addEventListener('click', function() {
+            const selectedList = [];
+            const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
 
-	            checkedItems.forEach(item => {
-	                selectedList.push({
-	                    idx: item.getAttribute('data-idx')
-	                });
-	            });
+            checkedItems.forEach(item => {
+                selectedList.push({
+                    idx: item.getAttribute('data-idx')
+                });
+            });
 
-	            if (selectedList.length === 0) {
-	                alert("삭제할 항목을 선택해주세요.");
-	                return;
-	            }
+            if (selectedList.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
 
-	            if (confirm("정말로 삭제하시겠습니까?")) {
-	                // 경로를 정확히 확인하세요! 
-	                // 클래스 상단에 @RequestMapping("/basket")이 없다면 아래에서 /basket을 빼야 합니다.
-	                fetch('${path}/basket/basket_delete.do', { 
-	                    method: 'POST',
-	                    headers: { 'Content-Type': 'application/json' },
-	                    body: JSON.stringify(selectedList)
-	                })
-	                .then(res => {
-	                    if(res.ok) {
-	                        alert("삭제 성공!");
-	                        location.reload();
-	                    } else {
-	                        // 여기서 서버의 에러 메시지를 확인해봅시다.
-	                        res.text().then(text => alert("삭제 실패 사유: " + text));
-	                    }
-	                })
-	                .catch(err => console.error("네트워크 에러:", err));
-	            }
-	        });
-	    }
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                fetch('${path}/basket/basket_delete.do', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(selectedList)
+                })
+                .then(res => {
+                    if(res.ok) {
+                        alert("삭제 성공!");
+                        location.reload();
+                    } else {
+                        // 여기서 서버의 에러 메시지를 확인해봅시다.
+                        res.text().then(text => alert("삭제 실패 사유: " + text));
+                    }
+                })
+                .catch(err => console.error("네트워크 에러:", err));
+            }
+	    });
+	    
+	    // 4. 구매 버튼 이벤트
+        btnPurchase.addEventListener('click', function() {
+            const selectedList = [];
+            const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
+
+            checkedItems.forEach(item => {
+                selectedList.push({
+                    idx: item.getAttribute('data-idx'),
+                    user_id: item.getAttribute('data-id'),
+                    product_code: item.getAttribute('data-code'),
+                    product_name: item.getAttribute('data-name'),
+                    product_img: item.getAttribute('data-img'),
+                    product_weight: item.getAttribute('data-weight'),
+                    crushing: item.getAttribute('data-crushing'),
+                    product_count: item.getAttribute('data-count'),
+                    basket_price: item.getAttribute('data-price')
+                });
+            });
+
+            if (selectedList.length === 0) {
+                alert("구매할 항목을 선택해주세요.");
+                return;
+            }
+
+            if (confirm("정말로 구매하시겠습니까?")) {
+            	const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '${path}/purchase/purchase_basket_list.do'; // 이동할 페이지의 URL (예: 주문페이지)
+
+                // 1. JSON 데이터를 문자열로 변환하여 hidden input에 저장
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = 'jsonPayload'; // 서버에서 @RequestParam("jsonPayload")로 받을 이름
+                hiddenField.value = JSON.stringify(selectedList);
+
+                form.appendChild(hiddenField);
+
+                // 2. 폼을 본문에 추가하고 전송
+                document.body.appendChild(form);
+                form.submit();
+            }
+	    });
 
 	    updateCalculations(); // 초기 실행
 	});

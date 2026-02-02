@@ -1,5 +1,7 @@
 package com.eighty.controller;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -8,15 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.eighty.basket.BasketVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.purchase.PurchaseService;
 import com.eighty.purchase.PurchaseVO;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 
 @RequestMapping("/purchase")
@@ -82,4 +89,24 @@ public class PurchaseController {
 	    }
 	}
 	
+	@PostMapping("/purchase_basket_list.do")
+    public String purchase_basket_list(@RequestParam("jsonPayload") String jsonPayload, HttpSession session, Model model) {
+		String id = (String) session.getAttribute("id");
+		
+		try {
+	        // 1. JSON 문자열을 List<BasketVO>로 변환
+	        ObjectMapper mapper = new ObjectMapper();
+	        List<BasketVO> voList = mapper.readValue(jsonPayload, new TypeReference<List<BasketVO>>(){});
+	        
+	        UsersVO buyer = new UsersVO();
+	        buyer.setUser_id(id);
+	        model.addAttribute("users", uservice.getSelectOne(buyer));
+	        model.addAttribute("purcahse_list", voList);
+	        
+	        return "purchase/purchase_detail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "redirect:/index.do?page=1";
+	    }
+    }
 }
