@@ -21,4 +21,9 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public void insertPurchase(List<PurchaseVO> list) {
 		mybatis.insert("PURCHASE.insertPurchase", list);		
 	}
+
+	@Override
+	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
+		return mybatis.selectOne("PURCHASE.getPurchaseListOne", vo);
+	}
 }

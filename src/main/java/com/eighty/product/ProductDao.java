@@ -13,4 +13,5 @@ public interface ProductDao {
    int selectReviewCount(String productCode);
    ProductVO getProductForReview(ProductVO vo);
    int getPrice(String product_code, String product_weight);
+  
 }

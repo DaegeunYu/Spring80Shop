@@ -23,4 +23,9 @@ public class PurchaseServiceImpl implements PurchaseService {
 		dao.insertPurchase(list);
 		
 	}
+
+	@Override
+	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
+		return dao.getPurchaseListOne(vo);
+	}
 }

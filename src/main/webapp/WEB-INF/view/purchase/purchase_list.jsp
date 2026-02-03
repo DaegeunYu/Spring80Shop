@@ -28,7 +28,7 @@
 			</tr>
 			<c:forEach var="li" items="${purchaseList}">
 				<tr>
-					<td>${li.orderCode}</td>
+					<td><a href="${path}/purchase/purchaseListOne.do?orderCode=${li.orderCode}">${li.orderCode}</a></td>
 					<td>${li.userId}</td>
 					<td>${li.productCode}</td>
 					<td>${li.productName}</td>

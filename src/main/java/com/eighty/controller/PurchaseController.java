@@ -64,6 +64,16 @@ public class PurchaseController {
 	    return "purchase/purchase_list";
 	}
 	
+	@GetMapping(value="/purchaseListOne.do")
+	public String getpurchaseListOne(
+	    @SessionAttribute(name = "id") String loginId, 
+	    PurchaseVO vo,
+	    Model model) {
+	    vo.setUserId(loginId);
+	    model.addAttribute("purchaseOne", service.getPurchaseListOne(vo));
+	    return "purchase/purchase_list_one";
+	}
+	
 	@GetMapping("/purchase.do")
 	public String purchaseForm(HttpSession session, Model model, 
 							   String product_code, String product_count) {

@@ -28,7 +28,7 @@
                     </span>
                 </td>
                 <td style="text-align: left;">${review.reviewTitle}</td>
-                <td>${review.userId}</td>
+                <td><a href="/review/reviewEdit.do?userId=${review.userId}">${review.userId}</a></td>
                 <td>${review.regDate}</td>
             </tr>
 
