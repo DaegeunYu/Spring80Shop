@@ -59,6 +59,12 @@ public class UsersController {
 		if (loginUser != null && passwordEncoder.matches(vo.getUser_pw(), loginUser.getUser_pw())) {
 			session.setAttribute("id", loginUser.getUser_id());
 			session.setAttribute("userName", loginUser.getUser_name());
+			
+			String prevPage = (String) session.getAttribute("prevPage");
+	        if (prevPage != null && !prevPage.isEmpty()) {
+	            session.removeAttribute("prevPage"); // 로그인 성공했후 저장했던 섹션 삭제
+	            return "redirect:" + prevPage;      // 마지막 보던 페이지로 이동 
+	        }
 			return "redirect:/index.do?page=1";
 		} else {
 			model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");

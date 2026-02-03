@@ -86,6 +86,9 @@ public class PurchaseController {
 	    // 로그인한 사용자 확인
 	    String id = (String) session.getAttribute("id");
 	    if (id == null) {
+	    	//마지막으로 본 페이지
+	    	String detailUrl = "/product/product_detail.do?product_code=" + product_code;
+	        session.setAttribute("prevPage", detailUrl);
 	        return "redirect:/users/login.do";// 비 로그인 시 로그인페이지로 이동
 	    } 
 	    //사용자 정보
