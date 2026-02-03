@@ -14,7 +14,7 @@
 				<li>
 					<p>${m.product_name} </p>
 					<a href="${path}/product/product_detail.do?product_code=${m.product_code}">
-						<img class="recent_product_img" src="${m.product_img}">
+						<img class="product_img" src="${m.product_img}">
 					</a>
 				</li>
 			</c:forEach>

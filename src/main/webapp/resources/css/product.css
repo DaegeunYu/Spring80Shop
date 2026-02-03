@@ -52,6 +52,8 @@
 .product_img {
 	width: 200px;
 	height: 200px;
+	margin: 5px;
+	object-fit: cover; /* 비율을 유지하면서 60x60 영역을 꽉 채움 (중요!) */
 	border-radius: 5%;  
 }
 
@@ -442,12 +444,4 @@
 
 .scroll-container:hover .scroll-list {
   animation-play-state: paused;
-}
-
-.recent_product_img {
-	width: 200px;
-	height: 200px;
-	margin: 5px;
-	object-fit: cover; /* 비율을 유지하면서 60x60 영역을 꽉 채움 (중요!) */
-	border-radius: 5%;  
 }
