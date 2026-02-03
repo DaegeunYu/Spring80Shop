@@ -6,16 +6,17 @@
 
 <div class="product_info_area">
     <h3>주문 상품 정보</h3>
-    <table border="1" > <!-- PJ TODO : css 스타일에서 테이블 이미지 사이즈 조정 -->
+    <table border="1" class="order_table"> 
         <colgroup>
-            <col width="20%">
+            <col width="10%">
             <col width="40%">
-            <col width="20%">
-            <col width="20%">
+            <col width="10%">
+            <col width="10%">
+            <col width="30%">
         </colgroup>
             <tr>
                 <td>
-                    <img id="product_detail_img" src="${product.product_img}" > <!-- PJ TODO : css 스타일에서 사이즈 조정 -->
+                    <img id="product_detail_img" src="${product.product_img}" > 
                 </td>
                 <td><strong>${product.product_name}</strong></td>
                 

@@ -14,9 +14,9 @@
     <div id="display_CARD" class="payment_info" style="display: block;"><br>카드 결제 시스템을 이용합니다.</div>
     <div id="display_BANK" class="payment_info" style="display: none;"><br>계좌번호: 80커피은행 123-456-789012</div>
 
-    <input type="hidden" id="paymentStatus" name="paymentStatus" value="COMPLETED">
+    <input type="hidden" id="paymentStatus" name="paymentStatus" value="결제완료">
     
-    <button type="button" onclick="submitPayment()">결제하기</button>
+    <button type="submit" class="btn_payment" >결제하기</button>
 </div>
 
 <script>
@@ -26,9 +26,4 @@ function updateStatus(status, method) {
     document.getElementById('display_' + method).style.display = 'block';
 }
 
-function submitPayment() {
-    if(confirm("결제를 진행하시겠습니까?")) {
-        document.getElementById("orderForm").submit();
-    }
-}
 </script>
