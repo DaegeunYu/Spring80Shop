@@ -8,7 +8,7 @@
 <section>
 	<div align="center">
         <BR>
-		<H2> 내가 찜한 상품 </H2>
+		<H2> 찜 리스트 </H2>
 		<BR>
 		<div>
 			<c:import url="/WEB-INF/view/like/like_product_content.jsp" /> 

@@ -43,7 +43,7 @@
 					</div>
 					<ul class="submenu">
 						<li><a href="${path}/basket/basket_list.do">장바구니</a></li>
-						<li><a href="${path}/purchase/purchaseList.do">구매내역</a></li>
+						<li><a href="${path}/purchase/purchaseList.do">구매 내역</a></li>
 						<li><a href="${path}/product/like_product.do?page=1">찜 리스트</a></li>
 					</ul>
 				</div>
