@@ -78,7 +78,7 @@
 </div>
 <BR>
 
-<script>
+<script type="text/javascript">
 	const upBtn = document.querySelector('.up-btn');
     const downBtn = document.querySelector('.down-btn');
 	const countInput = document.querySelector('.product_count');

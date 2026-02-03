@@ -2,6 +2,7 @@ package com.eighty.controller;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.eighty.basket.BasketService;
+import com.eighty.basket.RecentVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewService;
@@ -25,6 +28,9 @@ public class ProductController {
 	
 	@Autowired
 	private ProductService service;
+	
+	@Autowired
+	private BasketService basketService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -74,9 +80,29 @@ public class ProductController {
 	}
 	
 	@GetMapping(value="/product_detail.do")
-	public String product_detail(Model model, ProductVO vo){
-	    ProductVO product = service.getProduct(vo);
+	public String product_detail(HttpSession session, Model model, ProductVO vo){
+		ProductVO product = service.getProduct(vo);
 	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
+	    
+	    String id = (String) session.getAttribute("id");
+		if (id != null) {
+			RecentVO rVo = new RecentVO();
+			rVo.setUser_id(id);
+			rVo.setProduct_code(product.getProduct_code());
+			rVo.setProduct_name(product.getProduct_name());
+			rVo.setProduct_img(product.getProduct_img());
+			
+			int count = basketService.getProductCount(rVo);
+			long number = basketService.getMaxNumber(rVo);
+			rVo.setNumber(number+1);
+			
+			if (count == 0) {
+				basketService.insert(rVo);
+			} else {
+				basketService.update(rVo);
+			}
+		}
+	    
 	    model.addAttribute("product", product);
 	    model.addAttribute("reviewCount", reviewCount);
 	    return "shop/product_detail";

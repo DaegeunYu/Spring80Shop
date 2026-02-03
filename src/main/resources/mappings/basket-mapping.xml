@@ -6,17 +6,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="BASKET">
  
 	<insert id="INSERT" parameterType="BasketVO">
-	 
-	 insert  into basket(user_id, product_code, product_name, 
-	                      product_img, product_weight, crushing, 
-	                      product_count, basket_price )
-     values(#{user_id},#{product_code},#{product_name},
-     					#{product_img}, #{product_weight}, #{crushing},
-	                    #{product_count}, #{basket_price})
+		 insert into basket(user_id, product_code, product_name, 
+		                      product_img, product_weight, crushing, 
+		                      product_count, basket_price )
+	     values(#{user_id},#{product_code},#{product_name},
+	     					#{product_img}, #{product_weight}, #{crushing},
+		                    #{product_count}, #{basket_price})
 	</insert>
 	
 	<select id="SELECT" parameterType="BasketVO" resultType ="BasketVO">
-	   SELECT * FROM basket WHERE user_id = #{user_id}
+		SELECT * FROM basket WHERE user_id = #{user_id}
 	</select>
 	
 	<delete id="DELETE" parameterType="java.util.List">
@@ -25,5 +24,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	(#{item.idx})
     	</foreach>
 	</delete>
+	
+	<insert id="INSERT_RECENT" parameterType="com.eighty.basket.RecentVO">
+		insert into product_recently(user_id, product_code, product_name, product_img, number)
+		values(#{user_id},#{product_code},#{product_name}, #{product_img}, #{number})
+	</insert>
+	
+	<select id="SELECT_RECENT_CHK" parameterType="com.eighty.basket.RecentVO" resultType ="int">
+		SELECT COUNT(*) FROM product_recently WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</select>
+	
+	<select id="SELECT_RECENT_NUMBER" parameterType="com.eighty.basket.RecentVO" resultType ="long">
+		SELECT IFNULL(MAX(number), 0) FROM product_recently WHERE user_id = #{user_id}
+	</select>
+	
+	<update id="UPDATE_RECENT" parameterType="com.eighty.basket.RecentVO">
+		UPDATE product_recently SET number = #{number} WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</update>
+	
+	<select id="SELECT_RECENT" parameterType="com.eighty.basket.RecentVO" resultType ="com.eighty.basket.RecentVO">
+		SELECT * FROM product_recently WHERE user_id = #{user_id} order by number desc limit 0, 10
+	</select>
 	
 </mapper>
