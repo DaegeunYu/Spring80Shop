@@ -15,6 +15,7 @@
 <link href="${path}/resources/css/product.css" rel="stylesheet">
 <link href="${path}/resources/css/user_form.css" rel="stylesheet">
 <link href="${path}/resources/css/purchase.css" rel="stylesheet">
+<link href="${path}/resources/css/sign.css" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -32,7 +33,7 @@
 	
 	<!--  null 과 공배 모두 체크  -->
 	<c:if test="${empty id}">
-	  <a href="${path}/users/users_form.do"> 회원가입 </a>&emsp;
+	  <a href="${path}/users/sign_up.do"> 회원가입 </a>&emsp;
 	  <a href="${path}/users/login.do"> 로그인</a> 
 	</c:if>
 	<c:if test="${not empty id}"> 
