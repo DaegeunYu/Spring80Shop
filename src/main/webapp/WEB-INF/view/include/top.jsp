@@ -33,14 +33,15 @@
 	
 	<!--  null 과 공배 모두 체크  -->
 	<c:if test="${empty id}">
-	  <a href="${path}/users/sign_up.do"> 회원가입 </a>&emsp;
-	  <a href="${path}/users/login.do"> 로그인</a> 
+		<a href="${path}/users/sign_up.do"> 회원가입 </a>&emsp;
+		<a href="${path}/users/login.do"> 로그인</a> 
 	</c:if>
 	<c:if test="${not empty id}"> 
-	  <a href="${path}/basket/basket_list.do"> 장바구니(임시) </a>&emsp;
-	  <a href="${path}/purchase/purchaseList.do">구매내역</a>&emsp;
-	  <a href="${path}/users/mypage.do"> 마이페이지 </a>&emsp;
-	  <a href="${path}/users/logout.do"> ${id}(로그아웃)</a>  
+		<a href="${path}/product/like_product.do?page=1"> 찜 목록(임시) </a>&emsp;
+		<a href="${path}/basket/basket_list.do"> 장바구니(임시) </a>&emsp;
+		<a href="${path}/purchase/purchaseList.do">구매내역</a>&emsp;
+		<a href="${path}/users/mypage.do"> 마이페이지 </a>&emsp;
+		<a href="${path}/users/logout.do"> ${id}(로그아웃)</a>  
 	</c:if>
 </div>
 </nav>

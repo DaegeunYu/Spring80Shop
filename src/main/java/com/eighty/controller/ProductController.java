@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.basket.BasketService;
 import com.eighty.basket.RecentVO;
+import com.eighty.product.LikeProductVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewService;
@@ -96,6 +99,18 @@ public class ProductController {
 			long number = basketService.getMaxNumber(rVo);
 			rVo.setNumber(number+1);
 			
+			LikeProductVO lVo = new LikeProductVO();
+			lVo.setUser_id(id);
+			lVo.setProduct_code(product.getProduct_code());
+			
+			Short isLike = service.select(lVo);
+			if (isLike != null) {
+				model.addAttribute("like", isLike);
+			} else {
+				model.addAttribute("like", 0);
+				service.insert(lVo);
+			}
+			
 			if (count == 0) {
 				basketService.insert(rVo);
 			} else {
@@ -113,5 +128,48 @@ public class ProductController {
 	public String get_price(String product_code, String product_weight) {
 		int price = service.getPrice(product_code, product_weight); 
 	    return String.valueOf(price);
+	}
+	
+	
+	// Like
+	@GetMapping(value="/like_product.do")
+	public String like_product(HttpSession session, Model model, LikeProductVO vo){
+		String id = (String) session.getAttribute("id");
+		vo.setUser_id(id);
+		
+		long count = service.getLikeCount(vo);
+		int currentPage = vo.getPage();
+		
+		int totalPage = (int) Math.ceil((double) count / vo.getAmount());
+		int endPage = (int) (Math.ceil(currentPage / (double) vo.getDisplayPage()) * vo.getDisplayPage());
+		int startPage = (endPage-vo.getDisplayPage()) + 1;
+		
+		if (totalPage < endPage) {
+			endPage = totalPage;
+		}
+		boolean prev = startPage > 1;
+		boolean next = endPage < totalPage;
+		
+		int start = (currentPage-1)*vo.getAmount();
+		vo.setStart(start);
+		
+		model.addAttribute("product_list", service.getLikeProduct(vo));
+		model.addAttribute("start_page", startPage);
+		model.addAttribute("end_page", endPage);
+		model.addAttribute("current_page", currentPage);
+		model.addAttribute("total_page", totalPage);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
+		
+		return "like/like_product_list";
+	}
+	
+	@PostMapping("/update_like.do")
+	@ResponseBody
+	public String update_like(HttpSession session, @RequestBody LikeProductVO vo) {
+		String id = (String) session.getAttribute("id");
+		vo.setUser_id(id);
+	    service.update(vo);
+	    return "success";
 	}
 }

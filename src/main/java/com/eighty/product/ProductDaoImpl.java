@@ -18,8 +18,7 @@ public class ProductDaoImpl implements ProductDao {
 	
 	@Override
 	public void insert(ProductVO vo) {
-		mybatis.update("PRODUCT.INSERT", vo);
-		
+		mybatis.insert("PRODUCT.INSERT", vo);
 	}
 
 	@Override
@@ -69,5 +68,32 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public ProductVO getProductForReview(ProductVO vo) {
 		return mybatis.selectOne("PRODUCT.getProductForReview", vo);
+	}
+
+	
+	// LIKE
+	@Override
+	public void insert(LikeProductVO vo) {
+		mybatis.insert("PRODUCT.INSERT_LIKE", vo);
+	}
+	
+	@Override
+	public Long getLikeCount(LikeProductVO vo) {
+		return mybatis.selectOne("PRODUCT.SELECT_LIKE_COUNT", vo);
+	}
+	
+	@Override
+	public List<ProductVO> getLikeProduct(LikeProductVO vo) {
+		return mybatis.selectList("PRODUCT.SELECT_LIKE_LIST", vo);
+	}
+
+	@Override
+	public Short select(LikeProductVO vo) {
+		return mybatis.selectOne("PRODUCT.SELECT_LIKE", vo);
+	}
+
+	@Override
+	public void update(LikeProductVO vo) {
+		mybatis.update("PRODUCT.UPDATE_LIKE", vo);
 	}
 }

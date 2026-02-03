@@ -58,4 +58,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    WHERE product_code = #{product_code}
 	</select>
 	
+	
+	<!-- 찜하기 -->
+	<insert id="INSERT_LIKE" parameterType="com.eighty.product.LikeProductVO">
+		insert into product_like(user_id, product_code, is_like)
+		values(#{user_id},#{product_code},#{is_like})
+	</insert>
+	
+	<select id="SELECT_LIKE" parameterType="com.eighty.product.LikeProductVO" resultType ="short">
+		SELECT is_like FROM product_like WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</select>
+	
+	<select id="SELECT_LIKE_COUNT" parameterType="ProductVO" resultType ="long">
+	   SELECT count(*) FROM product_like WHERE user_id = #{user_id} AND is_like = 1
+	</select>
+	
+	<select id="SELECT_LIKE_LIST" parameterType="com.eighty.product.LikeProductVO" resultType ="ProductVO">
+		SELECT p.* FROM product p JOIN product_like l
+		WHERE l.user_id = #{user_id} AND l.product_code = p.product_code AND l.is_like = 1
+		order by p.product_code limit #{start}, #{amount}
+	</select>
+	
+	<update id="UPDATE_LIKE" parameterType="com.eighty.product.LikeProductVO">
+		UPDATE product_like SET is_like = #{is_like} WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</update>
+	
 </mapper>

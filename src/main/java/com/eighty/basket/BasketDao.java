@@ -10,6 +10,7 @@ public interface BasketDao {
 	void update(BasketVO vo);	
 	int delete(List<BasketVO> voList);
 	
+	// RECENT
 	void insert(RecentVO vo);
 	List<RecentVO> getProductList(RecentVO vo);
 	long getMaxNumber(RecentVO vo);

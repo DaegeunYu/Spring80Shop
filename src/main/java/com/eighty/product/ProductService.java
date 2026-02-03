@@ -11,4 +11,11 @@ public interface ProductService {
    int count(ProductVO vo, SQL_TYPE type);
    ProductVO getProductDetail(String productCode);
    int getPrice(String product_code, String product_weight);
+   
+   // LIKE
+   void insert(LikeProductVO vo);
+   Long getLikeCount(LikeProductVO vo);
+   List<ProductVO> getLikeProduct(LikeProductVO vo);
+   Short select(LikeProductVO vo);
+   void update(LikeProductVO vo);
 }

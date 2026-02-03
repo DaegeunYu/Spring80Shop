@@ -44,4 +44,31 @@ public class ProductServiceImpl implements ProductService {
 	public int getPrice(String product_code, String product_weight) {
 		return dao.getPrice(product_code, product_weight);
 	}
+
+	
+	// LIKE
+	@Override
+	public void insert(LikeProductVO vo) {
+		dao.insert(vo);
+	}
+	
+	@Override
+	public Long getLikeCount(LikeProductVO vo) {
+		return dao.getLikeCount(vo);
+	}
+
+	@Override
+	public List<ProductVO> getLikeProduct(LikeProductVO vo) {
+		return dao.getLikeProduct(vo);
+	}
+
+	@Override
+	public Short select(LikeProductVO vo) {
+		return dao.select(vo);
+	}
+
+	@Override
+	public void update(LikeProductVO vo) {
+		dao.update(vo);
+	}
 }
