@@ -159,20 +159,21 @@ public class PurchaseController {
 	
 	@PostMapping("/purchase_insert.do")
 	public String insertPurchase(
-	        @RequestParam("product_code") String productCode,
-	        @RequestParam("productName") String productName,
-	        @RequestParam("productWeight") String productWeight,
-	        @RequestParam("product_count") int productCount,
-	        @RequestParam("total_price") int totalPrice,
+	        @RequestParam("product_code") String[] productCode,
+	        @RequestParam("productName") String[] productName,
+	        @RequestParam("productWeight") String[] productWeight,
+	        @RequestParam("product_count") String[] productCount,
+	        @RequestParam("total_price") String[] totalPrice,
+	        @RequestParam("crushing") String[] crushing,
 	        @RequestParam("paymentMethod") String paymentMethod,
 	        @RequestParam("paymentStatus") String paymentStatus,
-	        @RequestParam("crushing") String crushing,
 	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
 	        HttpSession session) {
 
 	    String userId = (String) session.getAttribute("id");
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
+	    for (int i = 0; i < productCode.length; i++) {
 	    PurchaseVO item = new PurchaseVO();
 	    
 	    // 공통 및 배송 정보 (PurchaseVO에서 실제 존재하는 메서드 호출)
@@ -189,15 +190,16 @@ public class PurchaseController {
 	    item.setIsReview("n");
 
 	    // 개별 상품 정보 
-	    item.setProductCode(productCode);
-	    item.setProductName(productName);
-	    item.setProductWeight(productWeight);
-	    item.setCrushing(crushing);
-	    item.setOrderCount(String.valueOf(productCount)); 
-	    item.setOrderPrice(String.valueOf(totalPrice));  
+	    item.setProductCode(productCode[i]);
+	    item.setProductName(productName[i]);
+	    item.setProductWeight(productWeight[i]);
+	    item.setCrushing(crushing[i]);
+	    item.setOrderCount(productCount[i]); 
+	    item.setOrderPrice(totalPrice[i]);  
 
 	    purchaseList.add(item);
-
+	    }
+	    
 	    service.insertPurchase(purchaseList);
 
 	    return "redirect:/purchase/purchaseList.do";
