@@ -101,7 +101,7 @@ public class PurchaseController {
 	        UsersVO buyer = new UsersVO();
 	        buyer.setUser_id(id);
 	        model.addAttribute("users", uservice.getSelectOne(buyer));
-	        model.addAttribute("purcahse_list", voList);
+	        model.addAttribute("purchase_list", voList);
 	        
 	        return "purchase/purchase_detail";
 	    } catch (Exception e) {
