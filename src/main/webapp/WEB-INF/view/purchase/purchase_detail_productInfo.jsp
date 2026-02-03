@@ -16,7 +16,7 @@
         </colgroup>
             <tr>
                 <td>
-                    <img id="product_detail_img" src="${product.product_img}" > 
+                    <img id="purchase_detail_img" src="${product.product_img}" > 
                 </td>
                 <td><strong>${product.product_name}</strong></td>
                 
