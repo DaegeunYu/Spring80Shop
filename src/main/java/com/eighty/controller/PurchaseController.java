@@ -1,6 +1,9 @@
 package com.eighty.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -64,29 +67,77 @@ public class PurchaseController {
 	    return "purchase/purchase_list";
 	}
 	
+<<<<<<< Updated upstream
+	@GetMapping(value="/purchaseListOne.do")
+	public String getpurchaseListOne(
+	    @SessionAttribute(name = "id") String loginId, 
+	    PurchaseVO vo,
+	    Model model) {
+	    vo.setUserId(loginId);
+	    model.addAttribute("purchaseOne", service.getPurchaseListOne(vo));
+	    return "purchase/purchase_list_one";
+	}
+	
 	@GetMapping("/purchase.do")
+=======
+	@RequestMapping("/purchase.do")
+>>>>>>> Stashed changes
 	public String purchaseForm(HttpSession session, Model model, 
-							   String product_code, String product_count) {
+							   String product_code, String product_count,
+							   @RequestParam(value="crushing", required=false) String crushing,
+	                           @RequestParam(value="product_weight", required=false) String product_weight,
+							   @RequestParam(value="jsonPayload", required=false) String basketJson) {
 	    // 로그인한 사용자 확인
 	    String id = (String) session.getAttribute("id");
-	    // 로그인 검증
-	    if (id != null) {
-	        UsersVO buyer = new UsersVO();
-	        buyer.setUser_id(id);//유저 조회 대상 지정
-	        model.addAttribute("users", uservice.getSelectOne(buyer)); //DB에서 회원 정보 조회 후 객체를 model에 저장
-	        
-	        ProductVO pvo = new ProductVO();
-	        pvo.setProduct_code(product_code); //제품 조회 대상 지정
-	        
-	        ProductVO resultProduct = proservice.getProduct(pvo); 
-	        model.addAttribute("product", resultProduct);//DB에서 상품 정보 조회 후 객체를 model에 저장
-	        
-	        model.addAttribute("product_count", product_count);//제품 선택 수량
-	        
-	        return "purchase/purchase_detail"; 
-	    } else {
-	        return "redirect:/users/login.do"; // 비 로그인 시 로그인페이지로 이동
-	    }
+	    if (id == null) {
+	        return "redirect:/users/login.do";// 비 로그인 시 로그인페이지로 이동
+	    } 
+	    //사용자 정보
+        UsersVO buyer = new UsersVO();
+        buyer.setUser_id(id);//유저 조회 대상 지정
+        model.addAttribute("users", uservice.getSelectOne(buyer)); //DB에서 회원 정보 조회 후 객체를 model에 저장
+	    
+        List<Map<String, Object>> purchaseList = new ArrayList<Map<String, Object>>();
+        
+        // 장바구니에서 여러 상품이 넘어온 경우
+        if (basketJson != null && !basketJson.isEmpty()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                List<BasketVO> basketList = mapper.readValue(basketJson, new TypeReference<List<BasketVO>>(){});
+
+                for (BasketVO b : basketList) {
+                	ProductVO pvo = new ProductVO(); 
+                    pvo.setProduct_code(b.getProduct_code()); 
+                    ProductVO p = proservice.getProduct(pvo);
+                    
+                    Map<String,Object> map = new HashMap<String,Object>();
+                    map.put("basket", b);  
+                    map.put("product", p);  
+                    purchaseList.add(map);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else { // 상세페이지에서 바로구매로 단일 상품 결제
+            ProductVO pvo = new ProductVO();
+            pvo.setProduct_code(product_code);
+            ProductVO p = proservice.getProduct(pvo);
+
+            BasketVO b = new BasketVO();
+            b.setProduct_code(product_code);
+            b.setProduct_count(product_count);
+            b.setCrushing(crushing); 
+            b.setProduct_weight(product_weight);
+            
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("basket", b);   
+            map.put("product", p); 
+            purchaseList.add(map);
+        }
+
+        model.addAttribute("purchaseList", purchaseList);
+        return "purchase/purchase_detail";
 	}
 	
 	@PostMapping("/purchase_basket_list.do")
@@ -101,7 +152,7 @@ public class PurchaseController {
 	        UsersVO buyer = new UsersVO();
 	        buyer.setUser_id(id);
 	        model.addAttribute("users", uservice.getSelectOne(buyer));
-	        model.addAttribute("purchase_list", voList);
+	        model.addAttribute("purchaseList", voList);
 	        
 	        return "purchase/purchase_detail";
 	    } catch (Exception e) {

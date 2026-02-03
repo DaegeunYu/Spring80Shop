@@ -7,9 +7,9 @@
 
 <section>
 <form id="orderForm" action="${path}/purchase/purchase_insert.do" method="post" onsubmit="return orderFormOK()">
-    <input type="hidden" name="product_code" value="${product.product_code}">
-    <input type="hidden" name="product_count" value="${product_count}">
-    <input type="hidden" name="total_price" value="${product.sale_price * product_count}">
+    <!-- <input type="hidden" name="product_code" value="${product.product_code}"> -->
+    <!-- <input type="hidden" name="product_count" value="${product_count}">-->
+    <!-- <input type="hidden" name="total_price" value="${product.sale_price * product_count}">-->
     
     <input type="hidden" name="receiverName"  id="receiverName" value="${users.user_name}">
 	<input type="hidden" name="receiverPhone" id="receiverPhone"  value="${users.user_tel}">
@@ -18,9 +18,9 @@
     
     <input type="hidden" name="orderCode" id="orderCode" 
        value="ORD<%= new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()) %><%= (int)(Math.random() * 1000) %>">
-    <input type="hidden" name="productName" id="productName" value="${product.product_name}">
-    <input type="hidden" name="productWeight" id="productWeight" value="${product.quantity}"> 
-    <input type="hidden" name="crushing" value="${param.crushing}">
+    <!-- <input type="hidden" name="productName" id="productName" value="${product.product_name}"> -->
+    <!-- <input type="hidden" name="productWeight" id="productWeight" value="${product.quantity}">  -->
+    <!-- <input type="hidden" name="crushing" value="${param.crushing}"> -->
     
 	<div align="center">
 		<H2> 주문 결제 </H2>

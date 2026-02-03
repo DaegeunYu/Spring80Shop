@@ -48,7 +48,7 @@
                  data-name="${m.product_name}"
                  data-img="${m.product_img}"
                  data-weight="${m.product_weight}"
-                 data-chrushing="${m.crushing}"
+                 data-crushing="${m.crushing}"
                  data-price="${m.basket_price}" 
        		     data-count="${m.product_count}"
        		     checked>
@@ -192,7 +192,7 @@
             if (confirm("정말로 구매하시겠습니까?")) {
             	const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '${path}/purchase/purchase_basket_list.do'; // 이동할 페이지의 URL (예: 주문페이지)
+                form.action = '${path}/purchase/purchase.do'; // 이동할 페이지의 URL (예: 주문페이지)
 
                 // 1. JSON 데이터를 문자열로 변환하여 hidden input에 저장
                 const hiddenField = document.createElement('input');
