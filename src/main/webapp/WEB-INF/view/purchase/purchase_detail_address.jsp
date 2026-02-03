@@ -9,7 +9,7 @@
     <h3>배송지</h3>
     <hr>
     
-    <div >
+    <div class="addr_select_area">
         <label>
             <input type="radio" name="addrOption" value="DEFAULT" checked 
                    onclick="toggleAddr('DEFAULT')"> 기본 배송지
@@ -44,7 +44,7 @@
     </div>
 </div>
 	<!-- 배송 메모 -->
-	<div class="delivery_memo_area">
+	<div class="delivery_memo_area" >
     	<label><strong>배송 메모</strong></label><br>
     	<select name="delivery_memo_select" id="delivery_memo_select" onchange="toggleMemoInput()">
        	 	<option value="">배송 메모를 선택해주세요</option>
@@ -131,9 +131,9 @@ function toggleAddr(type) {
         document.getElementById('new_name').focus();
     } else {
         // DEFAULT 선택 시 hidden 값 초기화
-        document.getElementById("order_name").value = "${users.user_name}";
-        document.getElementById("order_tel").value = "${users.user_tel}";
-        document.getElementById("order_add").value = "${users.user_add}";
+        document.getElementById("receiverName").value = "${users.user_name}";
+        document.getElementById("receiverPhone").value = "${users.user_tel}";
+        document.getElementById("address").value = "${users.user_add}";
     }
 }
 
@@ -141,6 +141,7 @@ function toggleAddr(type) {
 function toggleMemoInput() {
     const selectBox = document.getElementById("delivery_memo_select");
     const directDiv = document.getElementById("direct_memo_div");
+    const orderMemoHidden = document.getElementById("orderMemo");
     
     if (selectBox.value === "direct") {
         // '직접 입력' 선택 시 입력창 노출
@@ -179,24 +180,23 @@ function orderFormOK() {
 
         // 주소 검증 (우편번호 및 상세주소 입력 확인)
         const postcode = document.getElementById("sample6_postcode").value.trim();
+        const addr = document.getElementById("sample6_address").value.trim();
         const detail = document.getElementById("sample6_detailAddress").value.trim();
+        const extra = document.getElementById("sample6_extraAddress").value.trim();
         if (postcode === "" || detail === "") {
             alert("배송지 주소와 상세주소를 모두 입력해주세요.");
             if(postcode === "") sample6_execDaumPostcode();
             else document.getElementById("sample6_detailAddress").focus();
             return false;
         }
-        var postcode = document.getElementById("sample6_postcode").value.trim();
-        var addr = document.getElementById("sample6_address").value.trim();
-        var detail = document.getElementById("sample6_detailAddress").value.trim();
-        var extra = document.getElementById("sample6_extraAddress").value.trim();
-
+        
+        //주소 합치기
         var fullAddress = "[" + postcode + "] " + addr + " " + detail;
         if(extra !== "") {
             fullAddress += " " + extra;
         }
 
-        document.getElementById("order_add").value = fullAddress; 
+        document.getElementById("address").value = fullAddress; 
     }
     
     // 배송 메모 직접 입력 시 검증
@@ -209,17 +209,31 @@ function orderFormOK() {
             return false;
         }
     }
-    document.getElementById("order_memo").value = (memoSelect === "direct") ? directMemo : memoSelect;
+    document.getElementById("orderMemo").value = (memoSelect === "direct") ? directMemo : memoSelect;
 
     // 새 배송지 선택 시, 입력된 이름과 연락처를 전송용 hidden 필드에 복사
     if (addrOption === 'NEW') {
-        document.getElementById("order_name").value = document.getElementById("new_name").value;
-        document.getElementById("order_tel").value = document.getElementById("new_tel").value;
+        document.getElementById("receiverName").value = document.getElementById("new_name").value;
+        document.getElementById("receiverPhone").value = document.getElementById("new_tel").value;
         // (주소는 이미 fullAddress 로직으로 order_add에 들어가 있으므로 생략 가능)
+    }
+    
+    if (!confirm("결제를 진행하시겠습니까?")) {
+        return false; // 취소 클릭 시 전송 중단
     }
     
     return true; // 모든 검증 통과 시 전송
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const checked = document.querySelector('input[name="addrOption"]:checked');
+    if (checked) {
+        toggleAddr(checked.value);
+    }
+});
+
+
 
 
 </script>
