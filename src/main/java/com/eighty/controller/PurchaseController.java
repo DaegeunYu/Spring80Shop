@@ -67,7 +67,6 @@ public class PurchaseController {
 	    return "purchase/purchase_list";
 	}
 	
-<<<<<<< Updated upstream
 	@GetMapping(value="/purchaseListOne.do")
 	public String getpurchaseListOne(
 	    @SessionAttribute(name = "id") String loginId, 
@@ -78,10 +77,7 @@ public class PurchaseController {
 	    return "purchase/purchase_list_one";
 	}
 	
-	@GetMapping("/purchase.do")
-=======
 	@RequestMapping("/purchase.do")
->>>>>>> Stashed changes
 	public String purchaseForm(HttpSession session, Model model, 
 							   String product_code, String product_count,
 							   @RequestParam(value="crushing", required=false) String crushing,

@@ -45,14 +45,16 @@
 	size: 40px;
 }
 
-
 #product_info {
 	width: 500px;
 }
 
 .product_img {
 	width: 200px;
-	height: 200px; 
+	height: 200px;
+	margin: 5px;
+	object-fit: cover; /* 비율을 유지하면서 60x60 영역을 꽉 채움 (중요!) */
+	border-radius: 5%;  
 }
 
 .product_detail {
@@ -389,4 +391,57 @@
 
 .btn_purchase:hover {
     background-color: #000;
+}
+
+
+/* 최근 본 목록 */
+
+.scroll-container {
+	width: 85%;       /* 컨테이너 너비 */
+	overflow: hidden;  /* 영역 밖 숨김 */
+	border: 1px solid #ccc;
+	padding: 10px 0; /* 위아래 여유 공간 */
+}
+
+.scroll-list {
+	display: flex;     /* 가로 배치 */
+	list-style: none;
+	width: max-content; /* 리스트 전체 너비 자동 계산 */
+	padding: 0;
+	margin: 0;
+	align-items: center; /* 아이템 세로 중앙 정렬 */
+}
+
+.is-rolling {
+	animation: scroll-left 45s linear infinite;
+}
+
+.scroll-list li {
+	width: 230px;
+	flex-shrink: 0; /* 크기 줄어듦 방지 */
+	margin: 0 10px; /* 항목 간 간격 */
+	text-align: center;
+	white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+/* 상품명 텍스트가 너무 길어질 경우 대비 */
+.scroll-list li p {
+	font-size: 15px;
+	font-weight: bold;
+	color: #36D;
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis; /* 말줄임표 처리 */
+	white-space: nowrap;
+	width: 100%;
+}
+
+/* 애니메이션 정의 */
+@keyframes scroll-left {
+	0% { transform: translateX(0); }
+	100% { transform: translateX(-50%); } /* 전체(원본+복제)의 절반만큼 이동 */
+}
+
+.scroll-container:hover .scroll-list {
+  animation-play-state: paused;
 }

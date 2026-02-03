@@ -65,7 +65,7 @@
 				<p> <span> 중 량 : </span> <span> ${m.product_weight} </span> </p>
 				<p> <span> 분 쇄 : </span> <span> ${m.crushing} </span> </p>
 				<p> <span> 개 수 : </span> <span> ${m.product_count} </span> </p>
-				<p> <span> 가 격 : </span> <span> <fmt:formatNumber value="${m.basket_price}" pattern="#,###" /> 원 </span> </p>
+				<p> <span> 단 가 : </span> <span> <fmt:formatNumber value="${m.basket_price}" pattern="#,###" /> 원 </span> </p>
 			</div>
 		</div>
 	</c:forEach>

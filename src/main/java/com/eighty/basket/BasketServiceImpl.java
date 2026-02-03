@@ -32,4 +32,31 @@ public class BasketServiceImpl implements BasketService {
 	public int delete(List<BasketVO> voList) {
 		return dao.delete(voList);
 	}
+
+	
+	// RECENT
+	@Override
+	public void insert(RecentVO vo) {
+		dao.insert(vo);
+	}
+
+	@Override
+	public List<RecentVO> getProductList(RecentVO vo) {
+		return dao.getProductList(vo);
+	}
+
+	@Override
+	public long getMaxNumber(RecentVO vo) {
+		return dao.getMaxNumber(vo);
+	}
+
+	@Override
+	public int getProductCount(RecentVO vo) {
+		return dao.getProductCount(vo);
+	}
+
+	@Override
+	public void update(RecentVO vo) {
+		dao.update(vo);
+	}
 }

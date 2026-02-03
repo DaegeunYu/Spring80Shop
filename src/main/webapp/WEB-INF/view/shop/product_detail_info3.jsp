@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <BR>
 
 <div class="product_detail">
@@ -73,12 +75,12 @@
 		<a class="button" id="addToBasket" href="#">장바구니</a>
 	</div>
 	<div class="icon_box">
-		<img class="icon" src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_empty.png"> <!-- PJ TODO: 찜하기 버튼 변경 추후 추가 -->
+		<img id="like" class="icon" src="${like == 0 ? 'https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_empty.png' : 'https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_full.png'}">
 	</div>
 </div>
 <BR>
 
-<script>
+<script type="text/javascript">
 	const upBtn = document.querySelector('.up-btn');
     const downBtn = document.querySelector('.down-btn');
 	const countInput = document.querySelector('.product_count');
@@ -86,9 +88,9 @@
 	const priceDisplay = document.getElementById('price');
 	const weightSelect = document.getElementById('weight');
 	const productCode = "${param.product_code}";
-	
 	let price = 0;
-	
+	let likeTimer;
+		
 	async function fetchPriceFromServer() {
 	    const selectedWeight = weightSelect.value;
 	    const count = parseInt(countInput.value) || 1;
@@ -117,7 +119,24 @@
 	        console.error("가격 정보를 가져오는데 실패했습니다.", error);
 	    }
 	}
-
+	
+	async function sendLikeData(data) {
+	    try {
+	        const response = await fetch('${path}/product/update_like.do', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify(data)
+	        });
+	        
+	        if (!response.ok) throw new Error('네트워크 응답 에러');
+	        console.log("서버 반영 완료:", data.is_like);
+	    } catch (error) {
+	        console.error("좋아요 반영 실패:", error);
+	    }
+	}
+	
 	// 이벤트 연결: 무게 변경 시 서버 요청
 	weightSelect.addEventListener('change', fetchPriceFromServer);
 
@@ -212,6 +231,28 @@
 	    
 	    // 3. 페이지 이동
 	    location.href = finalUrl;
+	});
+	
+	document.getElementById('like').addEventListener('click', function() {
+	    const emptyHeart = "https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_empty.png";
+	    const fullHeart = "https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_full.png";
+
+	    let isLike = 0;
+	    if (this.src === emptyHeart) {
+	        this.src = fullHeart;
+	        isLike = 1;
+	    } else {
+	        this.src = emptyHeart;
+	        isLike = 0;
+	    }
+	    
+	    clearTimeout(likeTimer);
+	    likeTimer = setTimeout(() => {
+	        sendLikeData({
+	            product_code: "${product.product_code}", // 현재 상품 코드
+	            is_like: isLike
+	        });
+	    }, 500);
 	});
 </script>
 

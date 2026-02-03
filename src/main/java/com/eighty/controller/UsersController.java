@@ -72,9 +72,19 @@ public class UsersController {
 	    return "redirect:/index.do?page=1";
 	}
 	
+	@GetMapping(value="/sign_up.do")
+	public String sign_up() {
+		return "users/users_signup_select";
+	}
+	
 	@GetMapping(value="/users_form.do")
 	public String users_form() {
 		return "users/users_form";
+	}
+	
+	@GetMapping(value="/business_users_form.do")
+	public String business_users_form() {
+		return "users/business_users_form";
 	}
 	
 	@PostMapping(value="/users_formOK.do")

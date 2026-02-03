@@ -15,6 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	ORDER BY orderCode DESC
 	</select>
 	
+	<select id="getPurchaseListOne" resultType="com.eighty.purchase.PurchaseVO">
+    	SELECT * FROM purchase
+    	where orderCode = #{orderCode}
+	</select>
+	
 	<insert id="insertReview" parameterType="ReviewVO">
     	INSERT INTO review (reviewId, orderCode, productCode, userId, content, reg_date)
     	VALUES (review_seq.NEXTVAL, #{orderCode}, #{productCode}, #{userId}, #{content}, SYSDATE)

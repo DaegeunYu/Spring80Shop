@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+#sign_select, #sign_form {
+	min-height: calc(100vh - 135px);
+	
+}
+
+#sign_select_header {
+	text-align: center;
+	margin-top: 100px;
+	margin-bottom: 80px;
+}
+#sign_form_header {
+	text-align: center;
+	margin-top: 50px;
+	margin-bottom: 80px;
+}
+.selection-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 30px;
+}
+.sign-card {
+        width: 200px;
+        padding: 40px;
+        border: 4px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 25px;
+}
+.sign-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-color: #007bff;
+}

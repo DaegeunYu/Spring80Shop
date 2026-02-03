@@ -31,4 +31,29 @@ public class BasketDaoImpl implements BasketDao {
 	public int delete(List<BasketVO> voList) {
 		return mybatis.delete("BASKET.DELETE", voList);
 	}
+
+	@Override
+	public void insert(RecentVO vo) {
+		mybatis.insert("BASKET.INSERT_RECENT", vo);
+	}
+
+	@Override
+	public List<RecentVO> getProductList(RecentVO vo) {
+		return mybatis.selectList("BASKET.SELECT_RECENT", vo);
+	}
+
+	@Override
+	public long getMaxNumber(RecentVO vo) {
+		return mybatis.selectOne("BASKET.SELECT_RECENT_NUMBER", vo);
+	}
+	
+	@Override
+	public int getProductCount(RecentVO vo) {
+		return mybatis.selectOne("BASKET.SELECT_RECENT_CHK", vo);
+	}
+
+	@Override
+	public void update(RecentVO vo) {
+		mybatis.update("BASKET.UPDATE_RECENT", vo);
+	}
 }
