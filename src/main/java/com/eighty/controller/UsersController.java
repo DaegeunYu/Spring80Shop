@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,14 @@ public class UsersController {
 	}
 	
 	@GetMapping(value="/login.do")
-	public String login() {
+	public String login(HttpSession session, HttpServletRequest request) {
+		// 이전 페이지 주소를 가져옴
+	    String referer = request.getHeader("Referer");
+	    
+	    // 이전 페이지가 있고, 로그인 페이지 자체가 아니라면 세션에 저장
+	    if (referer != null && !referer.contains("/login.do")) {
+	        session.setAttribute("prevPage", referer);
+	    }
 		return "users/login";		
 	}
 	
@@ -63,21 +71,28 @@ public class UsersController {
 	*/
 	
 	@PostMapping("/loginSuccess.do")
-	public String login(UsersVO vo, String userType, HttpSession session, Model model) {
+	public String loginSuccess(UsersVO vo, String userType, HttpSession session, Model model) {
 	    UsersVO loginUser = service.loginCheck(vo);
-	    
-	    // 1. 유저 존재 및 비밀번호 검증 (1차 관문)
+
+	    // 1. 유저 존재 및 비밀번호 검증
 	    if (loginUser == null || !passwordEncoder.matches(vo.getUser_pw(), loginUser.getUser_pw())) {
 	        model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
 	        return "users/login";
 	    }
 
-	    // 2. 선택한 유형과 실제 권한 비교 (2차 관문)
-	    // 화면의 'member'/'business' 값과 DB의 'member'/'business' 값이 일치하는지 바로 비교
+	    // 2. 선택한 유형과 실제 권한 비교
 	    if (userType.equals(loginUser.getUser_role())) {
 	        session.setAttribute("id", loginUser.getUser_id());
 	        session.setAttribute("userName", loginUser.getUser_name());
 	        session.setAttribute("userRole", loginUser.getUser_role());
+
+	        // [복구 부분] 이전 페이지 정보가 있다면 해당 페이지로 이동
+	        String prevPage = (String) session.getAttribute("prevPage");
+	        if (prevPage != null && !prevPage.isEmpty()) {
+	            session.removeAttribute("prevPage");
+	            return "redirect:" + prevPage;
+	        }
+
 	        return "redirect:/index.do?page=1";
 	    } else {
 	        model.addAttribute("msg", "회원 유형 선택이 올바르지 않습니다.");
