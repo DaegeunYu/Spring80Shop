@@ -268,3 +268,91 @@ hr {
     border: 1px solid #db6b30;
     border-radius: 4px;
 }
+
+/* 주문 완료 페이지 (purchase_success.jsp) */
+.success_container {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.success_icon {
+    font-size: 64px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.success_container h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.success_msg {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.order_info_box {
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.order_info_box p {
+    margin: 12px 0;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order_info_box .order_code {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.order_info_box .total_price {
+    font-size: 1.3em;
+    color: #db6b30;
+}
+
+/* 버튼 그룹 */
+.btn_group {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn_group .btn_common {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn_continue {
+    background-color: #333;
+    color: #fff;
+}
+
+.btn_continue:hover {
+    background-color: #000;
+}
+
+.btn_history {
+    background-color: #f1f1f1;
+    color: #555;
+}
+
+.btn_history:hover {
+    background-color: #e0e0e0;
+}

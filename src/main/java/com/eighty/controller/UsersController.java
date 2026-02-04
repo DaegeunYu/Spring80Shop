@@ -101,7 +101,7 @@ public class UsersController {
 	    String encodePw = passwordEncoder.encode(vo.getUser_pw());
 	    vo.setUser_pw(encodePw);
 		
-	    /*  PJ TODO : 테스트 완료 후 주석 삭제 =============
+	    
 		 // 아이디 중복 검사
 	    int id = service.idCheck(vo.getUser_id());
 
@@ -128,7 +128,7 @@ public class UsersController {
 	    }
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
 	    
-	    ====================테스트 완료 후 주석 삭제 */
+	
 	    
 	    vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 

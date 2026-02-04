@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td><input type="text" id="user_birthday" name="user_birthday" 
-              			placeholder="예: 20260101" maxlength="8" placeholder="생년월일" required value="19991111"> <!-- PJ TODO : 테스트 완료 후 value 삭제 -->
+              			placeholder="예: 20260101" maxlength="8" placeholder="생년월일" required > 
        					<small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
        				</td>
 				</tr>
@@ -41,7 +41,7 @@
 					<td><input type="text" id="user_email" name="user_email" placeholder="이메일" required></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_add" name="user_add" placeholder="주소" required> <!-- PJ TODO : 테스트 완료 후 type="hidden"으로 교체 placeholder="주소" 삭제-->
+					<td><input type="hidden" id="user_add" name="user_add" required>
 						<input type="text" id="sample6_postcode" placeholder="우편번호">
 						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
 						<input type="text" id="sample6_address" placeholder="주소"><br>
@@ -76,7 +76,7 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script>
 
-/* PJ TODO : 테스트 완료 후 주석 삭제 
+
 
 var idCheck = false; // 아이디 중복 확인 여부 확인 전역변수
 
@@ -322,7 +322,6 @@ function formOK() {
     return true;
 }
 
-===========================테스트 완료 후 주석 삭제 */
 
 </script>
 
