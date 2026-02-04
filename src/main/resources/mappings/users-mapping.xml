@@ -13,11 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      					 #{user_role},#{user_gender},#{recommender_id})
 	</insert>
 	
-	<select id="getUserById" resultType="UsersVO">
-	    SELECT user_id, user_pw, user_name 
-	    FROM users 
-	    WHERE user_id = #{user_id}
-	</select>
+	<select id="getUserById" parameterType="com.eighty.users.UsersVO" resultType="com.eighty.users.UsersVO">
+    SELECT 
+        idx, user_id, user_pw, user_name, user_role, user_tel, user_email, user_add
+    FROM users 
+    WHERE user_id = #{user_id}
+</select>
 	
 	<select id="idCheck"  parameterType="String" resultType="int">
 		select count(*) from users where user_id = #{user_id}
@@ -27,6 +28,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT * FROM users 
         WHERE user_id = #{user_id}
     </select>
+	
+    <insert id="insertUsers" parameterType="com.eighty.users.UsersVO">
+        INSERT INTO users (
+            user_id, user_pw, user_name, user_tel, user_email, user_add, user_role
+        ) VALUES (
+            #{user_id}, #{user_pw}, #{user_name}, #{user_tel}, #{user_email}, #{user_add}, 'business'
+        )
+    </insert>
 
+    <insert id="insertBusinessDetail" parameterType="com.eighty.users.BusinessVO">
+        INSERT INTO business_users (
+            businessId, bizRegNo, companyName, ceoName, bizType, bizLicenseFile
+        ) VALUES (
+            #{businessId}, #{bizRegNo}, #{companyName}, #{ceoName}, #{bizType}, #{bizLicenseFile}
+        )
+    </insert>
 	
 </mapper>
