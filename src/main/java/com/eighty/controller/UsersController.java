@@ -190,29 +190,38 @@ public class UsersController {
 	                           @RequestParam("file") MultipartFile file, 
 	                           Model model, HttpSession session, RedirectAttributes rttr) {
 	    try {
-	        // 1. 비밀번호 암호화 (BCrypt)
 	        uVo.setUser_pw(passwordEncoder.encode(uVo.getUser_pw()));
 
-	        // 2. 사업자 등록증 파일 업로드 처리
 	        if (file != null && !file.isEmpty()) {
-	            // init()에서 만들어둔 path 사용 (resources/files/)
-	            File folder = new File(path);
-	            if (!folder.exists()) folder.mkdirs();
-
-	            // 파일명 중복 방지를 위해 밀리초 추가
-	            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-	            file.transferTo(new File(path + fileName));
+	            // 1. 상세 폴더 경로 설정 (resources/files/business_license)
+	            File licenseFolder = new File(path, "business_license");
 	            
-	            // BusinessVO(카멜표기법)에 파일명 세팅
-	            bVo.setBizLicenseFile(fileName); 
+	            // 2. 폴더가 없으면 생성
+	            if (!licenseFolder.exists()) {
+	                licenseFolder.mkdirs();
+	            }
+
+	            // 3. 파일명 조립: 사업자번호_오늘날짜.확장자 (예: 123-45-67890_20260204.jpg)
+	            String bizRegNo = bVo.getBizRegNo(); // JSP name="bizRegNo" 값 가져오기
+	            String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+	            
+	            // 확장자 추출 (.jpg, .png 등)
+	            String originalName = file.getOriginalFilename();
+	            String extension = originalName.substring(originalName.lastIndexOf("."));
+	            
+	            String saveName = bizRegNo + "_" + today + extension;
+	            
+	            // 4. 실제 파일 저장
+	            file.transferTo(new File(licenseFolder, saveName));
+	            
+	            // 5. DB 저장용 경로 (폴더명 포함해서 저장)
+	            bVo.setBizLicenseFile("business_license/" + saveName); 
 	        }
 
-	        // 3. 서비스 호출 (Users + Business 한 번에 처리)
 	        businessService.joinBusiness(uVo, bVo);
-
-	        // 4. 가입 성공 후 즉시 로그인 세션 생성
+	        
 	        session.setAttribute("id", uVo.getUser_id());
-	        session.setAttribute("userName", bVo.getCompanyName()); // 법인은 상호명을 이름으로
+	        session.setAttribute("userName", bVo.getCompanyName());
 	        session.setAttribute("userRole", "business");
 
 	        rttr.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
