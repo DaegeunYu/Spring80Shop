@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.basket.BasketVO;
 import com.eighty.product.ProductService;
@@ -171,11 +172,14 @@ public class PurchaseController {
 	        @RequestParam("paymentMethod") String paymentMethod,
 	        @RequestParam("paymentStatus") String paymentStatus,
 	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
-	        HttpSession session) {
+	        HttpSession session,
+	        RedirectAttributes purchaseInfo) {
 
 	    String userId = (String) session.getAttribute("id");
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
+	    int finalTotalSum = 0;
+	    
 	    for (int i = 0; i < productCode.length; i++) {
 	    PurchaseVO item = new PurchaseVO();
 	    
@@ -204,7 +208,15 @@ public class PurchaseController {
 	    }
 	    
 	    service.insertPurchase(purchaseList);
+	    
+	    purchaseInfo.addFlashAttribute("finalPrice", finalTotalSum + 5000);
+	    purchaseInfo.addFlashAttribute("receiverName", buyerInfo.getReceiverName());
 
-	    return "redirect:/purchase/purchaseList.do";
+	    return "redirect:/purchase/purchase_success.do";
+	}
+	
+	@GetMapping("/purchase_success.do")
+	public String purchaseSuccess() {
+	    return "purchase/purchase_success"; 
 	}
 }

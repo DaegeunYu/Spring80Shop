@@ -218,6 +218,12 @@ function orderFormOK() {
         // (주소는 이미 fullAddress 로직으로 order_add에 들어가 있으므로 생략 가능)
     }
     
+    if (!orderMemo.value || orderMemo.value === "not" || orderMemo.value.trim() === "") {
+        alert("배송 메모를 선택하거나 입력해주세요.");
+        orderMemo.focus();
+        return false;
+    }
+    
     if (!confirm("결제를 진행하시겠습니까?")) {
         return false; // 취소 클릭 시 전송 중단
     }
