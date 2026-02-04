@@ -1,8 +1,7 @@
 @charset "UTF-8";
 
-@charset "UTF-8";
 
-/* 1. 기본 레이아웃 및 컨테이너 */
+/* 기본 레이아웃 및 컨테이너 */
 #purchase_info {
     width: 70%;
     margin: 0 auto;
@@ -32,7 +31,7 @@ hr {
     margin: 30px 0;
 }
 
-/* 2. 배송지 및 메모 영역 (address.jsp) */
+/* 배송지 및 메모 영역 (address.jsp) */
 .address_area,
 .delivery_memo_area {
     padding: 20px;
@@ -83,7 +82,7 @@ hr {
     margin-right: 5px;
 }
 
-/* 배송지 초기 상태 제어 (중요) */
+/* 배송지 초기 상태 제어 */
 #addr_DEFAULT {
     display: block;
 }
@@ -94,39 +93,128 @@ hr {
     border: 1px dashed #db6b30;
 }
 
-/* 3. 주문 상품 정보 (productInfo.jsp) */
-.order_table {
+/* 주문 상품 정보 */
+.purchase_basket_container {
+    display: flex;
     width: 100%;
-    border-collapse: collapse;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    background-color: #fff;
+    margin-bottom: 30px;
+    border: 1px solid #e9ecef; 
+    border-radius: 8px;        
+    box-sizing: border-box;
+}
+
+/* 개별 상품 */
+.purchase_basket_item {
+    display: flex;
+    align-items: center;
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
     background-color: #fff;
 }
 
-.order_table td {
-    padding: 15px;
-    border-bottom: 1px solid #f1f1f1;
-    text-align: center;
-    vertical-align: middle;
+/* 이미지 영역 */
+.purchase_image_box {
+    margin-right: 20px;
+    flex-shrink: 0;
 }
 
-#purchase_detail_img {
-    width: 90px;
-    height: 90px;
+.purchase_product_image {
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #eee;
+    display: block;
+    border-radius: 4px;
 }
 
-.order_table strong {
+/*  설명 영역 */
+.purchase_product_name, 
+.purchase_product_infomation {
+    flex: 1; 
+    text-align: center;
+}
+
+.purchase_product_name strong {
+    font-size: 18px;
+    display: block;
+    color: #333;
+}
+
+/* 상세 정보 텍스트 */
+.purchase_product_infomation p 
+{
+    display: flex;
+    margin: 4px 0;
+    color: #666;
     font-size: 16px;
-    color: #222;
+    font-weight: 600;
 }
 
-/* 4. 결제 수단 및 버튼 (payment.jsp) */
+/* 항목명 고정 너비 (중량, 분쇄, 개수 등 라벨 정렬) */
+.purchase_product_infomation p span:first-child {
+    width: 70px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    display: inline-block;
+}
+
+/* 금액 상세 영역  */
+.purchase_summary_box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 25px 20px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.purchase_price_detail {
+    display: flex;
+    margin: 4px 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+}
+.purchase_price_detail_total {
+    font-size: 15px;
+    color: #888;       
+}
+.purchase_delivery_price {
+    font-size: 14px;
+    color: #888;
+}
+
+.purchase_price_total {
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+}
+
+/* 최종 금액  */
+.purchase_price_total strong {
+    color: #db6b30;
+    font-size: 22px;
+    margin-left: 10px;
+}
+
+
+/* 결제 수단 및 버튼 (payment.jsp) */
 .payment_area {
     padding: 25px;
     background-color: #fff;
-    border: 2px solid #333;
-    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
 }
 
 .payment_info {
@@ -157,7 +245,7 @@ hr {
     background-color: #000;
 }
 
-/* 5. 배송 메모 */
+/* 배송 메모 */
 #delivery_memo_select {
     width: 100%;
     padding: 12px;

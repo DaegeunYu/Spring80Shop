@@ -2,12 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div class="product_info_area">
-    <h3 style="margin-bottom: 20px;">주문 상품 정보</h3>
+<div class="purchase_product_info_area">
     
-    <div class="basket_container"> 
+    
+    <div class="purchase_basket_container"> 
+   	 <h3 style="margin-bottom: 20px;">주문 상품 정보</h3>
     	<c:forEach var="item" items="${purchaseList}">
-            <div class="basket_item"> 
+    		<c:set var="totalSum" value="${totalSum + (item.product.sale_price * item.basket.product_count)}" />
+            <div class="purchase_basket_item"> 
             	<input type="hidden" name="product_code" value="${item.product.product_code}">
                 <input type="hidden" name="productName" value="${item.product.product_name}">
                 <input type="hidden" name="productWeight" value="${item.basket.product_weight}">
@@ -15,40 +17,40 @@
                 <input type="hidden" name="product_count" value="${item.basket.product_count}">
                 <input type="hidden" name="total_price" value="${item.product.sale_price * item.basket.product_count}">
 
-                <div class="image_box">
-                    <img class="product_image" src="${item.product.product_img}">
+                <div class="purchase_image_box">
+                    <img class="purchase_product_image" src="${item.product.product_img}">
                 </div>
 
-                <div class="product_name">
+                <div class="purchase_product_name">
                     <strong>${item.product.product_name}</strong>
                 </div>
 
-                <div class="product_infomation">
+                <div class="purchase_product_infomation">
                     <p><span> 중 량 : </span> <span> ${item.basket.product_weight} </span></p>
                     <p><span> 분 쇄 : </span> <span> ${item.basket.crushing} </span></p>
                     <p><span> 개 수 : </span> <span> ${item.basket.product_count} 개 </span></p>
-                    <p>
-                        <span> 가 격 : </span> 
-                        <span> 
-                            <fmt:formatNumber value="${item.product.sale_price * item.basket.product_count}" pattern="#,###" /> 원 
-                        </span>
-                    </p>
-                </div>
-            </div>
+                   
+                     <div class="purchase_price_detail">
+            			<span>상품 금액 : <fmt:formatNumber value="${item.product.sale_price * item.basket.product_count}" pattern="#,###" /> 원 </span>
+                   	 </div>
+              	</div>
+			</div>
+               
         </c:forEach>
-    </div>
-</div>
-
-<style>
-    /* 장바구니(basket_list) 스타일이 이 페이지에 없을 경우를 대비한 최소한의 가이드 */
-    .basket_item {
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #eee;
-        padding: 15px 0;
-    }
-    .image_box img { width: 100px; margin-right: 20px; }
-    .product_name { flex: 1; }
-    .product_infomation { flex: 1; text-align: right; line-height: 1.6; }
-    .product_infomation p span:first-child { color: #888; margin-right: 10px; }
-</style>
+        	<div class="purchase_summary_box">
+        		<div class="purchase_price_detail_total">
+        			<span>상품 금액 : </span>
+        			<span><fmt:formatNumber value="${totalSum}" pattern="#,###" /> 원</span>
+   				</div>
+       			<div class="purchase_delivery_price">
+           			<span>배송비 : 5,000원</span>
+       			</div>
+       			<div class="purchase_price_total">
+           			<span>총 결제 금액 : </span>
+           			<strong id="purchase_final_total_price">
+           			 	<fmt:formatNumber value="${totalSum + 5000}" pattern="#,###" />원
+           			</strong>
+       			</div>
+           	</div>
+    </div>    
+  
