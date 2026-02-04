@@ -15,7 +15,16 @@
 					<td><H2> 80's MEMBER LOGIN </H2></td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_id" name="user_id" placeholder="아이디"></td>
+				<td>
+				<div class="login-type-container">
+				    <input type="radio" name="userType" value="member" id="member" checked>
+				    <label for="member" class="type-label left">일반회원</label>
+				
+				    <input type="radio" name="userType" value="business" id="business">
+				    <label for="business" class="type-label right">법인회원</label>
+				</div>
+				<br>
+					<input type="text" id="user_id" name="user_id" placeholder="아이디"></td>
 				</tr>
 				<tr>
 					<td><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호"></td>

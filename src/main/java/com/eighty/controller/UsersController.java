@@ -1,5 +1,7 @@
 package com.eighty.controller;
 
+import java.io.File;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -11,9 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.users.BusinessService;
+import com.eighty.users.BusinessVO;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
@@ -24,6 +30,9 @@ public class UsersController {
 	
 	@Autowired
 	private UsersService service;
+	
+	@Autowired
+    private BusinessService businessService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -54,22 +63,26 @@ public class UsersController {
 	*/
 	
 	@PostMapping("/loginSuccess.do")
-	public String login(UsersVO vo, HttpSession session, Model model) {
-		UsersVO loginUser = service.loginCheck(vo);
-		if (loginUser != null && passwordEncoder.matches(vo.getUser_pw(), loginUser.getUser_pw())) {
-			session.setAttribute("id", loginUser.getUser_id());
-			session.setAttribute("userName", loginUser.getUser_name());
-			
-			String prevPage = (String) session.getAttribute("prevPage");
-	        if (prevPage != null && !prevPage.isEmpty()) {
-	            session.removeAttribute("prevPage"); // 로그인 성공했후 저장했던 섹션 삭제
-	            return "redirect:" + prevPage;      // 마지막 보던 페이지로 이동 
-	        }
-			return "redirect:/index.do?page=1";
-		} else {
-			model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
-			return "users/login";
-		}
+	public String login(UsersVO vo, String userType, HttpSession session, Model model) {
+	    UsersVO loginUser = service.loginCheck(vo);
+	    
+	    // 1. 유저 존재 및 비밀번호 검증 (1차 관문)
+	    if (loginUser == null || !passwordEncoder.matches(vo.getUser_pw(), loginUser.getUser_pw())) {
+	        model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
+	        return "users/login";
+	    }
+
+	    // 2. 선택한 유형과 실제 권한 비교 (2차 관문)
+	    // 화면의 'member'/'business' 값과 DB의 'member'/'business' 값이 일치하는지 바로 비교
+	    if (userType.equals(loginUser.getUser_role())) {
+	        session.setAttribute("id", loginUser.getUser_id());
+	        session.setAttribute("userName", loginUser.getUser_name());
+	        session.setAttribute("userRole", loginUser.getUser_role());
+	        return "redirect:/index.do?page=1";
+	    } else {
+	        model.addAttribute("msg", "회원 유형 선택이 올바르지 않습니다.");
+	        return "users/login";
+	    }
 	}
 	
 	@GetMapping("/logout.do")
@@ -155,6 +168,47 @@ public class UsersController {
 		}else {
 			return "F"; // 중복값이 없다.
 		}		
-	}	
+	}
+	
+	@PostMapping("/businessJoin.do")
+	public String businessJoin(UsersVO uVo, BusinessVO bVo, 
+	                           @RequestParam("file") MultipartFile file, 
+	                           Model model, HttpSession session, RedirectAttributes rttr) {
+	    try {
+	        // 1. 비밀번호 암호화 (BCrypt)
+	        uVo.setUser_pw(passwordEncoder.encode(uVo.getUser_pw()));
+
+	        // 2. 사업자 등록증 파일 업로드 처리
+	        if (file != null && !file.isEmpty()) {
+	            // init()에서 만들어둔 path 사용 (resources/files/)
+	            File folder = new File(path);
+	            if (!folder.exists()) folder.mkdirs();
+
+	            // 파일명 중복 방지를 위해 밀리초 추가
+	            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+	            file.transferTo(new File(path + fileName));
+	            
+	            // BusinessVO(카멜표기법)에 파일명 세팅
+	            bVo.setBizLicenseFile(fileName); 
+	        }
+
+	        // 3. 서비스 호출 (Users + Business 한 번에 처리)
+	        businessService.joinBusiness(uVo, bVo);
+
+	        // 4. 가입 성공 후 즉시 로그인 세션 생성
+	        session.setAttribute("id", uVo.getUser_id());
+	        session.setAttribute("userName", bVo.getCompanyName()); // 법인은 상호명을 이름으로
+	        session.setAttribute("userRole", "business");
+
+	        rttr.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
+	        return "redirect:/index.do?page=1";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        model.addAttribute("msg", "법인 가입 처리 중 오류가 발생했습니다.");
+	        return "users/business_users_form";
+	    }
+	}
+
 
 }

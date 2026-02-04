@@ -15,7 +15,7 @@
 </div>
 <div class="selection-container">
     <a href="${path}/users/users_form.do" class="sign-card">🧍 일반 회원  </a>
-    <a href="${path}/users/business_users_form.do" class="sign-card">🏢 법인 회원  </a>
+    <a href="${path}/users/business_users_form.do" class="sign-card">🏢 기업 회원  </a>
 </div>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
