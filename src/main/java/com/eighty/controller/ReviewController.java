@@ -82,14 +82,14 @@ public class ReviewController {
 	    }
 	    reviewVO.setUserId(loginId); 
 	    if (file != null && !file.isEmpty()) {
-	        String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
-	        File datePath = new File(path, today);
+	    	String folderName = "review_" + new SimpleDateFormat("yyyyMM").format(new Date());
+	        File datePath = new File(path, folderName);
 	        if (!datePath.exists()) datePath.mkdirs();
 	        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 	        String saveName = uuid + "_" + file.getOriginalFilename();
 	        try {
 	            file.transferTo(new File(datePath, saveName));
-	            reviewVO.setReviewImg(today + "/" + saveName);
+	            reviewVO.setReviewImg(folderName + "/" + saveName);
 	        } catch (IOException e) {
 	            System.out.println("파일 저장 중 오류 발생: " + e.getMessage());
 	            e.printStackTrace();
