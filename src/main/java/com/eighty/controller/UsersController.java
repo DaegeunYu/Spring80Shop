@@ -122,7 +122,7 @@ public class UsersController {
 	}
 	
 	@PostMapping(value="/users_formOK.do")
-	public String users_formOK(UsersVO vo, Model model, HttpSession session, RedirectAttributes rttr) {
+	public String users_formOK(UsersVO vo, Model model, HttpSession session, RedirectAttributes joinRedirect) {
 		
 		
 		// 비밀번호 암호화 설정
@@ -166,7 +166,7 @@ public class UsersController {
 	 		session.setAttribute("id", vo.getUser_id());
 	 		session.setAttribute("userName", vo.getUser_name());
 	 		
-	 		rttr.addFlashAttribute("msg", vo.getUser_name() + "님, 회원가입을 축하합니다!");
+	 		joinRedirect.addFlashAttribute("msg", vo.getUser_name() + "님, 회원가입을 축하합니다!");
 		
 		return "redirect:/index.do?page=1";
 	}
@@ -188,7 +188,7 @@ public class UsersController {
 	@PostMapping("/businessJoin.do")
 	public String businessJoin(UsersVO uVo, BusinessVO bVo, 
 	                           @RequestParam("file") MultipartFile file, 
-	                           Model model, HttpSession session, RedirectAttributes rttr) {
+	                           Model model, HttpSession session, RedirectAttributes joinRedirect) {
 	    try {
 	        // 1. 비밀번호 암호화 (BCrypt)
 	        uVo.setUser_pw(passwordEncoder.encode(uVo.getUser_pw()));
@@ -215,7 +215,7 @@ public class UsersController {
 	        session.setAttribute("userName", bVo.getCompanyName()); // 법인은 상호명을 이름으로
 	        session.setAttribute("userRole", "business");
 
-	        rttr.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
+	        joinRedirect.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
 	        return "redirect:/index.do?page=1";
 
 	    } catch (Exception e) {
