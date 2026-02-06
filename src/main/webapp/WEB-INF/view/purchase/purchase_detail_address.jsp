@@ -213,7 +213,6 @@ function orderFormOK() {
         return false;
     }
     
-
     // 새 배송지 선택 시, 입력된 이름과 연락처를 전송용 hidden 필드에 복사
     if (addrOption === 'NEW') {
         document.getElementById("receiverName").value = document.getElementById("new_name").value;
@@ -222,11 +221,9 @@ function orderFormOK() {
     }
     
     document.getElementById("orderMemo").value = (memoSelect === "direct") ? directMemo : memoSelect;
-    
-    if (!orderMemo.value || orderMemo.value === "not" || orderMemo.value.trim() === "") {
-        alert("배송 메모를 선택하거나 입력해주세요.");
-        orderMemo.focus();
-        return false;
+       
+    if (!confirm("결제를 진행하시겠습니까?")) {
+        return false; // 취소 클릭 시 전송 중단
     }
     
     return true; // 모든 검증 통과 시 전송
