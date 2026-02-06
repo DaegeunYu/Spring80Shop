@@ -12,14 +12,9 @@
 	<input type="hidden" name="receiverPhone" id="receiverPhone"  value="${users.user_tel}">
 	<input type="hidden" name="address"       id="address"  value="${users.user_add}">
     <input type="hidden" name="orderMemo" id="orderMemo" value="">
-    
-    <input type="hidden" name="orderCode" id="orderCode" 
-       value="ORD<%= new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()) %><%= (int)(Math.random() * 1000) %>">
-    
+        
 	<div align="center">
 		<H2> 주문 결제 </H2>
-		
-			        
 			<div id="purchase_info" align="center">
 				<c:import url="/WEB-INF/view/purchase/purchase_detail_address.jsp" />
 				<hr>
