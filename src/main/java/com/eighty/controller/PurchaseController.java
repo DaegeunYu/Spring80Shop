@@ -236,6 +236,8 @@ public class PurchaseController {
 	    
 	    service.insertPurchase(purchaseList);
 	    
+	    purchaseInfo.addAttribute("orderCode", uniqueOrderCode);
+	    
 	    purchaseInfo.addFlashAttribute("finalPrice", totalProductSum + 5000);
 	    purchaseInfo.addFlashAttribute("receiverName", buyerInfo.getReceiverName());
 
@@ -243,7 +245,47 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("/purchase_success.do")
-	public String purchaseSuccess() {
+	public String purchaseSuccess(
+	        @RequestParam("orderCode") String orderCode, 
+	        HttpSession session, 
+	        Model model) {
+	    
+	    String userId = (String) session.getAttribute("id");
+	    
+	    // 1. 이번 주문번호와 아이디를 조건으로 설정 (방금 결제한 내역만 필터링)
+	    PurchaseVO searchVO = new PurchaseVO();
+	    searchVO.setOrderCode(orderCode);
+	    searchVO.setUserId(userId); 
+
+	    // 2. DB에서 이번 주문 건만 가져옴 (상품이 여러 개면 여러 줄이 나옴)
+	    List<PurchaseVO> dbPurchaseList = service.getPurchaseList(searchVO); 
+	    
+	    // 3. purchase.do와 동일한 Map 구조 생성
+	    List<Map<String, Object>> successMapList = new ArrayList<Map<String, Object>>();
+	    
+	    if (dbPurchaseList != null && !dbPurchaseList.isEmpty()) {
+	        for (PurchaseVO pvo : dbPurchaseList) {
+	            Map<String, Object> map = new HashMap<String, Object>();
+	            
+	            // 각 주문 내역에 연결된 실제 상품 정보(이미지 등)를 DB에서 다시 가져옴
+	            ProductVO productSearch = new ProductVO();
+	            productSearch.setProduct_code(pvo.getProductCode());
+	            ProductVO productDetail = proservice.getProduct(productSearch);
+	            
+	            map.put("purchase", pvo);      // 주문 정보 (수량, 선택옵션, 가격 등)
+	            map.put("product", productDetail); // 상품 정보 (이미지, 실제 상품명 등)
+	            
+	            successMapList.add(map);
+	        }
+	        
+	        // 4. JSP로 전송
+	        model.addAttribute("orderItems", successMapList); // 상품 리스트 (Map 리스트)
+	        model.addAttribute("orderInfo", dbPurchaseList.get(0)); // 공통 배송지/결제 정보
+	    } else {
+	        // 비정상 접근 시 메인으로
+	        return "redirect:/index.do";
+	    }
+	    
 	    return "purchase/purchase_success"; 
 	}
 }

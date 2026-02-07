@@ -11,6 +11,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	<if test="userId != null and userId != ''">
             	AND userId = #{userId}
         	</if>
+        	<if test="orderCode != null and orderCode != ''">
+            AND orderCode = #{orderCode}
+        </if>
     	</where>
     	ORDER BY orderCode DESC
 	</select>
