@@ -202,15 +202,17 @@ function orderFormOK() {
     // 배송 메모 직접 입력 시 검증
     const memoSelect = document.getElementById("delivery_memo_select").value;
     const directMemo = document.getElementById("delivery_memo_direct").value.trim();
-    if (memoSelect === "direct") {
-        if (directMemo === "") {
-            alert("배송 메모를 입력해주세요.");
-            document.getElementById("delivery_memo_direct").focus();
-            return false;
-        }
+    if (memoSelect === "") {
+        alert("배송 메모를 선택해주세요.");
+        return false;
     }
-    document.getElementById("orderMemo").value = (memoSelect === "direct") ? directMemo : memoSelect;
-
+    
+    if (memoSelect === "direct" && directMemo === "") {
+        alert("배송 메모를 입력해주세요.");
+        document.getElementById("delivery_memo_direct").focus();
+        return false;
+    }
+    
     // 새 배송지 선택 시, 입력된 이름과 연락처를 전송용 hidden 필드에 복사
     if (addrOption === 'NEW') {
         document.getElementById("receiverName").value = document.getElementById("new_name").value;
@@ -218,12 +220,8 @@ function orderFormOK() {
         // (주소는 이미 fullAddress 로직으로 order_add에 들어가 있으므로 생략 가능)
     }
     
-    if (!orderMemo.value || orderMemo.value === "not" || orderMemo.value.trim() === "") {
-        alert("배송 메모를 선택하거나 입력해주세요.");
-        orderMemo.focus();
-        return false;
-    }
-    
+    document.getElementById("orderMemo").value = (memoSelect === "direct") ? directMemo : memoSelect;
+       
     if (!confirm("결제를 진행하시겠습니까?")) {
         return false; // 취소 클릭 시 전송 중단
     }

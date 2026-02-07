@@ -98,6 +98,7 @@ public class PurchaseController {
         model.addAttribute("users", uservice.getSelectOne(buyer)); //DB에서 회원 정보 조회 후 객체를 model에 저장
 	    
         List<Map<String, Object>> purchaseList = new ArrayList<Map<String, Object>>();
+        int total_price = 0; 
         
         // 장바구니에서 여러 상품이 넘어온 경우
         if (basketJson != null && !basketJson.isEmpty()) {
@@ -109,6 +110,12 @@ public class PurchaseController {
                 	ProductVO pvo = new ProductVO(); 
                     pvo.setProduct_code(b.getProduct_code()); 
                     ProductVO p = proservice.getProduct(pvo);
+                    
+                    // 서버에서 가격 재계산 (무게 기준 최신 단가 추출)
+                    int currentPrice = proservice.getPrice(b.getProduct_code(), b.getProduct_weight());
+                    p.setSale_price(String.valueOf(currentPrice)); // ProductVO의 가격정보를 최신화
+                    
+                    total_price += (currentPrice * Integer.parseInt(b.getProduct_count()));
                     
                     Map<String,Object> map = new HashMap<String,Object>();
                     map.put("basket", b);  
@@ -123,7 +130,13 @@ public class PurchaseController {
             ProductVO pvo = new ProductVO();
             pvo.setProduct_code(product_code);
             ProductVO p = proservice.getProduct(pvo);
-
+            
+            // 서버에서 가격 재계산 (무게 기준 최신 단가 추출)
+            int currentPrice = proservice.getPrice(product_code, product_weight);
+            p.setSale_price(String.valueOf(currentPrice)); // ProductVO의 가격정보를 최신화
+            
+            total_price = currentPrice * Integer.parseInt(product_count);
+            
             BasketVO b = new BasketVO();
             b.setProduct_code(product_code);
             b.setProduct_count(product_count);
@@ -137,6 +150,8 @@ public class PurchaseController {
         }
 
         model.addAttribute("purchaseList", purchaseList);
+        model.addAttribute("total_price", total_price); 
+        model.addAttribute("final_total_price", total_price + 5000); //배송비 5000원 추가
         return "purchase/purchase_detail";
 	}
 	
@@ -163,11 +178,9 @@ public class PurchaseController {
 	
 	@PostMapping("/purchase_insert.do")
 	public String insertPurchase(
-	        @RequestParam("product_code") String[] productCode,
-	        @RequestParam("productName") String[] productName,
+			@RequestParam("product_code") String[] productCode,
 	        @RequestParam("productWeight") String[] productWeight,
 	        @RequestParam("product_count") String[] productCount,
-	        @RequestParam("total_price") String[] totalPrice,
 	        @RequestParam("crushing") String[] crushing,
 	        @RequestParam("paymentMethod") String paymentMethod,
 	        @RequestParam("paymentStatus") String paymentStatus,
@@ -178,13 +191,16 @@ public class PurchaseController {
 	    String userId = (String) session.getAttribute("id");
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
-	    int finalTotalSum = 0;
+	    // orderCode 난수 생성
+	    String uniqueOrderCode = "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
+	    
+	    int totalProductSum = 0;
 	    
 	    for (int i = 0; i < productCode.length; i++) {
 	    PurchaseVO item = new PurchaseVO();
 	    
 	    // 공통 및 배송 정보 (PurchaseVO에서 실제 존재하는 메서드 호출)
-	    item.setOrderCode(buyerInfo.getOrderCode());
+	    item.setOrderCode(uniqueOrderCode);
 	    item.setUserId(userId);
 	    item.setReceiverName(buyerInfo.getReceiverName());   
 	    item.setReceiverPhone(buyerInfo.getReceiverPhone()); 
@@ -198,18 +214,29 @@ public class PurchaseController {
 
 	    // 개별 상품 정보 
 	    item.setProductCode(productCode[i]);
-	    item.setProductName(productName[i]);
 	    item.setProductWeight(productWeight[i]);
 	    item.setCrushing(crushing[i]);
 	    item.setOrderCount(productCount[i]); 
-	    item.setOrderPrice(totalPrice[i]);  
+	    
+	    ProductVO searchVO = new ProductVO();
+        searchVO.setProduct_code(productCode[i]);
+        ProductVO dbProduct = proservice.getProduct(searchVO); 
+        item.setProductName(dbProduct.getProduct_name()); //DB에서 상품명 직접 가져옴
+        
+	    
+	    int realPrice = proservice.getPrice(productCode[i], productWeight[i]);
+        int count = Integer.parseInt(productCount[i]);
+        int itemTotal = realPrice * count;
+        
+        item.setOrderPrice(String.valueOf(itemTotal)); 
+        totalProductSum += itemTotal; 
 
 	    purchaseList.add(item);
 	    }
 	    
 	    service.insertPurchase(purchaseList);
 	    
-	    purchaseInfo.addFlashAttribute("finalPrice", finalTotalSum + 5000);
+	    purchaseInfo.addFlashAttribute("finalPrice", totalProductSum + 5000);
 	    purchaseInfo.addFlashAttribute("receiverName", buyerInfo.getReceiverName());
 
 	    return "redirect:/purchase/purchase_success.do";
