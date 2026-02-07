@@ -41,16 +41,29 @@ hr {
     margin-bottom: 20px;
 }
 
-/* 배송지 선택 라디오 */
+/* 배송지 선택 라벨: 버튼 형태로 변경 */
 .address_area label {
-    margin-right: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
     font-size: 15px;
     cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: 0.3s;
+    font-weight: bold;
 }
 
+/* 실제 라디오 버튼은 숨김 */
 .address_area input[type="radio"] {
-    margin-right: 6px;
-    accent-color: #333;
+    display: none;
+}
+
+/* 선택되었을 때의 스타일 (검정 배경) */
+.address_area label:has(input[type="radio"]:checked) {
+    background-color: #333;
+    color: #fff;
 }
 
 /* 배송지 박스 공통 */
@@ -104,7 +117,7 @@ hr {
     background-color: #fff;
     margin-bottom: 30px;
     border: 1px solid #e9ecef; 
-    border-radius: 8px;        
+    border-radius: 8px;         
     box-sizing: border-box;
 }
 
@@ -131,7 +144,7 @@ hr {
     border-radius: 4px;
 }
 
-/*  설명 영역 */
+/* 설명 영역 */
 .purchase_product_name, 
 .purchase_product_infomation {
     flex: 1; 
@@ -215,6 +228,31 @@ hr {
     background-color: #fff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
+}
+
+/* 결제 수단 라벨: 버튼 형태로 변경 */
+.payment_area label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+/* 실제 라디오 버튼 숨김 */
+.payment_area input[type="radio"] {
+    display: none;
+}
+
+/* 선택되었을 때의 스타일 */
+.payment_area label:has(input[type="radio"]:checked) {
+    background-color: #333;
+    color: #fff;
 }
 
 .payment_info {
