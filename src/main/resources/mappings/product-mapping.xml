@@ -25,8 +25,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      values(#{product_code}, #{product_weight}, #{product_price})
 	</insert>
 	
+	<select id="MAN" resultType ="String">
+	   SELECT DISTINCT manufacturing FROM product
+	</select>
+	
 	<select id="SELECT" resultType ="ProductVO">
 	   SELECT * FROM product
+	   <where>
+	        <if test="_parameter != null and _parameter != ''">
+	            manufacturing = #{_parameter}
+	        </if>
+        </where>
 	</select>
 	
 	<select id="GET_MAX_CODE" resultType="string">

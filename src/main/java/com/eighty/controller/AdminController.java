@@ -1,5 +1,6 @@
 package com.eighty.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.admin.AdminService;
 import com.eighty.product.ProductVO;
+import com.eighty.review.ReviewDTO;
 import com.eighty.users.UsersVO;
 
 
@@ -50,23 +54,29 @@ public class AdminController {
     }
 	
 	@GetMapping("/user_list.do")
-    public String getUserList(Model model) {
-        List<UsersVO> userList = adminService.getUsers();
+    public String getUserList(@RequestParam(value="role", required=false) String role, Model model) {
+		List<UsersVO> userList = adminService.getUsers(role);
         model.addAttribute("userList", userList);
         return "admin/user_list"; // 실제 파일 경로
     }
 	
 	@GetMapping("/product_list.do")
-    public String getProductList(Model model) {
-        List<ProductVO> productList = adminService.getProducts();
+    public String getProductList(@RequestParam(value="manufacturing", required=false) String manufacturing, Model model) {
+        List<ProductVO> productList = adminService.getProducts(manufacturing);
         model.addAttribute("productList", productList);
         return "admin/product_list";
     }
+	
+	@GetMapping(value = "/getManufacturing.do", produces = "application/json; charset=UTF-8")
+	@ResponseBody // JSON 형태로 반환
+	public List<String> getManufacturing() {
+	    return adminService.getManufacturing();
+	}
 
 	@GetMapping("/review_list.do")
     public String getReviewList(Model model) {
-//        List<ReviewVO> reviewList = adminService.getAllReviews();
-//        model.addAttribute("reviews", reviewList);
+        List<ReviewDTO> reviewList = adminService.getReviews();
+        model.addAttribute("reviewList", reviewList);
         return "admin/review_list";
     }
 
