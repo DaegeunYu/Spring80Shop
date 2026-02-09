@@ -24,7 +24,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-    public void insertOption(ProductVO vo) {
+    public void insertOption(ProductVO.ProductOption vo) {
         mybatis.insert("PRODUCT.INSERT_PRODUCT_OPTION", vo);
     }
 
@@ -102,5 +102,10 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public void update(LikeProductVO vo) {
 		mybatis.update("PRODUCT.UPDATE_LIKE", vo);
+	}
+
+	@Override
+	public String getMaxCode() {
+		return mybatis.selectOne("PRODUCT.GET_MAX_CODE");
 	}
 }

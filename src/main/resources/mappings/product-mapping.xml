@@ -19,9 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                      #{quantity}, #{expiration_date})
 	</insert>
 	
-	<insert id="INSERT_PRODUCT_OPTION" parameterType="ProductVO">
+	<insert id="INSERT_PRODUCT_OPTION" parameterType="com.eighty.product.ProductVO$ProductOption">
 	 
-	 insert  into product( product_code, product_weight, product_price)
+	 insert  into product_option( product_code, product_weight, product_price)
      values(#{product_code}, #{product_weight}, #{product_price})
 	</insert>
 	

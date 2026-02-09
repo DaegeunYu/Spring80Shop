@@ -30,3 +30,11 @@
 	<BR>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
+<script type="text/javascript">
+    // 컨트롤러가 보낸 "msg"라는 이름의 FlashAttribute가 있는지 확인 (상품 등록 성공 확인용)
+    var message = "${product_form_status}"; 
+    
+    if (message != null && message !== "") {
+        alert(message); // 값이 있으면 팝업창을 띄운다!
+    }
+</script>

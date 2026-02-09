@@ -111,7 +111,7 @@
 			    'new_product': {
 			        title: '새 상품 등록',
 			        desc: '새로운 상품 정보를 입력하여 시스템에 등록합니다.',
-			        path: 'new_product.jsp',
+			        path: '${pageContext.request.contextPath}/admin/product_form.do',
 			        headers: [] // 폼 형태이므로 헤더가 필요 없음
 			    }
 	        };
@@ -160,11 +160,13 @@
 		    fetch(cfg.path)
 		        .then(res => res.text())
 		        .then(html => {
-		            if (cfg.headers.length === 0) {
-		                // 폼 페이지일 경우 테이블 구조를 깨고 HTML을 통째로 넣음
-		                // 이 경우 JSP 안에 <div class="p-8">...</div> 등을 넣어서 가져오세요.
-		                listBody.innerHTML = `<tr><td>${html}</td></tr>`;
+		        	if (type === 'new_product') {
+		                // [팀원들이 만든 기존 틀 유지]
+		                // 테이블의 모든 헤더를 비우고, tbody의 한 칸(td)에 본인의 JSP를 통째로 넣음
+		                headerRow.innerHTML = ''; 
+		                listBody.innerHTML = `<tr><td class="p-0 border-none">${html}</td></tr>`;
 		            } else {
+		                // [기존 팀원들의 리스트 로직]
 		                listBody.innerHTML = html;
 		            }
 		        })

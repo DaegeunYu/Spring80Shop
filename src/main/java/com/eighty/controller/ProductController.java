@@ -1,9 +1,6 @@
 package com.eighty.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +25,6 @@ import com.eighty.product.LikeProductVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewService;
-import com.eighty.review.ReviewVO;
 import com.eighty.shop.SQL_TYPE;
 
 
@@ -184,7 +180,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("/insertProduct.do")
-	public String insertProduct(ProductVO PVO, @RequestParam("product_img") MultipartFile file, 
+	public String insertProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file, 
 	                            RedirectAttributes rttr, HttpSession session) {
 	    
 	    
@@ -193,34 +189,26 @@ public class ProductController {
 	        rttr.addFlashAttribute("msg", "로그인이 필요한 서비스입니다.");
 	        return "redirect:/users/login.do"; 
 	    }
-
 	    try {
-	        if (file != null && !file.isEmpty()) {
-	            File licenseFolder = new File(path, "product");
-	            if (!licenseFolder.exists()) licenseFolder.mkdirs();
+	    	service.insert(PVO, file);
 
-	            String pCode = PVO.getProduct_code();
-	            String pName = PVO.getProduct_name();
-	            String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-	            
-	            String originalName = file.getOriginalFilename();
-	            String extension = originalName.substring(originalName.lastIndexOf("."));
-	            String uuid = UUID.randomUUID().toString().substring(0,4);
-	            String saveName = pCode + "_" + pName + "_" + today + "_" + uuid + extension;
-	            
-	            file.transferTo(new File(licenseFolder, saveName));
-	            PVO.setProduct_img("product/" + saveName); 
+	        if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
+	        	File licenseFolder = new File(path, "product");
+	        	if (!licenseFolder.exists()) {
+	        		licenseFolder.mkdirs();
+	        	}
+	        	File saveFile = new File(path, PVO.getProduct_img());
+	        	//if (!saveFile.getParentFile().exists()) saveFile.getParentFile().mkdirs();
+	        	
+	        	file.transferTo(saveFile);
 	        }
 	        
-	        service.insert(PVO);
-	        rttr.addFlashAttribute("msg", "상품이 성공적으로 등록되었습니다.");
-
+	        rttr.addFlashAttribute("product_form_status", "상품이 성공적으로 등록되었습니다. (번호: " + PVO.getProduct_code() + ")");
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        rttr.addFlashAttribute("msg", "등록 중 오류가 발생했습니다: " + e.getMessage());
+	        rttr.addFlashAttribute("product_form_status", "등록 중 오류가 발생했습니다: " + e.getMessage());
 	        return "redirect:/product/product_form.do"; 
 	    }
-
 	    return "redirect:/product/product_list.do";
 	}
 }

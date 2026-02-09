@@ -2,11 +2,13 @@ package com.eighty.product;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.eighty.shop.SQL_TYPE;
 
 public interface ProductService {
 
-	void insert(ProductVO vo);
+	void insert(ProductVO vo, MultipartFile file);
 	List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
 	ProductVO getProduct(ProductVO vo);
 	int count(ProductVO vo, SQL_TYPE type);
