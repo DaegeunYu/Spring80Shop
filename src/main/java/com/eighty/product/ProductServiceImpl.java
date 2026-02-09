@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eighty.shop.SQL_TYPE;
 
@@ -14,8 +15,18 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao  dao;
 	
 	@Override
+	@Transactional
 	public void insert(ProductVO vo) {
 		dao.insert(vo);
+		
+		List<ProductVO> list = vo.getOptionList();
+		if (list != null) {
+	        for (ProductVO option : list) {
+	            option.setProduct_code(vo.getProduct_code());
+	            // 옵션 저장 전용 dao 메서드 호출 (추가 필요)
+	            dao.insertOption(option); 
+	        }
+	    }		
 	}
 
 	@Override

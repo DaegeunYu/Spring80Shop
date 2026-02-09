@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eighty.shop.SQL_TYPE;
 
@@ -17,9 +18,15 @@ public class ProductDaoImpl implements ProductDao {
 	private SqlSessionTemplate mybatis;
 	
 	@Override
+	@Transactional
 	public void insert(ProductVO vo) {
-		mybatis.insert("PRODUCT.INSERT", vo);
+		mybatis.insert("PRODUCT.INSERT_PRODUCT", vo);
 	}
+	
+	@Override
+    public void insertOption(ProductVO vo) {
+        mybatis.insert("PRODUCT.INSERT_PRODUCT_OPTION", vo);
+    }
 
 	@Override
 	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {

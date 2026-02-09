@@ -1,5 +1,7 @@
 package com.eighty.product;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -35,4 +37,5 @@ public class ProductVO {
 	private int page;
 	private int amount = 8;
 	private int displayPage = 8;
+	private List<ProductVO> optionList;
 }
