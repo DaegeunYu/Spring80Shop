@@ -1,28 +1,19 @@
 package com.eighty.controller;
 
-import java.io.File;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.admin.AdminService;
-import com.eighty.users.BusinessService;
-import com.eighty.users.BusinessVO;
-import com.eighty.users.UsersService;
+import com.eighty.product.ProductVO;
 import com.eighty.users.UsersVO;
 
 
@@ -50,6 +41,33 @@ public class AdminController {
 	}
 	
 	
+	@GetMapping("/manager.do")
+    public String adminMain(HttpSession session) {
+		if (!"admin".equals(session.getAttribute("userRole"))) {
+		    return "redirect:/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
+		}
+        return "admin/main"; // 관리자 메인 layout
+    }
+	
+	@GetMapping("/user_list.do")
+    public String getUserList(Model model) {
+        List<UsersVO> userList = adminService.getUsers();
+        model.addAttribute("userList", userList);
+        return "admin/user_list"; // 실제 파일 경로
+    }
+	
+	@GetMapping("/product_list.do")
+    public String getProductList(Model model) {
+        List<ProductVO> productList = adminService.getProducts();
+        model.addAttribute("productList", productList);
+        return "admin/product_list";
+    }
 
+	@GetMapping("/review_list.do")
+    public String getReviewList(Model model) {
+//        List<ReviewVO> reviewList = adminService.getAllReviews();
+//        model.addAttribute("reviews", reviewList);
+        return "admin/review_list";
+    }
 
 }

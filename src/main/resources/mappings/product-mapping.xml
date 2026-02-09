@@ -25,6 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      values(#{product_code}, #{product_weight}, #{product_price})
 	</insert>
 	
+	<select id="SELECT" resultType ="ProductVO">
+	   SELECT * FROM product
+	</select>
+	
 	<select id="GET_MAX_CODE" resultType="string">
 		select max(product_code) from product	
 	</select>

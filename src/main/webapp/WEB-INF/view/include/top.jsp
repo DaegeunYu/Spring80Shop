@@ -39,8 +39,16 @@
 				</c:when>			
 				
 				<c:otherwise>
+					<!--  관리자  -->
+					<c:if test="${userRole eq 'admin'}">
+						<a href="${path}/admin/manager.do"> 관리자 페이지 </a>
+					</c:if>
+					
+					<!--  법인 회원  -->
+					<c:if test="${userRole eq 'business'}">
+					</c:if>
 					<div class="mypage-container">
-					<!--  회원  -->
+						<!--  회원  -->
 						<div class="mypage-trigger"><a> 마이페이지 </a></div>
 						<ul class="submenu">
 							<!--  공통 메뉴  -->
@@ -49,14 +57,6 @@
 							<li><a href="${path}/product/like_product.do?page=1">찜 리스트</a></li>
 						</ul>
 					</div>
-					<!--  법인 회원  -->
-					<c:if test="${userRole eq 'business'}">
-					</c:if>
-					<!--  관리자  -->
-					<c:if test="${userRole eq 'admin'}">
-						<a href="${path}/admin/main.do">관리자 페이지</a>
-						<a href="${path}/admin/product_form.do">상품 등록</a>
-					</c:if>
 					<a href="${path}/users/logout.do"> ${id}(로그아웃)</a>
 				</c:otherwise>
 			</c:choose>

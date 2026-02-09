@@ -13,6 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      					 #{user_role},#{user_gender},#{recommender_id})
 	</insert>
 	
+	<select id="SELECT" resultType="UsersVO">
+		SELECT * FROM users ORDER BY 
+    				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
+    				join_date DESC
+	</select>
+	
 	<select id="getUserById" parameterType="com.eighty.users.UsersVO" resultType="com.eighty.users.UsersVO">
     SELECT 
         idx, user_id, user_pw, user_name, user_role, user_tel, user_email, user_add

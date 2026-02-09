@@ -18,11 +18,6 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public List<UsersVO> getSelect(UsersVO vo) {
-		return mybatis.selectList("USERS.SELECT", vo);
-	}
-
-	@Override
 	public UsersVO loginCheck(UsersVO vo) {
 		return mybatis.selectOne("USERS.getUserById", vo);
 	}
