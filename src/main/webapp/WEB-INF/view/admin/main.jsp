@@ -63,20 +63,20 @@
         <main id="main-content" class="flex-1 content-scroll p-10 bg-gray-50">
             <div class="max-w-6xl mx-auto">
                 <!-- 헤더 영역 -->
-                <div class="flex items-end justify-between mb-10">
-                    <div>
-                        <h2 id="pageTitle" class="text-3xl font-black text-gray-900 bg-transparent leading-none">사용자 리스트</h2>
-                        <p id="pageDesc" class="text-gray-500 mt-2 font-medium">시스템에 등록된 모든 사용자 정보를 관리합니다.</p>
-                    </div>
-                    <div id="topActionArea"></div>
-                </div>
+                <div class="flex justify-between items-end mb-8">
+				    <div>
+				        <h1 id="pageTitle" class="text-3xl font-black text-gray-900 mb-2"></h1>
+				        <p id="pageDesc" class="text-gray-400 font-medium"></p>
+				    </div>
+				    <div id="filterArea" class="flex gap-3"></div>
+				</div>
 
                 <!-- 테이블 카드 -->
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100">
-                            <tr id="tableHeaderRow">
-                                <!-- JS에서 동적 생성 -->
+                        <thead class="bg-gray-50 border-b border-gray-100 sticky top-0 z-20">
+                            <tr id="tableHeaderRow" class="min-h-[60px]">
+                            	<!-- JS 동적 생성 -->
                             </tr>
                         </thead>
                         <tbody id="listBody" class="divide-y divide-gray-50">
@@ -94,19 +94,25 @@
 			        title: '사용자 리스트',
 			        desc: '시스템 권한별로 유저 정보를 관리합니다.',
 			        path: '${pageContext.request.contextPath}/admin/user_list.do',
-			        headers: ['아이디', '이름', '이메일', '권한', '가입일', '관리']
+			        headers: ['아이디', '이름', '이메일', '권한', '가입일', '관리'],
+			        filters: [
+			            { id: 'roleFilter', label: '전체 선택', options: ['전체', 'admin', 'business', 'member'] }
+			        ]
 			    },
 			    'product': {
 			        title: '상품 리스트',
 			        desc: '원산지, 제조사 등 상세 상품 정보를 관리합니다.',
 			        path: '${pageContext.request.contextPath}/admin/product_list.do',
-			        headers: ['상품명', '원산지', '제조사', '배전도', '가격', '재고량', '관리']
+			        headers: ['상품명', '원산지', '제조사', '배전도', '가격', '재고량', '관리'],
+			        filters: [
+			            { id: 'companyFilter', label: '전체 선택', options: ['전체', 'KBS', 'SBS', 'MBC'] }
+			        ]
 			    },
 			    'review': {
 			        title: '리뷰 관리',
 			        desc: '고객들이 남긴 소중한 리뷰를 모니터링합니다.',
 			        path: '${pageContext.request.contextPath}/admin/review_list.do',
-			        headers: ['번호', '상품명', '작성자', '평점', '내용', '날짜', '관리']
+			        headers: ['작성자ID', '작성자 이름', '상품코드', '제목', '평점', '날짜', '관리']
 			    },
 			    'new_product': {
 			        title: '새 상품 등록',
@@ -116,63 +122,136 @@
 			    }
 	        };
 		
-		function loadContent(type) {
+		async function loadContent(type, element) {
+		    console.log(">>> loadContent 호출됨! 타입:", type);
 		    const cfg = config[type];
 		    if (!cfg) return;
 
-		    const colCount = cfg.headers.length;
-
-		    // 1. UI 활성화 처리
+		    // 1. UI 활성화 처리 (메뉴 강조)
 		    document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-		    // 클릭된 요소에 active 추가 (event 객체 사용 시 주의)
-		    if(event) {
-		        document.querySelectorAll('.menu-item').forEach(item => {
-		            if(item.contains(event.target) || item === event.target) item.classList.add('active');
-		        });
+		    if (element) {
+		        element.classList.add('active');
 		    }
 
 		    // 2. 제목 및 설명 업데이트
 		    document.getElementById('pageTitle').textContent = cfg.title;
 		    document.getElementById('pageDesc').textContent = cfg.desc;
 
-		    // 3. 테이블 구조 제어 (새 상품 등록 같은 폼 페이지 처리)
-		    const tableContainer = document.querySelector('.bg-white.rounded-\\[2rem\\]'); // 테이블 카드 div
-		    const headerRow = document.getElementById('tableHeaderRow');
-		    const listBody = document.getElementById('listBody');
-
-		    if (cfg.headers.length === 0) {
-		        // 헤더가 없으면 테이블 헤더 숨김 (등록 폼 페이지용)
-		        headerRow.innerHTML = '';
-		        listBody.innerHTML = `<tr><td class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-3xl text-blue-500 mb-4"></i></td></tr>`;
-		    } else {
-		        // 헤더 생성
-		        headerRow.innerHTML = cfg.headers.map(text => {
-		            let align = 'text-left';
-		            if(['권한', '배전도', '평점', '번호'].includes(text)) align = 'text-center';
-		            if(text === '관리') align = 'text-right';
-		            return `<th class="px-6 py-5 text-xs font-black text-gray-400 uppercase tracking-widest ${align}">${text}</th>`;
-		        }).join('');
-		        
-		        listBody.innerHTML = `<tr><td colspan="${colCount}" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-3xl text-blue-500 mb-4"></i></td></tr>`;
+		    // 3. 필터 영역 생성 (우측 상단)
+		    const filterArea = document.getElementById('filterArea');
+		    if (filterArea) {
+		        filterArea.innerHTML = ''; // 기존 필터 제거
+		        await setupFilters(type, filterArea); // 동적 필터 생성 호출
 		    }
 
-		    // 4. 데이터 로드 (Fetch)
-		    fetch(cfg.path)
-		        .then(res => res.text())
-		        .then(html => {
-		            if (cfg.headers.length === 0) {
-		                // 폼 페이지일 경우 테이블 구조를 깨고 HTML을 통째로 넣음
-		                // 이 경우 JSP 안에 <div class="p-8">...</div> 등을 넣어서 가져오세요.
-		                listBody.innerHTML = `<tr><td>${html}</td></tr>`;
-		            } else {
-		                listBody.innerHTML = html;
-		            }
-		        })
-		        .catch(err => {
-		            listBody.innerHTML = `<tr><td class="py-20 text-center text-red-500 font-bold">데이터를 가져오지 못했습니다.</td></tr>`;
-		        });
+		    // 4. 테이블 헤더 생성
+		    const headerRow = document.getElementById('tableHeaderRow');
+		    if (headerRow) {
+		        const colCount = cfg.headers.length;
+		        if (colCount === 0) {
+		            headerRow.innerHTML = '';
+		        } else {
+		            headerRow.innerHTML = cfg.headers.map(text => {
+		                let align = 'text-center'; // 기본 중앙 정렬
+		                if (['내용', '상품명'].includes(text)) align = 'text-left';
+		                if (text === '관리') align = 'text-right';
+		                
+		                // JSP 충돌 방지를 위해 \${text} 사용
+		                return `<th class="px-6 py-5 text-xs font-bold text-gray-900 uppercase tracking-widest \${align} bg-gray-50">
+		                            \${text}
+		                        </th>`;
+		            }).join('');
+		        }
+		    }
+
+		    // 5. 초기 데이터 로드 (필터 없이 전체 데이터)
+		    fetchData(cfg.path);
 		}
 
+		/**
+		 * 필터를 동적으로 생성하는 함수
+		 */
+		async function setupFilters(type, filterArea) {
+		    const cfg = config[type];
+		    if (!cfg.filters) return;
+
+		    for (const filter of cfg.filters) {
+		        const select = document.createElement('select');
+		        select.id = filter.id;
+		        select.className = "px-4 py-2 rounded-xl border border-gray-200 text-sm font-bold text-gray-600 outline-none focus:border-blue-500 transition-all cursor-pointer bg-white shadow-sm hover:bg-gray-50";
+		        
+		        // 기본 선택 옵션 (전체)
+		        const defaultOpt = document.createElement('option');
+		        defaultOpt.value = "";
+		        defaultOpt.textContent = filter.label;
+		        select.appendChild(defaultOpt);
+
+		        // [동적 데이터 로드] 상품 관리의 제조사 필터인 경우
+		        if (type === 'product' && filter.id === 'companyFilter') {
+		            try {
+		                const response = await fetch('${pageContext.request.contextPath}/admin/getManufacturing.do');
+		                const companies = await response.json();
+		                companies.forEach(manufacturing => {
+		                    const option = document.createElement('option');
+		                    option.value = manufacturing;
+		                    option.textContent = manufacturing;
+		                    select.appendChild(option);
+		                });
+		            } catch (err) {
+		                console.warn("제조사 목록 로드 실패 (DB 확인 필요):", err);
+		            }
+		        } 
+		        // [정적 데이터 로드] 사용자 관리 권한 등
+		        else if (filter.options) {
+		            filter.options.forEach(opt => {
+		                if (opt === '전체') return;
+		                const option = document.createElement('option');
+		                option.value = opt;
+		                option.textContent = opt;
+		                select.appendChild(option);
+		            });
+		        }
+
+		        // 필터 변경 이벤트
+		        select.onchange = () => {
+		            const paramName = (type === 'user') ? 'role' : 'manufacturing';
+		            // 파라미터가 비어있지 않으면 쿼리스트링 생성
+		            const finalPath = select.value 
+		                ? `\${cfg.path}?\${paramName}=\${encodeURIComponent(select.value)}`
+		                : cfg.path;
+		                
+	                console.log(">>> 요청 보내는 경로:", finalPath);
+		            fetchData(finalPath);
+		        };
+
+		        filterArea.appendChild(select);
+		    }
+		}
+
+		/**
+		 * 서버에서 데이터를 가져와 tbody를 갱신하는 함수
+		 */
+		function fetchData(path) {
+		    const listBody = document.getElementById('listBody');
+		    if (!listBody) return;
+
+		    // 로딩 표시
+		    listBody.innerHTML = `<tr><td colspan="10" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-3xl text-blue-500"></i></td></tr>`;
+
+		    fetch(path)
+		        .then(res => {
+		            if (!res.ok) throw new Error("서버 응답 오류");
+		            return res.text();
+		        })
+		        .then(html => {
+		            listBody.innerHTML = html;
+		        })
+		        .catch(err => {
+		            console.error("데이터 로드 실패:", err);
+		            listBody.innerHTML = `<tr><td colspan="10" class="py-20 text-center text-red-500 font-bold">데이터를 로드하는 중 오류가 발생했습니다.</td></tr>`;
+		        });
+		}
+		
         // 초기 실행
         window.onload = () => loadContent('user');
     </script>

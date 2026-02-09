@@ -14,9 +14,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="SELECT" resultType="UsersVO">
-		SELECT * FROM users ORDER BY 
-    				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
-    				join_date DESC
+		SELECT * FROM users
+			<where>
+		        <if test="_parameter != null and _parameter != ''">
+		            user_role = #{_parameter}
+		        </if>
+	        </where>
+			ORDER BY 
+  				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
+  				join_date DESC
 	</select>
 	
 	<select id="getUserById" parameterType="com.eighty.users.UsersVO" resultType="com.eighty.users.UsersVO">

@@ -33,6 +33,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY idx DESC
     </select>
     
+    <select id="SELECT" resultType="com.eighty.review.ReviewDTO">
+	    SELECT  R.idx, R.userId, U.user_name AS userName, R.productCode, R.gradePoint,
+	    		R.reviewTitle, R.reviewContent, R.regDate
+   		FROM review R LEFT JOIN users U ON R.userId = U.user_id
+	    ORDER BY R.idx DESC
+	</select>
+    
     <insert id="insertReview" parameterType="com.eighty.review.ReviewVO">
 	    INSERT INTO review (
 	        userId, orderCode, productCode, gradePoint, 
