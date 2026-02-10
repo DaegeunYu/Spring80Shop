@@ -1,0 +1,35 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+
+/* 기본 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body { 
+    font-family: 'Pretendard', sans-serif; 
+    background-color: #f8fafc; 
+    color: #1e293b;
+}
+
+/* 스크롤 영역 계산 */
+.sidebar-scroll, 
+.content-scroll { 
+    height: calc(100vh - 64px); /* 헤더 h-16 = 64px */
+    overflow-y: auto; 
+}
+
+/* 사이드바 활성화 - 배경색 명시적 설정 */
+.menu-item.active { 
+    background-color: #eff6ff !important; 
+    color: #2563eb !important; 
+    border-right: 4px solid #2563eb; 
+}
+
+/* 텍스트 배경 제거 강제 설정 */
+h1, h2 {
+    background-color: transparent !important;
+    background: none !important;
+}

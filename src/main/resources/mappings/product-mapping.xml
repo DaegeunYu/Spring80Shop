@@ -5,21 +5,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="PRODUCT">
  
-	<insert id="INSERT" parameterType="ProductVO">
+	<insert id="INSERT_PRODUCT" parameterType="ProductVO">
 	 
 	 insert  into product(product_code, product_name, product_img, 
-	                      origin, brand, product_weight,
-	                      roast_dgree, crushing,
-	                      is_single_origin, is_decafe,
+	                      origin, brand, 
+	                      roast_dgree, is_single_origin, is_decafe,
 	                      manufacturing, origin_price, sale_price, 
-	                      quantity, grade_point, expiration_date  )
+	                      quantity, expiration_date)
      values(#{product_code},#{product_name},#{product_img}, 
-	                      #{origin}, #{brand}, #{product_weight},
-	                      #{roast_dgree}, #{crushing},
-	                      #{is_single_origin}, #{is_decafe},
+	                      #{origin}, #{brand}, 
+	                      #{roast_dgree}, #{is_single_origin}, #{is_decafe},
 	                      #{manufacturing}, #{origin_price}, #{sale_price}, 
-	                      #{quantity}, #{grade_point}, #{expiration_date})
+	                      #{quantity}, #{expiration_date})
 	</insert>
+	
+	<insert id="INSERT_PRODUCT_OPTION" parameterType="com.eighty.product.ProductVO$ProductOption">
+	 
+	 insert  into product_option( product_code, product_weight, product_price)
+     values(#{product_code}, #{product_weight}, #{product_price})
+	</insert>
+	
+	<select id="MAN" resultType ="String">
+	   SELECT DISTINCT manufacturing FROM product
+	</select>
+	
+	<select id="SELECT" resultType ="ProductVO">
+	   SELECT * FROM product
+	   <where>
+	        <if test="_parameter != null and _parameter != ''">
+	            manufacturing = #{_parameter}
+	        </if>
+        </where>
+	</select>
+	
+	<select id="GET_MAX_CODE" resultType="string">
+		select max(product_code) from product	
+	</select>
 	
 	<select id="IS_SINGLE" parameterType="ProductVO" resultType ="ProductVO">
 	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{amount}

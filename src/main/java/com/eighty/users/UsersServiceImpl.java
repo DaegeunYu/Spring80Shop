@@ -17,11 +17,6 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public List<UsersVO> getSelect(UsersVO vo) {
-		return dao.getSelect(vo);
-	}
-
-	@Override
 	public UsersVO loginCheck(UsersVO vo) {
 		return dao.loginCheck(vo);
 	}

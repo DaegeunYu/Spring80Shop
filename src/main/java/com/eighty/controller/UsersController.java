@@ -81,7 +81,7 @@ public class UsersController {
 	    }
 
 	    // 2. 선택한 유형과 실제 권한 비교
-	    if (userType.equals(loginUser.getUser_role())) {
+	    if (userType.equals(loginUser.getUser_role()) || "admin".equals(loginUser.getUser_role())) {
 	        session.setAttribute("id", loginUser.getUser_id());
 	        session.setAttribute("userName", loginUser.getUser_name());
 	        session.setAttribute("userRole", loginUser.getUser_role());

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-header{
+.top-logo-img {
 	background-color: #5252A0;
     height: 70px;
     color: #ffffff;
@@ -11,7 +11,7 @@ header{
     text-align: left;       /* 기존 설정 유지 */
 }
 
-header > a {
+.top-logo-img > a {
 	margin-left: 15px;
     display: flex;          /* a 태그 안의 이미지 정렬용 */
     align-items: center;

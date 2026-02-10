@@ -38,7 +38,7 @@
                         <strong>[상세 후기]</strong><br>
                         ${review.reviewContent}
                         <c:if test="${not empty review.reviewImg}">
-						    <img src="${pageContext.request.contextPath}/resources/files/${review.reviewImg}" 
+						    <img src="${pageContext.request.contextPath}/resources/files/${review.reviewImg}"
 						         class="review-img" alt="리뷰 이미지"
 						         style="max-width: 200px; border-radius: 8px; margin-top: 10px;">
 						</c:if>
