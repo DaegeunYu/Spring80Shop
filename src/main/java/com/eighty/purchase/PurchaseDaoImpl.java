@@ -26,4 +26,9 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
 		return mybatis.selectOne("PURCHASE.getPurchaseListOne", vo);
 	}
+
+	@Override
+	public void updatePaymentInfo(PurchaseVO vo) {
+		mybatis.update("PURCHASE.updatePaymentInfo", vo);
+	}
 }

@@ -29,13 +29,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<insert id="insertPurchase" parameterType="java.util.List">
-    INSERT INTO purchase (orderCode, userId, productCode, productName, productWeight, crushing, orderPrice, 
-                        orderCount, receiverName,  receiverPhone, address, orderMemo, paymentMethod, orderStatus, isReview) 
-                VALUES 
+    	INSERT INTO purchase (
+        	orderCode, userId, productCode, productName, productWeight, crushing, orderPrice, 
+        	orderCount, receiverName, receiverPhone, address, orderMemo, paymentMethod, 
+        	orderStatus, isReview, 
+        	receiptId, approvalId, approvalDate, paidAmount, pgStatus, cancelAmount) 
+        	VALUES 
     <foreach collection="list" item="item" separator=",">
-    (#{item.orderCode},#{item.userId},#{item.productCode},#{item.productName},#{item.productWeight}, #{item.crushing},#{item.orderPrice},
-        #{item.orderCount},#{item.receiverName},#{item.receiverPhone},#{item.address},#{item.orderMemo},#{item.paymentMethod}, #{item.orderStatus}, #{item.isReview})
+    	(#{item.orderCode}, #{item.userId}, #{item.productCode}, #{item.productName}, #{item.productWeight}, 
+         #{item.crushing}, #{item.orderPrice}, #{item.orderCount}, #{item.receiverName}, #{item.receiverPhone}, 
+         #{item.address}, #{item.orderMemo}, #{item.paymentMethod}, #{item.orderStatus}, #{item.isReview},
+         #{item.receiptId}, #{item.approvalId}, #{item.approvalDate}, #{item.paidAmount}, #{item.pgStatus}, #{item.cancelAmount})
     </foreach>
-</insert>
+	</insert>
+	
+	<!-- 결제 완료 후 영수증 정보 -->
+	<update id="updatePaymentInfo" parameterType="com.eighty.purchase.PurchaseVO">
+    UPDATE purchase SET receiptId = #{receiptId}, approvalId = #{approvalId}, approvalDate = #{approvalDate},
+        paidAmount = #{paidAmount}, pgStatus = 'PAID', orderStatus = 'PAID' WHERE orderCode = #{orderCode}
+</update>
 
 </mapper>

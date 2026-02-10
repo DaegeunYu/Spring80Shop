@@ -28,4 +28,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
 		return dao.getPurchaseListOne(vo);
 	}
+
+	@Override
+	public void updatePaymentInfo(PurchaseVO vo) {
+		dao.updatePaymentInfo(vo);		
+	}
+	
+	public boolean verifyPayment(String paymentId, int expectedPrice) {
+	    return false; // 금액이 다르거나 결제되지 않았으면 실패 처리
+	}
 }

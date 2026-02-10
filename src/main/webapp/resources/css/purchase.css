@@ -55,11 +55,6 @@ hr {
     font-weight: bold;
 }
 
-/* 실제 라디오 버튼은 숨김 */
-.address_area input[type="radio"] {
-    display: none;
-}
-
 /* 선택되었을 때의 스타일 (검정 배경) */
 .address_area label:has(input[type="radio"]:checked) {
     background-color: #333;
