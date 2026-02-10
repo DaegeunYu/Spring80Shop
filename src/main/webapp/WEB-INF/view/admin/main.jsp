@@ -332,6 +332,44 @@
 		        }
 		    }
 		});
+		// 2. [추가된 부분] formContainer 내부의 전송(submit) 이벤트 관리
+		document.getElementById('formContainer').addEventListener('submit', function(e) {
+		    if (e.target && e.target.id === 'productForm') {
+		        // [중요] 일단 브라우저의 기본 이동(404 에러 원인)을 무조건 막습니다.
+		        e.preventDefault(); 
+		
+		        // 1. 유효성 검증 (기존 pName 로직 유지)
+		        const pName = e.target.product_name.value.trim();
+		        if (!pName) {
+		            alert('상품명을 입력해주세요.');
+		            e.target.product_name.focus();
+		            return; // 여기서 중단
+		        }
+		
+		        // 2. 비동기(AJAX) 전송 로직 시작
+		        // FormData는 input type="file"을 포함한 모든 데이터를 자동으로 묶어줍니다.
+		        const formData = new FormData(e.target);
+		        
+		        // e.target.action은 form 태그에 적힌 주소(${path}/product/insertProduct.do)를 가져옵니다.
+		        fetch(e.target.action, {
+		            method: 'POST',
+		            body: formData
+		        })
+		        .then(res => {
+		            if (!res.ok) throw new Error('전송 실패');
+		            // 서버에서 저장 후 성공 문자열이나 JSON을 보낸다고 가정
+		            return res.text(); 
+		        })
+		        .then(data => {
+		            alert('상품 등록이 완료되었습니다!');
+		            loadContent('product'); // 성공 후 리스트 화면으로 자동 전환 (새로고침 없이!)
+		        })
+		        .catch(err => {
+		            console.error(err);
+		            alert('저장 중 오류가 발생했습니다. 컨트롤러 주소를 확인해주세요.');
+		        });
+		    }
+		});
         // 초기 실행
         window.onload = () => loadContent('user');
     </script>

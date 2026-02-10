@@ -179,36 +179,5 @@ public class ProductController {
 	    return "success";
 	}
 	
-	@PostMapping("/insertProduct.do")
-	public String insertProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file, 
-	                            RedirectAttributes rttr, HttpSession session) {
-	    
-	    
-	    String loginId = (String) session.getAttribute("id"); 
-	    if (loginId == null) {
-	        rttr.addFlashAttribute("msg", "로그인이 필요한 서비스입니다.");
-	        return "redirect:/users/login.do"; 
-	    }
-	    try {
-	    	service.insert(PVO, file);
-
-	        if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
-	        	File licenseFolder = new File(path, "product");
-	        	if (!licenseFolder.exists()) {
-	        		licenseFolder.mkdirs();
-	        	}
-	        	File saveFile = new File(path, PVO.getProduct_img());
-	        	//if (!saveFile.getParentFile().exists()) saveFile.getParentFile().mkdirs();
-	        	
-	        	file.transferTo(saveFile);
-	        }
-	        
-	        rttr.addFlashAttribute("product_form_status", "상품이 성공적으로 등록되었습니다. (번호: " + PVO.getProduct_code() + ")");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        rttr.addFlashAttribute("product_form_status", "등록 중 오류가 발생했습니다: " + e.getMessage());
-	        return "redirect:/product/product_form.do"; 
-	    }
-	    return "redirect:/product/product_list.do";
-	}
+	
 }

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="p-8 bg-white">
-    <form id="productForm" action="${path}/product/insertProduct.do" method="post" enctype="multipart/form-data" class="space-y-6">
+    <form id="productForm" action="${pageContext.request.contextPath}/admin/insertProduct.do" method="post" enctype="multipart/form-data" class="space-y-6">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">

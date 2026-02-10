@@ -1,5 +1,6 @@
 package com.eighty.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.admin.AdminService;
+import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewDTO;
 import com.eighty.users.UsersVO;
@@ -27,6 +32,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private ProductService productService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -79,5 +87,31 @@ public class AdminController {
         model.addAttribute("reviewList", reviewList);
         return "admin/review_list";
     }
-
+	
+	@PostMapping("/insertProduct.do")
+	@ResponseBody
+	public String insertProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file, 
+	                            HttpSession session) {
+	    	    
+		String loginId = (String) session.getAttribute("id"); 
+	    if (loginId == null) {
+	        return "login_required"; // 자바스크립트에서 처리할 신호
+	    }
+	    
+	    try {	        
+	        productService.insert(PVO, file);
+	        if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
+	            File licenseFolder = new File(path, "product"); // 설정된 path 사용
+	            if (!licenseFolder.exists()) {
+	                licenseFolder.mkdirs();
+	            }
+	            File saveFile = new File(path, PVO.getProduct_img());
+	            file.transferTo(saveFile);
+	        }	        
+	        return "success"; // 성공 시 문자열 리턴
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error: " + e.getMessage(); // 에러 발생 시 메시지 리턴
+	    }
+	}
 }
