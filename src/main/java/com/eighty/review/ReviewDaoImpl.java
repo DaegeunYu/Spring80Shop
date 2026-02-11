@@ -2,6 +2,7 @@ package com.eighty.review;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,8 +19,8 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 	
 	@Override
-	public ReviewVO getReview(ReviewVO vo) {
-		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", vo);
+	public ReviewVO getReview(@Param("idx") int idx) {
+		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", idx);
 	}
 
 	@Override

@@ -5,10 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="REVIEW">
  
-	<select id="SELECT_ONE_REVIEW" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+	<select id="SELECT_ONE_REVIEW" resultType="com.eighty.review.ReviewVO">
     SELECT * FROM review 
-    WHERE orderCode = #{orderCode} 
-      AND productCode = #{productCode}
+    	WHERE idx = #{_parameter}
 	</select>
 	
 	<select id="SELECT_AVG_GRADE" parameterType="String" resultType="double">
