@@ -7,5 +7,6 @@ public interface ReviewService {
 	   ReviewVO getReview(ReviewVO vo);
 	   double getAverageGrade(String productCode);
 	   void insertReview(ReviewVO vo);
-	   int getReviewCount(String productCode);	   
+	   int getReviewCount(String productCode);
+	   ReviewVO getOrderDetailByIdx(Long idx);
 }

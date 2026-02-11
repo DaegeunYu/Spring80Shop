@@ -9,4 +9,5 @@ public interface ReviewDao {
 	   void insertReview(ReviewVO vo);
 	   int selectReviewCount(String productCode);
 	   void updateReviewStatus(ReviewVO vo);
+	   ReviewVO getOrderDetailByIdx(Long idx);
 }

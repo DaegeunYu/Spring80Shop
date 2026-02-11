@@ -360,4 +360,80 @@ hr {
 
 /* 상태별 색상 */
 .status_complete { color: #28a745; }
+<<<<<<< Updated upstream
 .status_wait { color: #ffc107; }
+=======
+.status_wait { color: #ffc107; }
+
+/* ==========================================================================
+    purchase_list.jsp, purchase_list_one.jsp 의 style
+   ========================================================================== */
+
+#purchase_list_main, 
+#purchase_view_one {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+#purchase_list_main > *, 
+#purchase_view_one > * {
+    width: 100%;
+    max-width: 1400px;
+}
+
+/* ==========================================================================
+   [List Page Area] 나의 주문 목록 전용 스타일
+   ========================================================================== */
+.purchase_list_table {
+    background: #fff;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.purchase_list_table th { background: #333; color: #fff; padding: 18px; }
+.purchase_list_table td { padding: 16px; border-bottom: 1px solid #eee; text-align: center; }
+
+.btn_list_view { padding: 6px 15px; cursor: pointer; border: 1px solid #ddd; background: #fff; }
+.btn_list_home { width: 250px; height: 50px; cursor: pointer; background: #fff; border: 1px solid #333; font-weight: bold; }
+
+
+/* ==========================================================================
+   [One Page Area] 주문 상세 내역 전용 스타일
+   ========================================================================== */
+.purchase_one_table {
+    background: #fff;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.purchase_one_table th { background: #444; color: #fff; padding: 18px; }
+.purchase_one_table td { padding: 16px; border-bottom: 1px solid #eee; text-align: center; }
+
+.purchase_one_info_box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+
+}
+.one_price_summary span { color: #db6b30; font-size: 26px; font-weight: bold; }
+
+.one_bottom_area { display: flex; justify-content: center; }
+.btn_one_back { width: 200px; height: 50px; background: #333; color: #fff; cursor: pointer; }
+.btn_one_review { padding: 6px 15px; cursor: pointer; background: #db6b30; color: #fff; border: none; border-radius: 4px; }
+
+
+
+
+/* ==========================================================================
+   [Status] 공통 상태 컬러
+   ========================================================================== */
+.status_complete { color: #28a745; font-weight: bold; }
+>>>>>>> Stashed changes
