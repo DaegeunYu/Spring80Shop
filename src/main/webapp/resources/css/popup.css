@@ -1,0 +1,99 @@
+/* 기본 스타일 초기화 및 배경 */
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.popup-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 20px 0;
+}
+
+/* 정보 요약 영역 (상단) */
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    background: #f1f3f5;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+/* 별점 스타일 */
+.rating-box {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.text-yellow-400 { color: #ffc107; } /* 별색상 */
+
+/* 제목 스타일 */
+.review-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-left: 4px solid #4dabf7;
+    padding-left: 12px;
+}
+
+/* 본문 영역 */
+.content-box {
+    min-height: 180px;
+    background: #fafafa;
+    border: 1px solid #e9ecef;
+    padding: 20px;
+    border-radius: 8px;
+    line-height: 1.6;
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+}
+
+/* 이미지 영역 */
+.img-container {
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+.img-container img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+/* 하단 버튼 */
+.btn-close {
+    background-color: #495057;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-close:hover {
+    background-color: #212529;
+}

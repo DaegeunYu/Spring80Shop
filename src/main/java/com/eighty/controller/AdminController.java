@@ -56,7 +56,7 @@ public class AdminController {
 	@GetMapping("/manager.do")
     public String adminMain(HttpSession session) {
 		if (!"admin".equals(session.getAttribute("userRole"))) {
-		    return "redirect:/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
+		    return "/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
 		}
         return "admin/main"; // 관리자 메인 layout
     }
@@ -114,4 +114,16 @@ public class AdminController {
 	        return "error: " + e.getMessage(); // 에러 발생 시 메시지 리턴
 	    }
 	}
+	
+	@GetMapping("/sales_list.do") 
+	public String getSalesList(Model model) {
+        // 전체 요약 (총 매출, 주문 수 등)
+        model.addAttribute("summary", adminService.getOverallSummary());
+        // 제품별 통계 (차트용)
+        //model.addAttribute("productStats", adminService.getProductStats());
+        // 회원별 구매 내역
+        //model.addAttribute("userPurchases", adminService.getUserPurchases());
+        
+        return "admin/sales_list";
+    }
 }

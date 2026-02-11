@@ -11,4 +11,5 @@ public interface ReviewService {
 	   void insertReview(ReviewVO vo);
 	   int getReviewCount(String productCode);
 	   ReviewVO getOrderDetailByIdx(Long idx);
+	   int delReview(@Param("idx") int idx);
 }

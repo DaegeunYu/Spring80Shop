@@ -12,4 +12,5 @@ public interface ReviewDao {
 	   int selectReviewCount(String productCode);
 	   void updateReviewStatus(Long idx);
 	   ReviewVO getOrderDetailByIdx(Long idx);
+	   int delReview(@Param("idx") int idx);
 }

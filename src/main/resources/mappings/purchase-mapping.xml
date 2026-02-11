@@ -61,6 +61,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updatePaymentInfo" parameterType="com.eighty.purchase.PurchaseVO">
     UPDATE purchase SET receiptId = #{receiptId}, approvalId = #{approvalId}, approvalDate = #{approvalDate},
         paidAmount = #{paidAmount}, pgStatus = 'PAID', orderStatus = 'PAID' WHERE orderCode = #{orderCode}
-</update>
+	</update>
+
+	<!-- 관리자페이지 전체 매출 / 주문수량 -->
+	<select id="getOverallSummary" resultType="map">
+    	SELECT IFNULL(SUM(paidAmount), 0) AS GROSS_SALES,  <!-- 총 매출 계산, IFNULL(..., 0) 입력값이 없을경우 0, GROSS_SALES 총 매출  -->
+        
+        IFNULL(SUM(CASE WHEN p.productCode != 'DELIVERY'   <!-- productCode의 DELIVERY항목 제외 -->
+        THEN p.orderPrice * p.orderCount ELSE 0 END), 0) AS NET_SALES, <!--상품일경우 계산, '거짓'(배송비)값은 0으로 처리, NET_SALES 순매출액 -->
+        
+        COUNT(DISTINCT p.orderCode) AS TOTAL_ORDERS, <!-- orderCode중복을 제거한 전체 주문건수 -->
+        
+        COUNT(DISTINCT CASE WHEN p.paymentMethod = 'CARD' THEN p.orderCode END) AS CARD_CNT,
+        COUNT(DISTINCT CASE WHEN p.paymentMethod = 'BANK' THEN p.orderCode END) AS BANK_CNT,
+        
+        CASE WHEN COUNT(DISTINCT p.orderCode) = 0 THEN 0 
+        ELSE IFNULL(SUM(p.paidAmount), 0) / COUNT(DISTINCT p.orderCode) END AS ATV
+		FROM purchase p WHERE p.pgStatus = 'PAID'
+	</select>
+	
+	
 
 </mapper>

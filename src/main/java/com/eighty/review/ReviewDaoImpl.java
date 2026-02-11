@@ -47,5 +47,9 @@ public class ReviewDaoImpl implements ReviewDao {
 	@Override
 	public ReviewVO getOrderDetailByIdx(Long idx) {
 		return mybatis.selectOne("REVIEW.getOrderDetailByIdx", idx);
+
+	@Override
+	public int delReview(@Param("idx") int idx) {
+		return mybatis.delete("REVIEW.DELETE", idx);
 	}
 }

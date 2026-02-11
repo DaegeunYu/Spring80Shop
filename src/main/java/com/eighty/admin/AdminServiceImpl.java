@@ -2,6 +2,7 @@ package com.eighty.admin;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,21 @@ public class AdminServiceImpl implements AdminService {
 	public List<ReviewDTO> getReviews() {
 		return dao.getReviews();
 	}
+	
+	@Override
+	public List<Map<String, Object>> getProductStats() {
+		return dao.getProductStats();
+	}
+
+	@Override
+	public Map<String, Object> getOverallSummary() {
+		return dao.getOverallSummary();
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserPurchases() {
+		return dao.getUserPurchases();
+	}
+
 	
 }

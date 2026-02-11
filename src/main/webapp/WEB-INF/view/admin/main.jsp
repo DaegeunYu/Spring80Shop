@@ -50,6 +50,11 @@
 				        <span class="font-bold">리뷰 관리</span>
 				    </a>
 				    
+					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
+    					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
+    					<span class="font-bold">매출 현황</span>
+					</a>
+				    
 				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Registration</p>
 				    <a href="#" onclick="loadContent('new_product')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
 				        <i class="fas fa-plus-circle w-5 group-hover:scale-110 transition-transform"></i>
@@ -88,6 +93,7 @@
         </main>
     </div>
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script>
 		const config = {
 				'user': {
@@ -118,8 +124,16 @@
 			        title: '새 상품 등록',
 			        desc: '새로운 상품 정보를 입력하여 시스템에 등록합니다.',
 			        path: '${pageContext.request.contextPath}/admin/product_form.do',
-			        headers: [] // 폼 형태이므로 헤더가 필요 없음
+			        headers: [], // 폼 형태이므로 헤더가 필요 없음
+			        isForm: true
+			    },
+			    'sales': {
+			        title: '매출 현황',
+			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
+			        path: '${pageContext.request.contextPath}/admin/sales_list.do',
+			        headers: []
 			    }
+			    
 	        };
 		
 		async function loadContent(type, element) {
@@ -258,6 +272,37 @@
     	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
     	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
     	    window.open(url, "ReviewDetail_" + idx, options);
+    	}
+        
+        function deleteReview(idx) {
+        	if (!confirm("정말 이 리뷰를 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
+                return; // 사용자가 '취소'를 누르면 중단
+            }
+        	
+        	console.log(idx);
+        	
+            $.ajax({
+                url: "${pageContext.request.contextPath}/review/deleteReview.do",
+                type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
+                data: { "idx": idx },
+                success: function(response) {
+                    if (response === "success") {
+                        alert("리뷰가 정상적으로 삭제되었습니다.");
+                        // 팝업창에서 삭제했다면 부모창 새로고침 후 팝업 닫기
+                        if (window.opener) {
+                            window.opener.loadContent('review');; 
+                            window.close();
+                        } else {
+                        	loadContent('review');
+                        }
+                    } else {
+                        alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                }
+            });
     	}
     </script>
 
