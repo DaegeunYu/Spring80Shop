@@ -55,7 +55,7 @@ public class AdminController {
 		if (product_code != null) {
 			ProductVO vo = new ProductVO();
 			vo = productService.getProductDetail(product_code);
-			
+			vo.setOptionList(productService.getProductOption(product_code));
 			model.addAttribute("product", vo);
 			model.addAttribute("mode", "edit");
 		}
@@ -101,6 +101,33 @@ public class AdminController {
 	@PostMapping("/insertProduct.do")
 	@ResponseBody
 	public String insertProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file, 
+	                            HttpSession session) {
+	    	    
+		String loginId = (String) session.getAttribute("id"); 
+	    if (loginId == null) {
+	        return "login_required"; // 자바스크립트에서 처리할 신호
+	    }
+	    
+	    try {	        
+	        productService.insert(PVO, file);
+	        if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
+	            File licenseFolder = new File(path, "product"); // 설정된 path 사용
+	            if (!licenseFolder.exists()) {
+	                licenseFolder.mkdirs();
+	            }
+	            File saveFile = new File(path, PVO.getProduct_img());
+	            file.transferTo(saveFile);
+	        }	        
+	        return "success"; // 성공 시 문자열 리턴
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error: " + e.getMessage(); // 에러 발생 시 메시지 리턴
+	    }
+	}
+	
+	@PostMapping("/changeProduct.do")
+	@ResponseBody
+	public String changeProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file, 
 	                            HttpSession session) {
 	    	    
 		String loginId = (String) session.getAttribute("id"); 

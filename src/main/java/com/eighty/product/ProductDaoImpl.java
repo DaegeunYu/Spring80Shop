@@ -28,6 +28,11 @@ public class ProductDaoImpl implements ProductDao {
     public void insertOption(ProductVO.ProductOption vo) {
         mybatis.insert("PRODUCT.INSERT_PRODUCT_OPTION", vo);
     }
+	
+	@Override
+    public List<ProductVO.ProductOption> getProductOption(String product_code) {
+        return mybatis.selectList("PRODUCT.OPTION", product_code);
+    }
 
 	@Override
 	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {

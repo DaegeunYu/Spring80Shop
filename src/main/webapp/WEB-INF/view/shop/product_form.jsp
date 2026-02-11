@@ -100,7 +100,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-gray-50 pt-6">
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">보유량(g)</label>
-                <input type="text" name="quantity" maxlength="10" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="quantity" maxlength="10" value="${product.quantity}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">상품 출시일</label>

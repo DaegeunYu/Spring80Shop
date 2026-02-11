@@ -47,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
 	        }
 	    }
 	}
+	
+	@Override
+    public List<ProductVO.ProductOption> getProductOption(String product_code) {
+        return dao.getProductOption(product_code);
+    }
 
 	@Override
 	public List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type) {

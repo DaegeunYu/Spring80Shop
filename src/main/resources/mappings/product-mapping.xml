@@ -66,6 +66,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   SELECT product_price FROM product_option WHERE product_code = #{product_code} AND product_weight = #{product_weight}
 	</select>
 	
+	<select id="OPTION" parameterType="string" resultType ="com.eighty.product.ProductVO$ProductOption">
+	   SELECT * FROM product_option WHERE product_code = #{product_code}
+	</select>
+	
 	<update id="UPDATE_PRODUCT_GRADE" parameterType="map">
         UPDATE product 
         SET grade_point = #{avgScore} 
