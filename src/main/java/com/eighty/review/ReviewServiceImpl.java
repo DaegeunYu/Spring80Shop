@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eighty.product.ProductDao;
 
@@ -33,11 +34,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
+	@Transactional
 	public void insertReview(ReviewVO vo) {
 		dao.insertReview(vo);
         double avg = dao.getAverageGrade(vo.getProductCode());
         productDao.updateProductGrade(vo.getProductCode(), String.valueOf(avg));
-        dao.updateReviewStatus(vo.getIdx());
+        dao.updateReviewStatus(vo);
     }
 	
 	@Override
