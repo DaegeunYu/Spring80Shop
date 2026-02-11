@@ -50,6 +50,12 @@
 				        <span class="font-bold">리뷰 관리</span>
 				    </a>
 				    
+				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Management</p>
+					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
+    					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
+    					<span class="font-bold">매출 현황</span>
+					</a>
+				    
 				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Registration</p>
 				    <a href="#" onclick="loadContent('new_product')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
 				        <i class="fas fa-plus-circle w-5 group-hover:scale-110 transition-transform"></i>
@@ -122,7 +128,15 @@
 			        path: '${pageContext.request.contextPath}/admin/product_form.do',
 			        headers: [], // 폼 형태이므로 헤더가 필요 없음
 			        isForm: true
+			    },
+			    'sales': {
+			        title: '매출 현황',
+			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
+			        path: '${pageContext.request.contextPath}/admin/sales_list.do',
+			        headers: [], 
+			        isForm: true 
 			    }
+			    
 	        };
 		
 		async function loadContent(type, element) {

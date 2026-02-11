@@ -1,6 +1,7 @@
 package com.eighty.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -41,6 +42,21 @@ public class AdminDaoImpl implements AdminDao {
     @Override
 	public List<ReviewDTO> getReviews() {
 		return mybatis.selectList("REVIEW.SELECT");
+	}
+    
+    @Override
+	public List<Map<String, Object>> getProductStats() {
+		return mybatis.selectList("PURCHASE.getProductStats");
+	}
+
+	@Override
+	public Map<String, Object> getOverallSummary() {
+		return mybatis.selectOne("PURCHASE.getOverallSummary");
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserPurchases() {
+		return mybatis.selectList("PURCHASE.getUserPurchases");
 	}
 
 }
