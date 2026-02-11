@@ -407,6 +407,19 @@ hr {
 .purchase_one_table th { background: #444; color: #fff; padding: 18px; }
 .purchase_one_table td { padding: 16px; border-bottom: 1px solid #eee; text-align: center; }
 
+.btn_review.write {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn_review.view {
+    background-color: #f4f4f4;
+    color: #666;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
 .purchase_one_info_box {
     background: #fff;
     padding: 40px;

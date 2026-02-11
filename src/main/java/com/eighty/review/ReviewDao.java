@@ -10,6 +10,6 @@ public interface ReviewDao {
 	   double getAverageGrade(String productCode);
 	   void insertReview(ReviewVO vo);
 	   int selectReviewCount(String productCode);
-	   void updateReviewStatus(ReviewVO vo);
+	   void updateReviewStatus(Long idx);
 	   ReviewVO getOrderDetailByIdx(Long idx);
 }

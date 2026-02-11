@@ -17,8 +17,9 @@
     </div>
 
     <form action="${pageContext.request.contextPath}/review/insertReview.do" method="post" id="reviewForm" enctype="multipart/form-data">
-        <input type="hidden" name="productCode" value="${productCode}">
-        <input type="hidden" name="orderCode" value="${orderCode}">
+        <input type="hidden" name="idx" value="${orderInfo.idx}">
+        <input type="hidden" name="productCode" value="${orderInfo.productCode}">
+        <input type="hidden" name="orderCode" value="${orderInfo.orderCode}">
 
         <div class="rating-section">
             

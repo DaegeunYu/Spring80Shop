@@ -41,10 +41,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <insert id="insertReview" parameterType="com.eighty.review.ReviewVO">
 	    INSERT INTO review (
-	        userId, orderCode, productCode, gradePoint, 
+	        idx, userId, orderCode, productCode, gradePoint, 
 	        reviewTitle, reviewContent, reviewImg, regDate
 	    ) VALUES (
-	        #{userId}, #{orderCode}, #{productCode}, #{gradePoint}, 
+	        #{idx}, #{userId}, #{orderCode}, #{productCode}, #{gradePoint}, 
 	        #{reviewTitle}, #{reviewContent}, #{reviewImg}, NOW()
 	    )
 	    <selectKey keyProperty="idx" resultType="long" order="AFTER">
@@ -52,11 +52,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </selectKey>
 	</insert>
 	
-	<update id="UPDATE_REVIEW_STATUS" parameterType="com.eighty.review.ReviewVO">
+	<update id="UPDATE_REVIEW_STATUS" parameterType="long">
 	    UPDATE purchase 
 	    SET isReview = 'y' 
-	    WHERE orderCode = #{orderCode} 
-	      AND productCode = #{productCode}
+	    WHERE idx = #{idx}
 	</update>
+	
+	<select id="getOrderDetailByIdx" parameterType="long" resultType="com.eighty.review.ReviewVO">
+	    SELECT idx, order_code as orderCode, product_code as productCode
+	    FROM order_detail_table 
+	    WHERE idx = #{idx}
+	</select>
+	
+	
 	
 </mapper>

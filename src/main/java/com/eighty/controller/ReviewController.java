@@ -64,7 +64,10 @@ public class ReviewController {
 	@GetMapping(value="/reviewForm.do")
 	public String reviewForm(@RequestParam("idx") Long idx,
 	                         Model model) {
-	    ReviewVO orderDetail = reviewService.get
+	    ReviewVO orderInfo = reviewService.getOrderDetailByIdx(idx);
+	    
+	    model.addAttribute("product", productService.getProductDetail(orderInfo.getProductCode()));
+	    model.addAttribute("orderInfo", orderInfo);
 	    return "review/review_form";
 	}
 	

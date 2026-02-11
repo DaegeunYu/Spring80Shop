@@ -39,8 +39,8 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 
 	@Override
-	public void updateReviewStatus(ReviewVO vo) {
-		mybatis.update("REVIEW.UPDATE_REVIEW_STATUS", vo);
+	public void updateReviewStatus(Long idx) {
+		mybatis.update("REVIEW.UPDATE_REVIEW_STATUS", idx);
 		
 	}
 
