@@ -49,7 +49,7 @@
                 <button onclick="changeProductInfo('${item.product_code}')" class="p-2 hover:bg-blue-50 text-blue-600 rounded-md transition-colors" title="수정">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button onclick="deleteProduct('${item.idx}')" class="p-2 hover:bg-red-50 text-red-600 rounded-md transition-colors" title="삭제">
+                <button onclick="deleteProduct('${item.product_code}')" class="p-2 hover:bg-red-50 text-red-600 rounded-md transition-colors" title="삭제">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>

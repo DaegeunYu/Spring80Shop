@@ -49,11 +49,13 @@ public class PurchaseController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath(new ParameterValue().getFilePath());
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/purchaseList.do")

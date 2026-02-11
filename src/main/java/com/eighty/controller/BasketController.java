@@ -35,12 +35,14 @@ public class BasketController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	//메서드 자동 실행
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath(new ParameterValue().getFilePath());
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/basket_in.do")

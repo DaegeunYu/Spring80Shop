@@ -3,6 +3,7 @@ package com.eighty.product;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +73,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int getPrice(String product_code, String product_weight) {
 		return dao.getPrice(product_code, product_weight);
+	}
+	
+	@Override
+	public int delProduct(@Param("idx") int idx) {
+		return dao.delProduct(idx);
 	}
 
 	
