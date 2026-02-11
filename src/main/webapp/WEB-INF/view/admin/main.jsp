@@ -50,7 +50,6 @@
 				        <span class="font-bold">리뷰 관리</span>
 				    </a>
 				    
-				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Management</p>
 					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
     					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
     					<span class="font-bold">매출 현황</span>
