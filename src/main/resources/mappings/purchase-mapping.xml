@@ -23,6 +23,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where orderCode = #{orderCode}
 	</select>
 	
+	<select id="getPurchaseListSummary" resultType="com.eighty.purchase.PurchaseVO">
+        SELECT 
+            orderCode,
+            MAX(productName) AS productName,
+            COUNT(*) AS totalCount,
+            SUM(paidAmount) AS paidAmount,
+            MAX(orderDate) AS orderDate,
+            MAX(orderStatus) AS orderStatus
+        FROM purchase
+        WHERE userId = #{userId}
+        GROUP BY orderCode
+        ORDER BY orderCode DESC
+    </select>
+	
 	<insert id="insertReview" parameterType="ReviewVO">
     	INSERT INTO review (reviewId, orderCode, productCode, userId, content, reg_date)
     	VALUES (review_seq.NEXTVAL, #{orderCode}, #{productCode}, #{userId}, #{content}, SYSDATE)

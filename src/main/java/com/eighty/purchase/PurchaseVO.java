@@ -21,6 +21,7 @@ public class PurchaseVO {
     private String orderStatus;
     private String orderDate;
     private String isReview;
+    private int totalCount;
     
     // 배송을 위한 수령인 정보 추가, 결제 수단 추가
     private String receiverName;    // 수령인 성명
