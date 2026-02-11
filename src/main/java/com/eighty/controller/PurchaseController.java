@@ -56,17 +56,12 @@ public class PurchaseController {
 	}
 	
 	@GetMapping(value="/purchaseList.do")
-	public String getPurchaseList(
-	    Model model, 
-	    @SessionAttribute(name = "id", required = false) String loginId, 
-	    PurchaseVO vo) {
-
-	    if (loginId == null) {
-	        return "redirect:/users/login.do";
-	    }
+	public String purchaseList(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("id");
+	    if(userId == null) return "redirect:/users/login.do";
+	    List<PurchaseVO> list = service.getPurchaseListSummary(userId);
+	    model.addAttribute("purchaseList", list);
 	    
-	    vo.setUserId(loginId);
-	    model.addAttribute("purchaseList", service.getPurchaseList(vo));
 	    return "purchase/purchase_list";
 	}
 	
@@ -76,7 +71,9 @@ public class PurchaseController {
 	    PurchaseVO vo,
 	    Model model) {
 	    vo.setUserId(loginId);
-	    model.addAttribute("purchaseOne", service.getPurchaseListOne(vo));
+	    List<PurchaseVO> list = service.getPurchaseListOne(vo);
+	    model.addAttribute("purchaseList", list);
+	    model.addAttribute("orderInfo", list.get(0));
 	    return "purchase/purchase_list_one";
 	}
 	

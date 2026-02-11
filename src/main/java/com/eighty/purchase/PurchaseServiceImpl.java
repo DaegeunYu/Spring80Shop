@@ -17,6 +17,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 	public List<PurchaseVO> getPurchaseList(PurchaseVO vo) {
 		return dao.getPurchaseList(vo);
 	}
+	
+	@Override
+    public List<PurchaseVO> getPurchaseListSummary(String userId) {
+        return dao.getPurchaseListSummary(userId);
+    }
 
 	@Override
 	public void insertPurchase(List<PurchaseVO> list) {
@@ -25,7 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 
 	@Override
-	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
+	public List<PurchaseVO> getPurchaseListOne(PurchaseVO vo) {
 		return dao.getPurchaseListOne(vo);
 	}
 
