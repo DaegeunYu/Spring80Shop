@@ -14,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -54,17 +56,12 @@ public class PurchaseController {
 	}
 	
 	@GetMapping(value="/purchaseList.do")
-	public String getPurchaseList(
-	    Model model, 
-	    @SessionAttribute(name = "id", required = false) String loginId, 
-	    PurchaseVO vo) {
-
-	    if (loginId == null) {
-	        return "redirect:/users/login.do";
-	    }
+	public String purchaseList(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("id");
+	    if(userId == null) return "redirect:/users/login.do";
+	    List<PurchaseVO> list = service.getPurchaseListSummary(userId);
+	    model.addAttribute("purchaseList", list);
 	    
-	    vo.setUserId(loginId);
-	    model.addAttribute("purchaseList", service.getPurchaseList(vo));
 	    return "purchase/purchase_list";
 	}
 	
@@ -74,7 +71,9 @@ public class PurchaseController {
 	    PurchaseVO vo,
 	    Model model) {
 	    vo.setUserId(loginId);
-	    model.addAttribute("purchaseOne", service.getPurchaseListOne(vo));
+	    List<PurchaseVO> list = service.getPurchaseListOne(vo);
+	    model.addAttribute("purchaseList", list);
+	    model.addAttribute("orderInfo", list.get(0));
 	    return "purchase/purchase_list_one";
 	}
 	
@@ -152,6 +151,10 @@ public class PurchaseController {
         model.addAttribute("purchaseList", purchaseList);
         model.addAttribute("total_price", total_price); 
         model.addAttribute("final_total_price", total_price + 5000); //배송비 5000원 추가
+        
+        // 결제창 호출 시 사용할 임시 주문번호 생성 (purchase_detail_payment.jsp의 ${orderCode}로 전달됨)
+        String orderCode = "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
+        model.addAttribute("orderCode", orderCode);
         return "purchase/purchase_detail";
 	}
 	
@@ -169,6 +172,10 @@ public class PurchaseController {
 	        model.addAttribute("users", uservice.getSelectOne(buyer));
 	        model.addAttribute("purchaseList", voList);
 	        
+	        // 결제창 호출 시 사용할 임시 주문번호 생성 (purchase_detail_payment.jsp의 ${orderCode}로 전달됨)
+	        String orderCode = "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
+	        model.addAttribute("orderCode", orderCode);
+	        
 	        return "purchase/purchase_detail";
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -184,6 +191,12 @@ public class PurchaseController {
 	        @RequestParam("crushing") String[] crushing,
 	        @RequestParam("paymentMethod") String paymentMethod,
 	        @RequestParam("paymentStatus") String paymentStatus,
+	        @RequestParam(value="orderCode", required=false) String orderCode,
+	        @RequestParam("receiptId") String receiptId,
+	        @RequestParam("approvalId") String approvalId,
+	        @RequestParam("approvalDate") String approvalDate,
+	        @RequestParam("paidAmount") int paidAmount,
+	        @RequestParam("pgStatus") String pgStatus,
 	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
 	        HttpSession session,
 	        RedirectAttributes purchaseInfo) {
@@ -191,8 +204,10 @@ public class PurchaseController {
 	    String userId = (String) session.getAttribute("id");
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
-	    // orderCode 난수 생성
-	    String uniqueOrderCode = "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
+	    // 외부에서 넘어온 번호가 없으면(계좌이체 등) 난수 새로 생성, 있으면 그대로 사용
+	    String uniqueOrderCode = (orderCode == null || orderCode.isEmpty()) 
+	        ? "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date())
+	        : orderCode;
 	    
 	    int totalProductSum = 0;
 	    
@@ -218,6 +233,14 @@ public class PurchaseController {
 	    item.setCrushing(crushing[i]);
 	    item.setOrderCount(productCount[i]); 
 	    
+	    // 포트원 결제 상세 정보
+        item.setReceiptId(receiptId);
+        item.setApprovalId(approvalId);
+        item.setApprovalDate(approvalDate);
+        item.setPaidAmount(paidAmount);
+        item.setPgStatus(pgStatus); 
+        item.setCancelAmount(0); //환불금액
+	    
 	    ProductVO searchVO = new ProductVO();
         searchVO.setProduct_code(productCode[i]);
         ProductVO dbProduct = proservice.getProduct(searchVO); 
@@ -229,9 +252,45 @@ public class PurchaseController {
         int itemTotal = realPrice * count;
         
         item.setOrderPrice(String.valueOf(itemTotal)); 
+        item.setPaidAmount(itemTotal);
+        
         totalProductSum += itemTotal; 
-
 	    purchaseList.add(item);
+	    }
+	    
+	    // 배송비 전용 행 추가 로직 (장바구니 다수장품 동시 구매 시 배송비 한번만 적용)
+	    int deliveryFee = 5000; // 배송비 설정
+	    if (deliveryFee > 0) {
+	        PurchaseVO deliveryRow = new PurchaseVO();
+	        
+	        // 공통 정보 
+	        PurchaseVO firstItem = purchaseList.get(0);
+	        deliveryRow.setOrderCode(firstItem.getOrderCode());
+	        deliveryRow.setUserId(firstItem.getUserId());
+	        deliveryRow.setReceiverName(firstItem.getReceiverName());
+	        deliveryRow.setReceiverPhone(firstItem.getReceiverPhone());
+	        deliveryRow.setAddress(firstItem.getAddress());
+	        deliveryRow.setOrderMemo(firstItem.getOrderMemo());
+	        deliveryRow.setPaymentMethod(firstItem.getPaymentMethod());
+	        deliveryRow.setOrderStatus(firstItem.getOrderStatus());
+	        deliveryRow.setIsReview("n");
+	        deliveryRow.setReceiptId(firstItem.getReceiptId());
+	        deliveryRow.setApprovalId(firstItem.getApprovalId());
+	        deliveryRow.setApprovalDate(firstItem.getApprovalDate());
+	        deliveryRow.setPgStatus(firstItem.getPgStatus());
+	        deliveryRow.setCancelAmount(0);
+
+	        // 배송비 전용 데이터
+	        deliveryRow.setProductCode("DELIVERY"); // 가상의 배송비 코드
+	        deliveryRow.setProductName("배송비");
+	        deliveryRow.setProductWeight("N/A");
+	        deliveryRow.setCrushing("N/A");
+	        deliveryRow.setOrderCount("1"); // 배송 횟수 계산용
+	        deliveryRow.setOrderPrice("0");
+	        deliveryRow.setPaidAmount(deliveryFee); // 배송비 금액만 입력
+
+	        // 리스트에 추가
+	        purchaseList.add(deliveryRow);
 	    }
 	    
 	    service.insertPurchase(purchaseList);
@@ -288,4 +347,15 @@ public class PurchaseController {
 	    
 	    return "purchase/purchase_success"; 
 	}
+	
+	@ResponseBody
+    @PostMapping("/purchase_success.do")
+    public String completePayment(@RequestBody Map<String, Object> data) {
+        String paymentId = (String) data.get("paymentId");
+        System.out.println("==> 결제 검증 수신 (Success 주소 활용): " + paymentId);
+        
+        // 무조건 success 문자열 반환하여 JS의 submit() 유도
+        return "success"; 
+    }
+	
 }

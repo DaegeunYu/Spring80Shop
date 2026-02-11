@@ -36,6 +36,9 @@
 	<div class="purchase_basket_container">
 		<h3>주문 상품 정보</h3>
 		<c:forEach var="item" items="${orderItems}">
+		
+		<%-- 배송비 행은 결제완료 상품 목록에서 제외합니다 --%>
+			<c:if test="${item.purchase.productCode != 'DELIVERY'}">
 			<div class="purchase_basket_item">
 				<div class="purchase_image_box">
 					<img src="${item.product.product_img}"
@@ -63,6 +66,7 @@
 					</p>
 				</div>
 			</div>
+			</c:if>
 		</c:forEach>
 	</div>
 

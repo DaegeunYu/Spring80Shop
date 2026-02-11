@@ -1,11 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:import url="/WEB-INF/view/include/top.jsp" />
+<link rel="stylesheet" href="${path}/resources/css/purchase.css">
 
-<<<<<<< Updated upstream
 <section>
 	<div align="center">
         <BR>
@@ -61,9 +60,10 @@
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
 <script>
 	function purchaseList() {
-		location.href="${path}/purchase/purchaseList.do"
+		locationhref="${path}/purchase/purchaseList.do"
 	}
-=======
+</script>
+
 <section id="purchase_view_one">
     <div class="one_header_area">
         <h2>주문 상세 내역</h2>
@@ -129,6 +129,4 @@
 function reviewForm(idx) {
 	location.href="${path}/review/reviewForm.do?idx="+idx;
 }
-
->>>>>>> Stashed changes
 </script>

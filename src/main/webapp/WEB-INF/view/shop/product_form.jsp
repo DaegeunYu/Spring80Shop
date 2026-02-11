@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="p-8 bg-white">
-    <form id="productForm" action="${path}/product/insertProduct.do" method="post" enctype="multipart/form-data" class="space-y-6">
+    <form id="productForm" action="${pageContext.request.contextPath}/admin/insertProduct.do" method="post" enctype="multipart/form-data" class="space-y-6">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
@@ -107,72 +107,6 @@
     </form>
 </div>
 
-<script>
-    // 페이지 로드 시 첫 번째 옵션 자동 생성
-    (function() {
-        addOption();
-    })();
-
-    function addOption() {
-        const container = document.getElementById('option_container');
-        const newOption = document.createElement('div');
-        newOption.className = 'option-item flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100 animate-fadeIn';
-        
-        newOption.innerHTML = `
-            <div class="flex-1">
-                <select class="opt-weight w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400">
-                    <option value="200g">200g</option>
-                    <option value="350g">350g</option>
-                    <option value="500g">500g</option>
-                    <option value="1kg">1kg</option>
-                </select>
-            </div>
-            <div class="flex-1">
-                <input type="text" class="opt-price w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400" placeholder="옵션 가격(숫자만)">
-            </div>
-            <button type="button" onclick="removeOption(this)" class="w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-                <i class="fas fa-trash-can"></i>
-            </button>
-        `;
-        
-        container.appendChild(newOption);
-        reIndexOptions();
-    }
-
-    function removeOption(btn) {
-        const items = document.querySelectorAll('.option-item');
-        if(items.length > 1) {
-            btn.closest('.option-item').remove();
-            reIndexOptions();
-        } else {
-            alert('최소 하나 이상의 옵션은 존재해야 합니다.');
-        }
-    }
-
-    function reIndexOptions() {
-        const items = document.querySelectorAll('#option_container .option-item');
-        items.forEach((item, idx) => {
-            const select = item.querySelector('.opt-weight');
-            const input = item.querySelector('.opt-price');
-            
-            if(select) select.name = "optionList[" + idx + "].product_weight";
-            if(input) input.name = "optionList[" + idx + "].product_price";
-        });
-    }
-
-    // 전송 전 최종 점검
-    document.getElementById('productForm').onsubmit = function() {
-        reIndexOptions();
-        // 간단한 유효성 검사 예시 (상품명 필수 등)
-        const pName = this.product_name.value.trim();
-        if(!pName) {
-            alert('상품명을 입력해주세요.');
-            this.product_name.focus();
-            return false;
-        }
-        return true;
-    };
-</script>
 
 <style>
     @keyframes fadeIn {

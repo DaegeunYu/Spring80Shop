@@ -2,9 +2,11 @@ package com.eighty.review;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface ReviewDao {
 	   List<ReviewVO> getReviewList(ReviewVO vo);
-	   ReviewVO getReview(ReviewVO vo);
+	   ReviewVO getReview(@Param("idx") int idx);
 	   double getAverageGrade(String productCode);
 	   void insertReview(ReviewVO vo);
 	   int selectReviewCount(String productCode);

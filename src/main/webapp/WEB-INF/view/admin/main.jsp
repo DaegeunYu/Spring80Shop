@@ -123,7 +123,6 @@
 	        };
 		
 		async function loadContent(type, element) {
-		    console.log(">>> loadContent 호출됨! 타입:", type);
 		    const cfg = config[type];
 		    if (!cfg) return;
 
@@ -254,6 +253,12 @@
 		
         // 초기 실행
         window.onload = () => loadContent('user');
+        
+        function viewReviewDetail(idx) {
+    	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+    	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
+    	    window.open(url, "ReviewDetail_" + idx, options);
+    	}
     </script>
 
 </body>

@@ -6,11 +6,12 @@
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
 <section>
-<form id="orderForm" action="${path}/purchase/purchase_insert.do" method="post" onsubmit="return orderFormOK()">
+<form id="orderForm" action="${path}/purchase/purchase_insert.do" method="post" >
     
     <input type="hidden" name="receiverName"  id="receiverName" value="${users.user_name}">
 	<input type="hidden" name="receiverPhone" id="receiverPhone"  value="${users.user_tel}">
 	<input type="hidden" name="address"       id="address"  value="${users.user_add}">
+	<input type="hidden" name="orderCode" id="orderCodeInput" value="${orderCode}">
     <input type="hidden" name="orderMemo" id="orderMemo" value="">
         
 	<div align="center">

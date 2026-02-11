@@ -109,4 +109,15 @@ public class ReviewController {
 	    return "redirect:/product/product_detail.do";
 	}
 	
+	@GetMapping("/reviewDetail.do")
+    public String reviewDetail(@RequestParam("idx") int idx, Model model) {
+		System.out.println("리뷰 넘버 : " + idx);
+		ReviewVO review = reviewService.getReview(idx);
+		System.out.println("리뷰 넘버 : " + idx);
+		System.out.println(review);
+	    model.addAttribute("review", review);
+        // 별도의 팝업용 JSP 반환
+        return "review/review_detail"; 
+    }
+	
 }

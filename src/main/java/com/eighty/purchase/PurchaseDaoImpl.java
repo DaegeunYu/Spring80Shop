@@ -16,6 +16,11 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public List<PurchaseVO> getPurchaseList(PurchaseVO vo) {
 		return mybatis.selectList("PURCHASE.getPurchaseList", vo);
 	}
+	
+	@Override
+    public List<PurchaseVO> getPurchaseListSummary(String userId) {
+        return mybatis.selectList("PURCHASE.getPurchaseListSummary", userId);
+    }
 
 	@Override
 	public void insertPurchase(List<PurchaseVO> list) {
@@ -23,7 +28,12 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public PurchaseVO getPurchaseListOne(PurchaseVO vo) {
-		return mybatis.selectOne("PURCHASE.getPurchaseListOne", vo);
+	public List<PurchaseVO> getPurchaseListOne(PurchaseVO vo) {
+		return mybatis.selectList("PURCHASE.getPurchaseListOne", vo);
+	}
+
+	@Override
+	public void updatePaymentInfo(PurchaseVO vo) {
+		mybatis.update("PURCHASE.updatePaymentInfo", vo);
 	}
 }
