@@ -2,6 +2,7 @@ package com.eighty.review;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public ReviewVO getReview(ReviewVO vo) {
-		return dao.getReview(vo);
+	public ReviewVO getReview(@Param("idx") int idx) {
+		return dao.getReview(idx);
 	}
 
 	@Override

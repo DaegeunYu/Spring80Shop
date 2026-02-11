@@ -29,8 +29,7 @@ public class AdminDaoImpl implements AdminDao {
     
     @Override
 	public List<ProductVO> getProducts(@Param("manufacturing") String manufacturing) {
-		System.out.println("결과 값 : " + manufacturing);
-    	return mybatis.selectList("PRODUCT.SELECT", manufacturing);
+		return mybatis.selectList("PRODUCT.SELECT", manufacturing);
 	}
     
     @Override
