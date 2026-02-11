@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	SELECT IFNULL(SUM(paidAmount), 0) AS GROSS_SALES,  <!-- 총 매출 계산, IFNULL(..., 0) 입력값이 없을경우 0, GROSS_SALES 총 매출  -->
         
         IFNULL(SUM(CASE WHEN p.productCode != 'DELIVERY'   <!-- productCode의 DELIVERY항목 제외 -->
-        THEN p.orderPrice * p.orderCount ELSE 0 END), 0) AS NET_SALES, <!--상품일경우 계산, '거짓'(배송비)값은 0으로 처리, NET_SALES 순매출액 -->
+        THEN p.orderPrice ELSE 0 END), 0) AS NET_SALES, <!--상품일경우 계산, '거짓'(배송비)값은 0으로 처리, NET_SALES 순매출액 -->
         
         COUNT(DISTINCT p.orderCode) AS TOTAL_ORDERS, <!-- orderCode중복을 제거한 전체 주문건수 -->
         
@@ -81,10 +81,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getProductStats" resultType="map">
-    	SELECT p.product_name AS productName, IFNULL(SUM(pc.orderCount), 0) AS TOTAL_COUNT
+    	SELECT p.product_name AS productName, IFNULL(SUM(pc.productWeight * pc.orderCount), 0) AS TOTAL_WEIGHT
 		FROM product p LEFT OUTER JOIN purchase pc ON p.product_code = pc.productCode
 		GROUP BY p.product_code, p.product_name
-		ORDER BY TOTAL_COUNT DESC;
+		ORDER BY TOTAL_WEIGHT DESC;
 	</select>
 
 </mapper>

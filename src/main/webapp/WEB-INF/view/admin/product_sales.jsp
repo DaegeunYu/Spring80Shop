@@ -33,18 +33,15 @@
 
         <c:forEach var="s" items="${productStats}">
             labels.push("${s.productName}");
-            data.push(Number("${s.TOTAL_COUNT}"));
+            // TOTAL_COUNT를 TOTAL_WEIGHT로 변경
+            data.push(Number("${s.TOTAL_WEIGHT}")); 
         </c:forEach>
 
         const ctx = document.getElementById('productPieChart');
-        if (!ctx) {
-            console.error("Canvas(productPieChart)를 찾을 수 없습니다.");
-            return;
-        }
+        if (!ctx) return;
 
         const total = data.reduce((a, b) => a + b, 0);
 
-        // 1. 차트 생성
         new Chart(ctx, {
             type: 'doughnut',
             plugins: [ChartDataLabels],
@@ -68,7 +65,7 @@
                         color: '#fff',
                         font: { weight: 'bold', size: 12 },
                         formatter: (value) => {
-                            if (value === 0) return null;
+                            if (value === 0 || total === 0) return null;
                             return ((value / total) * 100).toFixed(1) + '%';
                         }
                     }
@@ -76,7 +73,6 @@
             }
         });
 
-        // 목록 생성
         const legendContainer = document.getElementById('customLegend');
         if (legendContainer) {
             labels.forEach((label, i) => {
@@ -90,7 +86,7 @@
                     </div>
                     <div class="text-right">
                         <span class="text-base font-black text-blue-600">\${percent}%</span>
-                        <span class="text-[10px] text-gray-400 ml-1">\${data[i]}개</span>
+                        <span class="text-[10px] text-gray-400 ml-1">\${data[i].toLocaleString()}g</span>
                     </div>
                 `;
                 legendContainer.appendChild(div);
