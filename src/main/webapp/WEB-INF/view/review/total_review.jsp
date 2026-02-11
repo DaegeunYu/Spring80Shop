@@ -26,7 +26,7 @@
         <div class="stat-label">전체 리뷰수</div>
         
         <div class="icon-box">
-            <img src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/review_record.png" 
+            <img src="${pageContext.request.contextPath}/resources/files/common/review_record.png" 
                  class="review-icon-img">
         </div>
         

@@ -8,8 +8,8 @@
         <td class="px-6 py-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-200">
-                    <img src="${item.product_img}" 
-                         onerror="this.src='https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg'"
+                    <img src="${pageContext.request.contextPath}/resources/files/${item.product_img}" 
+                         onerror="this.src='${pageContext.request.contextPath}/resources/files/common/logo.jpg'"
                          class="w-full h-full object-cover">
                 </div>
                 <span class="font-bold text-gray-800">${item.product_name}</span>

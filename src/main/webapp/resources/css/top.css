@@ -78,7 +78,7 @@ section {
 .list_section::before {
     content: "";
     /* 이미지 경로는 CSS 파일 위치 기준으로 잡거나 절대경로 사용 */
-    background-image: url('https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/background_list.png'); 
+    background-image: url('./../files/common/background_list.png'); 
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
@@ -98,7 +98,7 @@ section {
 .detail_section::before {
     content: "";
     /* 이미지 경로는 CSS 파일 위치 기준으로 잡거나 절대경로 사용 */
-    background-image: url('https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/background_detail.png'); 
+    background-image: url('./../files/common/background_detail.png'); 
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;

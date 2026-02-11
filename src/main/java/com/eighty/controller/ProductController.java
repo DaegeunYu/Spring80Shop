@@ -19,6 +19,7 @@ import com.eighty.product.LikeProductVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewService;
+import com.eighty.shop.ParameterValue;
 import com.eighty.shop.SQL_TYPE;
 
 
@@ -44,7 +45,7 @@ public class ProductController {
 	@PostConstruct  
 	public void init() {
 		// 가독성 때문에 init() 이란 이름 부여
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(new ParameterValue().getFilePath());
 	}
 	
 	@GetMapping(value="/product_list.do")

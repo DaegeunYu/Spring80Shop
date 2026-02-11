@@ -6,7 +6,7 @@
     <div align="center">
         <br>
         <a href="${path}/index.do?page=1">
-            <img id="login_box_logo" src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg">
+            <img id="login_box_logo" src="${pageContext.request.contextPath}/resources/files/common/logo.jpg">
         </a>
         
         <div class="join-card"> <h2 class="join-title">80's BUSINESS JOIN</h2>

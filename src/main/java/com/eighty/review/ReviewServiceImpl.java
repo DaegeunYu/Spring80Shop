@@ -48,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public ReviewVO getOrderDetailByIdx(Long idx) {
 		return dao.getOrderDetailByIdx(idx);
+	}
 	
 	@Override
 	public int delReview(@Param("idx") int idx) {

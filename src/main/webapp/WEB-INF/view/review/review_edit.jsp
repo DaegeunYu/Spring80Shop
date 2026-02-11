@@ -8,7 +8,7 @@
     <h2>리뷰 수정 페이지</h2>
     
     <div class="product-info-header">
-        <img src="${product.product_img}" alt="상품이미지">
+        <img src="${pageContext.request.contextPath}/resources/files/${product.product_img}" alt="상품이미지">
         <div class="info-text">
             <p class="brand">${product.brand}</p>
             <p class="name">${product.product_name}</p>

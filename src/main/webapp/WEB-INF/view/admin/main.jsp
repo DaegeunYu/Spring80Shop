@@ -19,7 +19,7 @@
     <header class="h-16 bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-6 z-10 relative">
 	    <div class="flex items-center gap-3">
 	        <div class="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100 shadow-sm">
-	            <img src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg" alt="Logo" class="w-full h-full object-cover">
+	            <img src="${pageContext.request.contextPath}/resources/files/common/logo.jpg" alt="Logo" class="w-full h-full object-cover">
 	        </div>
 	        <h1 class="text-xl font-bold text-gray-900 tracking-tight bg-transparent">관리자 페이지</h1>
 	    </div>

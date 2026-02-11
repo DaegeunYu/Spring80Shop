@@ -19,7 +19,7 @@
 </head>
 <body>
 <header class="top-logo-img">
-<a href=${path}/index.do?page=1><img id=logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+<a href=${path}/index.do?page=1><img id=logo src="${pageContext.request.contextPath}/resources/files/common/logo.jpg"></a>
 80's Coffee 
 </header>
 <nav>

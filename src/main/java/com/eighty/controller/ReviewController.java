@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.eighty.product.ProductService;
 import com.eighty.review.ReviewService;
 import com.eighty.review.ReviewVO;
+import com.eighty.shop.ParameterValue;
 
 
 @RequestMapping("/review")
@@ -44,7 +45,7 @@ public class ReviewController {
 			
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(new ParameterValue().getFilePath());
 		
 	}
 		

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.shop.ParameterValue;
 import com.eighty.users.BusinessService;
 import com.eighty.users.BusinessVO;
 import com.eighty.users.UsersService;
@@ -47,7 +48,7 @@ public class UsersController {
 	@PostConstruct  
 	public void init() {
 		// 가독성 때문에 init() 이란 이름 부여
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(new ParameterValue().getFilePath());
 	}
 	
 	@GetMapping(value="/login.do")

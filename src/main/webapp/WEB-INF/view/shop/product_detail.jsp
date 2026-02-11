@@ -10,7 +10,7 @@
         <BR>
         <div class="product_detail">
         	<div id="main_img">
-	        	<img id="product_detail_img" src="${product.product_img}">        
+	        	<img id="product_detail_img" src="${pageContext.request.contextPath}/resources/files/${product.product_img}">        
 	        </div>
 	        
 			<div id="product_info" align="left">
