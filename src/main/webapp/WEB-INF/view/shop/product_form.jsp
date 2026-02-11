@@ -2,18 +2,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="p-8 bg-white">
-    <form id="productForm" action="${pageContext.request.contextPath}/admin/insertProduct.do" method="post" enctype="multipart/form-data" class="space-y-6">
+    <form id="productForm" action="${mode == 'edit'? '${pageContext.request.contextPath}/admin/insertProduct.do' : '${pageContext.request.contextPath}/admin/changeProduct.do'}" method="post" enctype="multipart/form-data" class="space-y-6">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">원두의 종류</label>
                 <div class="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="is_single_origin" value="Y" checked class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="is_single_origin" value="Y" ${product.is_single_origin == 'n' ? '' : 'checked'} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">싱글 원두</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="is_single_origin" value="N" class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="is_single_origin" value="N" ${product.is_single_origin == 'n' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">블렌딩 원두</span>
                     </label>
                 </div>
@@ -22,11 +22,11 @@
                 <label class="block text-sm font-bold text-gray-700">디카페인 여부</label>
                 <div class="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="is_decafe" value="N" checked class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="is_decafe" value="N" ${product.is_decafe == 'y' ? '' : 'checked'} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">카페인</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="is_decafe" value="Y" class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="is_decafe" value="Y" ${product.is_decafe == 'y' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">디카페인</span>
                     </label>
                 </div>
@@ -35,7 +35,7 @@
 
         <div class="space-y-2">
             <label class="block text-sm font-bold text-gray-700">상품명</label>
-            <input type="text" name="product_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="최대 80자 이내로 입력해주세요" maxlength="80">
+            <input type="text" name="product_name" placeholder="최대 80자 이내로 입력해주세요" maxlength="80" value="${product.product_name}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
         </div>
 
         <div class="space-y-2">
@@ -46,30 +46,43 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">원산지</label>
-                <input type="text" name="origin" maxlength="20" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="origin" maxlength="20" value="${product.origin}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">브랜드</label>
-                <input type="text" name="brand" maxlength="20" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="brand" maxlength="20" value="${product.brand}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">볶음도</label>
-                <input type="text" name="roast_dgree" maxlength="10" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <div class="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="roast_dgree" value="S" ${product.roast_dgree == '약배전' ? '' : product.roast_dgree == '중배전' ? '' : 'checked'} class="w-4 h-4 text-blue-600">
+                        <span class="ml-2 text-sm">강배전</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="roast_dgree" value="M" ${product.roast_dgree == '중배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                        <span class="ml-2 text-sm">중배전</span>
+                    </label>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="roast_dgree" value="W" ${product.roast_dgree == '약배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                        <span class="ml-2 text-sm">약배전</span>
+                    </label>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-gray-50 pt-6">
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">제조사</label>
-                <input type="text" name="manufacturing" maxlength="20" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="manufacturing" maxlength="20" value="${product.manufacturing}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">판매가</label>
-                <input type="text" name="origin_price" maxlength="10" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="origin_price" maxlength="10" value="${product.origin_price}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">할인가</label>
-                <input type="text" name="sale_price" maxlength="10" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" name="sale_price" maxlength="10" value="${product.sale_price}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
         </div>
 

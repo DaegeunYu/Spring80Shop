@@ -51,7 +51,14 @@ public class AdminController {
 	}
 	
 	@GetMapping(value="/product_form.do")
-	public String product_form() {
+	public String product_form(String product_code, Model model) {
+		if (product_code != null) {
+			ProductVO vo = new ProductVO();
+			vo = productService.getProductDetail(product_code);
+			
+			model.addAttribute("product", vo);
+			model.addAttribute("mode", "edit");
+		}
 		return "shop/product_form";
 	}
 	

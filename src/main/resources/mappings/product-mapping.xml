@@ -73,8 +73,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <delete id="DELETE" parameterType="int">
-	    DELETE FROM product 
-	    WHERE idx = #{idx}
+	    DELETE p, o
+		FROM product AS p
+		INNER JOIN product_option AS o ON p.product_code = o.product_code
+		WHERE p.idx = #{idx};
 	</delete>
     
     <!-- 리뷰 작성시 제품정보 불러오기용 -->

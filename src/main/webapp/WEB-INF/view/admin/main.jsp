@@ -127,6 +127,13 @@
 			        headers: [], // 폼 형태이므로 헤더가 필요 없음
 			        isForm: true
 			    },
+			    'change_product': {
+			        title: '상품 수정',
+			        desc: '상품 정보를 수정하여 시스템에 등록합니다.',
+			        path: '${pageContext.request.contextPath}/admin/product_form.do',
+			        headers: [], // 폼 형태이므로 헤더가 필요 없음
+			        isForm: true
+			    },
 			    'sales': {
 			        title: '매출 현황',
 			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
@@ -268,11 +275,11 @@
         // 초기 실행
         window.onload = () => loadContent('user');
         
-        function viewReviewDetail(idx) {
-    	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
-    	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
-    	    window.open(url, "ReviewDetail_" + idx, options);
-    	}
+        function changeProductInfo(product_code) {
+        	console.log(product_code);
+        	config['change_product'].path = '${pageContext.request.contextPath}/admin/product_form.do?product_code='+product_code;
+        	loadContent('change_product');
+        }
         
         function deleteProduct(product_code) {
         	if (!confirm("정말 이 상품을 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
@@ -301,6 +308,12 @@
                     alert("서버 통신 중 오류가 발생했습니다.");
                 }
             });
+    	}
+        
+        function viewReviewDetail(idx) {
+    	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+    	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
+    	    window.open(url, "ReviewDetail_" + idx, options);
     	}
         
         function deleteReview(idx) {
