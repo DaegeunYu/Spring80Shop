@@ -9,5 +9,6 @@ public interface ReviewService {
 	   ReviewVO getReview(@Param("idx") int idx);
 	   double getAverageGrade(String productCode);
 	   void insertReview(ReviewVO vo);
-	   int getReviewCount(String productCode);	   
+	   int getReviewCount(String productCode);
+	   int delReview(@Param("idx") int idx);
 }

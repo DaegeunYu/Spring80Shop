@@ -11,4 +11,5 @@ public interface ReviewDao {
 	   void insertReview(ReviewVO vo);
 	   int selectReviewCount(String productCode);
 	   void updateReviewStatus(ReviewVO vo);
+	   int delReview(@Param("idx") int idx);
 }

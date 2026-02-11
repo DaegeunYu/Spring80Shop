@@ -56,7 +56,7 @@ public class AdminController {
 	@GetMapping("/manager.do")
     public String adminMain(HttpSession session) {
 		if (!"admin".equals(session.getAttribute("userRole"))) {
-		    return "redirect:/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
+		    return "/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
 		}
         return "admin/main"; // 관리자 메인 layout
     }

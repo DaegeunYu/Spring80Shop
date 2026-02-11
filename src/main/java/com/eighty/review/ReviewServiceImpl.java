@@ -44,4 +44,9 @@ public class ReviewServiceImpl implements ReviewService {
 	public int getReviewCount(String productCode) {
 	    return dao.selectReviewCount(productCode);
 	}
+	
+	@Override
+	public int delReview(@Param("idx") int idx) {
+		return dao.delReview(idx);
+	}
 }

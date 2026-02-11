@@ -93,6 +93,7 @@
         </main>
     </div>
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script>
 		const config = {
 				'user': {
@@ -271,6 +272,37 @@
     	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
     	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
     	    window.open(url, "ReviewDetail_" + idx, options);
+    	}
+        
+        function deleteReview(idx) {
+        	if (!confirm("정말 이 리뷰를 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
+                return; // 사용자가 '취소'를 누르면 중단
+            }
+        	
+        	console.log(idx);
+        	
+            $.ajax({
+                url: "${pageContext.request.contextPath}/review/deleteReview.do",
+                type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
+                data: { "idx": idx },
+                success: function(response) {
+                    if (response === "success") {
+                        alert("리뷰가 정상적으로 삭제되었습니다.");
+                        // 팝업창에서 삭제했다면 부모창 새로고침 후 팝업 닫기
+                        if (window.opener) {
+                            window.opener.loadContent('review');; 
+                            window.close();
+                        } else {
+                        	loadContent('review');
+                        }
+                    } else {
+                        alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                }
+            });
     	}
     </script>
 

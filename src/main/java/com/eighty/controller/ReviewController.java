@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -114,13 +116,50 @@ public class ReviewController {
 	
 	@GetMapping("/reviewDetail.do")
     public String reviewDetail(@RequestParam("idx") int idx, Model model) {
-		System.out.println("리뷰 넘버 : " + idx);
 		ReviewVO review = reviewService.getReview(idx);
-		System.out.println("리뷰 넘버 : " + idx);
-		System.out.println(review);
 	    model.addAttribute("review", review);
         // 별도의 팝업용 JSP 반환
         return "review/review_detail"; 
     }
 	
+	@PostMapping("/deleteReview.do")
+	@ResponseBody
+    public String deleteReview(@RequestParam("idx") int idx, HttpServletRequest request) {
+		try {
+	        ReviewVO review = reviewService.getReview(idx);
+	        if (review.getReviewImg() != null) {
+	        	deletePhysicalFile(review.getReviewImg(), request);
+	        }
+	        
+	        int result = reviewService.delReview(idx);
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
+	
+	public void deletePhysicalFile(String fileName, HttpServletRequest request) {
+	    if (fileName == null || fileName.isEmpty()) return;
+
+	    // 1. 실제 파일이 저장된 서버의 경로 찾기
+	    // 보통 resources/files/ 경로에 저장하셨으니 해당 상대경로를 절대경로로 변환합니다.
+	    String rootPath = request.getSession().getServletContext().getRealPath("/");
+	    String savePath = rootPath + "resources" + File.separator + "files";
+	    
+	    // 2. 전체 파일 경로 생성
+	    File file = new File(savePath + File.separator + fileName);
+
+	    // 3. 파일 존재 여부 확인 후 삭제
+	    if (file.exists()) {
+	        if (file.delete()) {
+	            System.out.println("파일 삭제 성공: " + fileName);
+	        } else {
+	            System.out.println("파일 삭제 실패: " + fileName);
+	        }
+	    } else {
+	        System.out.println("삭제할 파일이 존재하지 않습니다: " + fileName);
+	    }
+	}
 }

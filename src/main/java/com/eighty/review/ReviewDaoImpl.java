@@ -43,4 +43,9 @@ public class ReviewDaoImpl implements ReviewDao {
 		mybatis.update("REVIEW.UPDATE_REVIEW_STATUS", vo);
 		
 	}
+
+	@Override
+	public int delReview(@Param("idx") int idx) {
+		return mybatis.delete("REVIEW.DELETE", idx);
+	}
 }
