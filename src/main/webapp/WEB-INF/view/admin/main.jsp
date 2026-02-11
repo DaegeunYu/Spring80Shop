@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 차트 실행 -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> <!-- 차트 실행 -->
 
 <title>관리자 페이지</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -50,10 +52,14 @@
 				        <span class="font-bold">리뷰 관리</span>
 				    </a>
 				    
-				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Management</p>
 					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
     					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
     					<span class="font-bold">매출 현황</span>
+					</a>
+					
+					<a href="#" onclick="loadContent('product_stats')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
+    					<i class="fas fa-chart-pie w-5 group-hover:scale-110 transition-transform"></i>
+    					<span class="font-bold">상품 판매 분석</span>
 					</a>
 				    
 				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Registration</p>
@@ -131,6 +137,12 @@
 			        title: '매출 현황',
 			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
 			        path: '${pageContext.request.contextPath}/admin/sales_list.do',
+			        headers: []
+			    },
+			    'product_stats': {
+			        title: '상품 판매 분석',
+			        desc: '상품별 점유율과 판매량 무게별 판매 추이를 분석합니다.',
+			        path: '${pageContext.request.contextPath}/admin/product_sales.do',
 			        headers: []
 			    }
 			    
@@ -258,6 +270,25 @@
 		        })
 		        .then(html => {
 		            listBody.innerHTML = html;
+		            
+		         	// 차트 실행, HTML 내의 스크립트 추출 및 강제 실행
+		            const scripts = listBody.getElementsByTagName("script");
+            			for (let i = 0; i < scripts.length; i++) {
+                	const scriptTag = document.createElement("script");
+                
+                	if (scripts[i].src) {
+                    	// 외부 라이브러리(Chart.js 등) 로드인 경우
+                    	scriptTag.src = scripts[i].src;
+                	} else {
+                    	// 내부 실행 코드인 경우
+                    	scriptTag.text = scripts[i].innerHTML;
+                	}
+                
+                	document.body.appendChild(scriptTag);
+                	// 실행 후 태그 제거
+                	document.body.removeChild(scriptTag);
+            }
+		            
 		        })
 		        .catch(err => {
 		            console.error("데이터 로드 실패:", err);

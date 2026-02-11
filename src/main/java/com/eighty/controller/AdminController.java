@@ -119,11 +119,17 @@ public class AdminController {
 	public String getSalesList(Model model) {
         // 전체 요약 (총 매출, 주문 수 등)
         model.addAttribute("summary", adminService.getOverallSummary());
-        // 제품별 통계 (차트용)
-        //model.addAttribute("productStats", adminService.getProductStats());
-        // 회원별 구매 내역
-        //model.addAttribute("userPurchases", adminService.getUserPurchases());
         
         return "admin/sales_list";
+    }
+	
+	@GetMapping("/product_sales.do") 
+	public String getProductStats(Model model) {
+		// 전체 요약 (총 매출, 주문 수 등)
+        model.addAttribute("summary", adminService.getOverallSummary());
+        // 제품별 통계 (차트용)
+        model.addAttribute("productStats", adminService.getProductStats());
+        
+        return "admin/product_sales";
     }
 }
