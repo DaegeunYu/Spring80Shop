@@ -30,21 +30,28 @@
 <script>
 (function() {
     requestAnimationFrame(() => {
-        // --- 1. 데이터 수집 및 실적 필터링 ---
+        const colors20 = [
+            '#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231',
+            '#911EB4', '#42D4F4', '#F032E6', '#BFEF45', '#FABEBE',
+            '#469990', '#E6BEFF', '#9A6324', '#FFFAC8', '#800000',
+            '#AAFFC3', '#808000', '#FFD8B1', '#000075', '#A9A9A9'
+        ];
+
+        // 데이터 수집 및 실적 필터링 
         const rawLabels = [];
         const rawPieData = [];
         
         <c:forEach var="s" items="${productStats}">
             rawLabels.push("${s.productName}");
-            rawPieData.push(Number("${s.TOTAL_WEIGHT}")); 
+            rawPieData.push(Number("${s.TOTAL_WEIGHT}") || 0); 
         </c:forEach>
 
-        // 실적이 있는 상품만 선별
         const activeIndices = rawPieData.map((v, i) => v > 0 ? i : -1).filter(i => i !== -1);
         const originalLabels = activeIndices.map(i => rawLabels[i]);
         const pieData = activeIndices.map(i => rawPieData[i]);
+        const totalWeight = pieData.reduce((a, b) => a + b, 0);
 
-        // --- 2. 도넛 차트 (기존 동일) ---
+        // 원형 차트 실행
         const pieCtx = document.getElementById('productPieChart');
         if (pieCtx && originalLabels.length > 0) {
             new Chart(pieCtx, {
@@ -54,21 +61,68 @@
                     labels: originalLabels,
                     datasets: [{
                         data: pieData,
-                        backgroundColor: [
-                            '#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231',
-                            '#911EB4', '#42D4F4', '#F032E6', '#BFEF45', '#FABEBE'
-                        ],
-                        borderWidth: 4, borderColor: '#ffffff'
+                        // 20개 색상을 데이터 인덱스에 맞춰 순환 배정
+                        backgroundColor: pieData.map((_, i) => colors20[i % colors20.length]),
+                        borderWidth: 4, 
+                        borderColor: '#ffffff',
+                        hoverOffset: 20
                     }]
                 },
-                options: { cutout: '70%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { 
+                    cutout: '70%', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    let value = context.parsed || 0;
+                                    return ` \${label}: \${value.toLocaleString()}g`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: (value) => {
+                                if (!value || totalWeight === 0) return null;
+                                return ((value / totalWeight) * 100).toFixed(1) + '%';
+                            }
+                        }
+                    } 
+                }
             });
         }
 
-        // --- 3. 누적 막대 차트 (구조 변경: 단순 숫자 배열 사용) ---
+        // 목록 생성
+        const legendContainer = document.getElementById('customLegend');
+        if (legendContainer) {
+            legendContainer.innerHTML = ''; // 초기화
+            originalLabels.forEach((label, i) => {
+                const val = pieData[i];
+                const percent = totalWeight > 0 ? ((val / totalWeight) * 100).toFixed(1) : 0;
+                
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-4 bg-white rounded-2xl shadow-sm border border-gray-100";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-4 h-4 rounded-full" style="background-color: \${colors20[i % colors20.length]}"></span>
+                        <span class="text-sm font-bold text-gray-700">\${label}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-base font-black text-blue-600">\${percent}%</span>
+                        <span class="text-[10px] text-gray-400 ml-2">\${val.toLocaleString()}g</span>
+                    </div>
+                `;
+                legendContainer.appendChild(div);
+            });
+        }
+
+        // 누적 막대 차트 실행 
         const barCtx = document.getElementById('stackedBarChart');
         if (barCtx && originalLabels.length > 0) {
-            
             const rawDistData = [
                 <c:forEach var="item" items="${weightDist}" varStatus="loop">
                     { 
@@ -83,9 +137,7 @@
             const barColors = ['#4363D8', '#3CB44B', '#FFE119', '#F58231']; 
 
             const barDatasets = weightGroups.map((weight, idx) => {
-                // 막대 높이(중량 합계) 데이터 배열
                 const weightSums = [];
-                // 툴팁용 수량 데이터 배열 (커스텀 프로퍼티)
                 const itemCounts = [];
 
                 originalLabels.forEach(name => {
@@ -101,8 +153,8 @@
 
                 return {
                     label: weight + 'g',
-                    data: weightSums, // 단순 숫자 배열로 변경 (출력 보장)
-                    counts: itemCounts, // 툴팁 참조용 커스텀 필드
+                    data: weightSums,
+                    counts: itemCounts,
                     backgroundColor: barColors[idx],
                     borderRadius: 4
                 };
@@ -117,17 +169,22 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',     
+                        intersect: false   
+                    },
                     scales: {
-                        x: { stacked: true, grid: { display: false }, ticks: { autoSkip: false, maxRotation: 0, font: { size: 10 } } },
+                        x: { stacked: true, grid: { display: false }, ticks: { autoSkip: false, font: { size: 10 } } },
                         y: { stacked: true, beginAtZero: true, title: { display: true, text: '판매 중량 (g)' } }
                     },
                     plugins: {
                         legend: { position: 'bottom' },
                         tooltip: {
+                        	itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
                             callbacks: {
                                 label: function(context) {
                                     const weightValue = context.parsed.y;
-                                    const countValue = context.dataset.counts[context.dataIndex]; // 별도 배열에서 개수 추출
+                                    const countValue = context.dataset.counts[context.dataIndex];
                                     if (weightValue === 0) return null;
                                     return ` \${context.dataset.label}: \${weightValue.toLocaleString()}g (\${countValue.toLocaleString()}개)`;
                                 }

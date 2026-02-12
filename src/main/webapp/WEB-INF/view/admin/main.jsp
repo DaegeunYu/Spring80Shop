@@ -278,6 +278,7 @@
 		            	adminTable.classList.add('hidden');
 		                formContainer.classList.remove('hidden');
 		                formContainer.innerHTML = html;
+		                targetArea = formContainer; // 폼 컨테이너에서 스크립트 찾기
 		                
 		                setTimeout(() => {
 		                    const container = document.getElementById('option_container');
@@ -290,6 +291,22 @@
 		            	adminTable.classList.remove('hidden');       
 		                formContainer.classList.add('hidden');
 		                listBody.innerHTML = html;
+		                targetArea = listBody; // 리스트 본문에서 스크립트 찾기
+		                
+		             	// 삽입된 HTML 내의 스크립트를 추출하여 강제 실행 
+		                const scripts = targetArea.querySelectorAll("script");
+		                scripts.forEach(oldScript => {
+		                    const newScript = document.createElement("script");
+		                    // 기존 스크립트의 모든 속성 복사 (src, type 등)
+		                    Array.from(oldScript.attributes).forEach(attr => 
+		                        newScript.setAttribute(attr.name, attr.value)
+		                    );
+		                    // 스크립트 내부의 텍스트 코드 복사 (차트 생성 로직 등)
+		                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+		                    // 노드를 교체하여 브라우저가 스크립트를 즉시 실행하게 함
+		                    oldScript.parentNode.replaceChild(newScript, oldScript);
+		                });
+		                
 		            }
 		        })
 		        .catch(err => {
