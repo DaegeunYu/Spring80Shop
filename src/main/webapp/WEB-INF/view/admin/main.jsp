@@ -135,6 +135,13 @@
 			        headers: [], // 폼 형태이므로 헤더가 필요 없음
 			        isForm: true
 			    },
+			    'change_product': {
+			        title: '상품 수정',
+			        desc: '상품 정보를 수정하여 시스템에 등록합니다.',
+			        path: '${pageContext.request.contextPath}/admin/product_form.do',
+			        headers: [], // 폼 형태이므로 헤더가 필요 없음
+			        isForm: true
+			    },
 			    'sales': {
 			        title: '매출 현황',
 			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
@@ -192,7 +199,7 @@
 		    }
 
 		    // 5. 초기 데이터 로드 (필터 없이 전체 데이터)
-		    fetchData(cfg.path);
+		    fetchData(cfg.path, element);
 		}
 
 		/**
@@ -319,34 +326,21 @@
 		    // 1. [수정] id="addOption" 버튼 클릭 시 (closest를 써서 아이콘 클릭도 인식)
 		    if (e.target && e.target.closest('button[onclick="addOption()"]')) {
 		        e.preventDefault(); // 기본 동작 방지
-		        console.log("옵션 추가 버튼 클릭됨!");
 		        
 		        // [수정] product_form.jsp에 적힌 id와 동일하게 맞춤
 		        const container = document.getElementById('option_container');
-		        if (!container) return;
-
-		        const idx = container.querySelectorAll('.option-item').length;
-		        const newOption = document.createElement('div');
-		        newOption.className = 'option-item flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100 animate-fadeIn';
+		       
+		        const mode = document.getElementById("mode").value;
+		        const options = getProductOptions();
 		        
-		        // product_form.jsp의 원본 디자인 유지
-		        newOption.innerHTML = `
-		            <div class="flex-1">
-		                <select name="optionList[\${idx}].product_weight" class="opt-weight w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400">
-		                    <option value="200g">200g</option>
-		                    <option value="350g">350g</option>
-		                    <option value="500g">500g</option>
-		                    <option value="1000g">1kg</option>
-		                </select>
-		            </div>
-		            <div class="flex-1">
-		                <input type="text" name="optionList[\${idx}].product_price" class="opt-price w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400" placeholder="옵션 가격(숫자만)">
-		            </div>
-		            <button type="button" class="remove-btn w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
-		                <i class="fas fa-trash-can"></i>
-		            </button>
-		        `;
-		        container.appendChild(newOption);
+		        if (mode === "edit") {
+		        	options.forEach((el, index) => {
+		        		makeOption(container, options[index].weight, options[index].price)
+		            });
+                } else {
+                    makeOption(container, "200g", "")
+                }
+		        
 		    }
 
 		    // 2. 삭제 버튼 클릭 시
@@ -378,7 +372,13 @@
 		            e.target.product_name.focus();
 		            return; // 여기서 중단
 		        }
-		
+		        
+		        const mode = document.getElementById("mode").value;
+		        let message = '상품 등록이 완료되었습니다!';
+		        if (mode === "edit") {
+		        	message = '상품 수정이 완료되었습니다!';
+		        }
+		        
 		        // 2. 비동기(AJAX) 전송 로직 시작
 		        // FormData는 input type="file"을 포함한 모든 데이터를 자동으로 묶어줍니다.
 		        const formData = new FormData(e.target);
@@ -394,7 +394,7 @@
 		            return res.text(); 
 		        })
 		        .then(data => {
-		            alert('상품 등록이 완료되었습니다!');
+		            alert(message);
 		            loadContent('product'); // 성공 후 리스트 화면으로 자동 전환 (새로고침 없이!)
 		        })
 		        .catch(err => {
@@ -406,11 +406,64 @@
         // 초기 실행
         window.onload = () => loadContent('user');
         
-        function viewReviewDetail(idx) {
-    	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
-    	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
-    	    window.open(url, "ReviewDetail_" + idx, options);
-    	}
+        function getProductOptions() {
+        	const codes = document.querySelectorAll('.opt-code');
+            const weights = document.querySelectorAll('.opt-weight');
+            const prices = document.querySelectorAll('.opt-price');
+            
+            let optionList = [];
+
+            // 인덱스를 기준으로 데이터를 매칭하여 객체 생성
+            weights.forEach((el, index) => {
+                let optionObj = {
+                	code: codes[index].value,
+                    weight: weights[index].value,
+                    price: prices[index].value
+                };
+                optionList.push(optionObj);
+            });
+
+            return optionList;
+        }
+        
+        function makeOption(container, weight, price) {
+        	if (!container) return;
+
+	        const idx = container.querySelectorAll('.option-item').length;
+	        const newOption = document.createElement('div');
+	        newOption.className = 'option-item flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100 animate-fadeIn';
+	        
+	        // product_form.jsp의 원본 디자인 유지
+	        newOption.innerHTML = `
+	            <div class="flex-1">
+	                <select name="optionList[\${idx}].product_weight" class="opt-weight w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400">
+	                    <option value="200g">200g</option>
+	                    <option value="350g">350g</option>
+	                    <option value="500g">500g</option>
+	                    <option value="1000g">1kg</option>
+	                </select>
+	            </div>
+	            <div class="flex-1">
+	                <input type="text" name="optionList[\${idx}].product_price" class="opt-price w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400" placeholder="옵션 가격(숫자만)">
+	            </div>
+	            <button type="button" class="remove-btn w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+	                <i class="fas fa-trash-can"></i>
+	            </button>
+	        `;
+	        
+	        const option_weight = newOption.querySelector('.opt-weight');
+	        const option_price = newOption.querySelector('.opt-price');
+	        
+	        option_weight.value = weight;
+	        option_price.value = price;
+	        
+	        container.appendChild(newOption);
+        }
+        
+        function changeProductInfo(product_code) {
+        	config['change_product'].path = '${pageContext.request.contextPath}/admin/product_form.do?product_code='+product_code;
+        	loadContent('change_product');
+        }
         
         function deleteProduct(product_code) {
         	if (!confirm("정말 이 상품을 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
@@ -439,6 +492,12 @@
                     alert("서버 통신 중 오류가 발생했습니다.");
                 }
             });
+    	}
+        
+        function viewReviewDetail(idx) {
+    	    const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+    	    const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
+    	    window.open(url, "ReviewDetail_" + idx, options);
     	}
         
         function deleteReview(idx) {

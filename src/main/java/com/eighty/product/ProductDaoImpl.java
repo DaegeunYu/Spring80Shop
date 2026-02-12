@@ -25,8 +25,24 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
+	@Transactional
+	public void update(ProductVO vo) {
+		mybatis.update("PRODUCT.UPDATE_PRODUCT", vo);
+	}
+	
+	@Override
     public void insertOption(ProductVO.ProductOption vo) {
         mybatis.insert("PRODUCT.INSERT_PRODUCT_OPTION", vo);
+    }
+	
+	@Override
+    public int deleteOption(String product_code) {
+        return mybatis.delete("PRODUCT.DELETE_PRODUCT_OPTION", product_code);
+    }
+	
+	@Override
+    public List<ProductVO.ProductOption> getProductOption(String product_code) {
+        return mybatis.selectList("PRODUCT.OPTION", product_code);
     }
 
 	@Override
@@ -81,6 +97,11 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public int delProduct(@Param("idx") int idx) {
 		return mybatis.delete("PRODUCT.DELETE", idx);
+	}
+	
+	@Override
+	public int delProductRecently(@Param("product_code") String product_code) {
+		return mybatis.delete("PRODUCT.DELETE_RECENTLY", product_code);
 	}
 
 	
