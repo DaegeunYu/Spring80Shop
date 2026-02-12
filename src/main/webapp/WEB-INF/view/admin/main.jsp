@@ -142,6 +142,13 @@
 			        headers: [], // 폼 형태이므로 헤더가 필요 없음
 			        isForm: true
 			    },
+			    'change_user': {
+			        title: '사용자 정보 수정',
+			        desc: '사용자 정보를 수정하여 시스템에 등록합니다.',
+			        path: '${pageContext.request.contextPath}/admin/user_form.do',
+			        headers: [], // 폼 형태이므로 헤더가 필요 없음
+			        isForm: true
+			    },
 			    'sales': {
 			        title: '매출 현황',
 			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
@@ -403,6 +410,58 @@
 		        });
 		    }
 		});
+		// 3. user_form 제어
+		document.addEventListener('change', function(e) {
+		    if (e.target && e.target.name === 'user_role') {
+		        const role = e.target.value;
+		        const isBusiness = (role === 'business');
+		        const form = e.target.closest('form');
+		        if (!form) return;
+
+		        // 1. 이름/상호명 변경 (기존 로직 동일)
+		        const nameInput = form.querySelector('input[name="user_name"]');
+		        if (nameInput) {
+		            const label = nameInput.closest('div').querySelector('label');
+		            label.textContent = isBusiness ? '법인 상호명' : '이름';
+		        }
+
+		        // 2. 나이/생년월일/추천인 필드 제어 (ID 기반 권장)
+		        const targetIds = ['input_age', 'input_birthday', 'input_recommender'];
+		        targetIds.forEach(id => {
+		            const el = document.getElementById(id);
+		            if (el) {
+		                el.readOnly = isBusiness;
+		                if (isBusiness) {
+		                    el.classList.add('bg-gray-100', 'text-gray-400', 'cursor-not-allowed');
+		                    el.value = '';
+		                } else {
+		                    el.classList.remove('bg-gray-100', 'text-gray-400', 'cursor-not-allowed');
+		                    el.classList.add('bg-white');
+		                }
+		            }
+		        });
+
+		        // 3. [성별 영역 핵심 수정]
+		        const genderContainer = document.getElementById('gender_container');
+		        const radioGroup = document.getElementById('gender_radio_group');
+		        const businessMsg = document.getElementById('business_only_msg');
+
+		        if (isBusiness) {
+		            // 법인일 때: 메시지 SHOW, 라디오 HIDE
+		            if(businessMsg) businessMsg.classList.remove('hidden');
+		            if(radioGroup) radioGroup.classList.add('hidden');
+		            genderContainer.classList.add('bg-gray-100', 'opacity-60');
+		            genderContainer.querySelectorAll('input').forEach(i => i.disabled = true);
+		        } else {
+		            // 일반일 때: 메시지 HIDE, 라디오 SHOW
+		            if(businessMsg) businessMsg.classList.add('hidden');
+		            if(radioGroup) radioGroup.classList.remove('hidden');
+		            genderContainer.classList.remove('bg-gray-100', 'opacity-60');
+		            genderContainer.classList.add('bg-gray-50');
+		            genderContainer.querySelectorAll('input').forEach(i => i.disabled = false);
+		        }
+		    }
+		});
         // 초기 실행
         window.onload = () => loadContent('user');
         
@@ -463,6 +522,11 @@
         function changeProductInfo(product_code) {
         	config['change_product'].path = '${pageContext.request.contextPath}/admin/product_form.do?product_code='+product_code;
         	loadContent('change_product');
+        }
+        
+        function changeUserInfo(user_id) {
+        	config['change_user'].path = '${pageContext.request.contextPath}/admin/user_form.do?user_id='+user_id;
+        	loadContent('change_user');
         }
         
         function deleteProduct(product_code) {

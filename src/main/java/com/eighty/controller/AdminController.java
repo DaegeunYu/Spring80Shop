@@ -24,6 +24,8 @@ import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewDTO;
 import com.eighty.shop.ParameterValue;
+import com.eighty.users.BusinessService;
+import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
 
@@ -36,6 +38,12 @@ public class AdminController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private UsersService usersService;
+	
+	@Autowired
+	private BusinessService businessService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -60,6 +68,15 @@ public class AdminController {
 			model.addAttribute("mode", "edit");
 		}
 		return "shop/product_form";
+	}
+	
+	@GetMapping(value="/user_form.do")
+	public String user_form(String user_id, Model model) {
+		UsersVO vo = new UsersVO();
+		vo.setUser_id(user_id);
+		vo = usersService.getSelectOne(vo);
+		model.addAttribute("user", vo);
+		return "users/user_form";
 	}
 	
 	
@@ -158,6 +175,24 @@ public class AdminController {
 	        e.printStackTrace();
 	        return "error: " + e.getMessage(); // 에러 발생 시 메시지 리턴
 	    }
+	}
+	
+	@PostMapping("/updateUser.do")
+	@ResponseBody
+	public String updateUser(UsersVO UVO, HttpSession session) {
+	    	    
+		String loginId = (String) session.getAttribute("id"); 
+	    if (loginId == null) {
+	        return "login_required"; // 자바스크립트에서 처리할 신호
+	    }
+	    
+	    if ("business".equals(UVO.getUser_role())) {
+//	    	businessService.update(UVO);
+	    } else {
+//	    	usersService.update(UVO);
+	    }
+	    
+        return "success"; // 성공 시 문자열 리턴
 	}
 	
 	@GetMapping("/sales_list.do") 
