@@ -12,7 +12,7 @@
         <div class="info-text">
             <p class="brand">${product.brand}</p>
             <p class="name">${product.product_name}</p>
-            <p class="option">선택: ${product.product_weight} / ${product.crushing}</p>
+            <p class="option">선택: ${product.firstWeight} / ${product.crushing}</p>
         </div>
     </div>
 

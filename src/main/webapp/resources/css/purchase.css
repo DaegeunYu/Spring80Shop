@@ -425,6 +425,10 @@ hr {
     padding: 40px;
     border-radius: 12px;
     border: 1px solid #eee;
+    
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 30px;
 }
 
 .one_price_summary span { color: #db6b30; font-size: 26px; font-weight: bold; }

@@ -1,5 +1,6 @@
 package com.eighty.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -35,7 +36,14 @@ public class ProductVO {
 	private int amount = 8;
 	private int displayPage = 8;
 	
-	private List<ProductOption> optionList;
+	// 리스트 초기화 ( null 방지용 ) 및  review_from.jsp에서 사용
+	private List<ProductOption> optionList = new ArrayList<ProductOption>();
+	public String getFirstWeight() {
+        if (this.optionList != null && !this.optionList.isEmpty()) {
+            return this.optionList.get(0).getProduct_weight();
+        }
+        return "옵션 없음";
+    }
 	
 	@Data
     public static class ProductOption {
