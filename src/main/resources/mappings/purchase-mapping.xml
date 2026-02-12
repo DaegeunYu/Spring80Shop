@@ -86,5 +86,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		GROUP BY p.product_code, p.product_name
 		ORDER BY TOTAL_WEIGHT DESC;
 	</select>
+	
+	<select id="getProductWeightDistribution" resultType="map">
+    SELECT 
+        p.product_name AS productName,
+        pc.productWeight AS weightGroup, 
+        IFNULL(SUM(pc.orderCount), 0) AS totalCount
+    FROM product p
+    LEFT OUTER JOIN purchase pc ON p.product_code = pc.productCode
+    GROUP BY p.product_name, pc.productWeight
+    ORDER BY p.product_name ASC, pc.productWeight ASC
+	</select>
 
 </mapper>
