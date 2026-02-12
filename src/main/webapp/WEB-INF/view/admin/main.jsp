@@ -77,8 +77,8 @@
 				</div>
 
                 <!-- 테이블 카드 -->
-                <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
-                    <table class="w-full text-left">
+                <div id="dynamic-render-area" class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden p-4">
+                    <table id="adminTable" class="w-full text-left">
                         <thead class="bg-gray-50 border-b border-gray-100 sticky top-0 z-20">
                             <tr id="tableHeaderRow" class="min-h-[60px]">
                             	<!-- JS 동적 생성 -->
@@ -88,6 +88,7 @@
                             <!-- JSP 데이터 로드 영역 -->
                         </tbody>
                     </table>
+                    <div id="formContainer" class="hidden min-h-[400px]"></div>
                 </div>
             </div>
         </main>
@@ -245,26 +246,133 @@
 		 * 서버에서 데이터를 가져와 tbody를 갱신하는 함수
 		 */
 		function fetchData(path) {
-		    const listBody = document.getElementById('listBody');
+			const listBody = document.getElementById('listBody');
+		    const adminTable = document.getElementById('adminTable'); // 여기서 adminTable로 가져옴
+		    const formContainer = document.getElementById('formContainer');
+		    
+		    const type = Object.keys(config).find(key => path.includes(config[key].path));
+		    const cfg = config[type];
+		    
 		    if (!listBody) return;
 
 		    // 로딩 표시
 		    listBody.innerHTML = `<tr><td colspan="10" class="py-20 text-center"><i class="fas fa-circle-notch fa-spin text-3xl text-blue-500"></i></td></tr>`;
 
 		    fetch(path)
-		        .then(res => {
-		            if (!res.ok) throw new Error("서버 응답 오류");
-		            return res.text();
-		        })
+		        .then(res => res.text())
 		        .then(html => {
-		            listBody.innerHTML = html;
+		            if (cfg && cfg.isForm) {
+		            	adminTable.classList.add('hidden');
+		                formContainer.classList.remove('hidden');
+		                formContainer.innerHTML = html;
+		                
+		                setTimeout(() => {
+		                    const container = document.getElementById('option_container');
+		                    if (container && container.children.length === 0) {
+		                        const addBtn = document.querySelector('button[onclick="addOption()"]');
+		                        if (addBtn) addBtn.click();
+		                    }
+		                }, 100);
+		            } else {
+		            	adminTable.classList.remove('hidden');       
+		                formContainer.classList.add('hidden');
+		                listBody.innerHTML = html;
+		            }
 		        })
 		        .catch(err => {
 		            console.error("데이터 로드 실패:", err);
 		            listBody.innerHTML = `<tr><td colspan="10" class="py-20 text-center text-red-500 font-bold">데이터를 로드하는 중 오류가 발생했습니다.</td></tr>`;
 		        });
 		}
+		// formContainer 내부의 클릭 이벤트 감시
+		document.getElementById('formContainer').addEventListener('click', function(e) {
+		    // 1. [수정] id="addOption" 버튼 클릭 시 (closest를 써서 아이콘 클릭도 인식)
+		    if (e.target && e.target.closest('button[onclick="addOption()"]')) {
+		        e.preventDefault(); // 기본 동작 방지
+		        console.log("옵션 추가 버튼 클릭됨!");
+		        
+		        // [수정] product_form.jsp에 적힌 id와 동일하게 맞춤
+		        const container = document.getElementById('option_container');
+		        if (!container) return;
+
+		        const idx = container.querySelectorAll('.option-item').length;
+		        const newOption = document.createElement('div');
+		        newOption.className = 'option-item flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100 animate-fadeIn';
+		        
+		        // product_form.jsp의 원본 디자인 유지
+		        newOption.innerHTML = `
+		            <div class="flex-1">
+		                <select name="optionList[\${idx}].product_weight" class="opt-weight w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400">
+		                    <option value="200g">200g</option>
+		                    <option value="350g">350g</option>
+		                    <option value="500g">500g</option>
+		                    <option value="1000g">1kg</option>
+		                </select>
+		            </div>
+		            <div class="flex-1">
+		                <input type="text" name="optionList[\${idx}].product_price" class="opt-price w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-blue-400" placeholder="옵션 가격(숫자만)">
+		            </div>
+		            <button type="button" class="remove-btn w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+		                <i class="fas fa-trash-can"></i>
+		            </button>
+		        `;
+		        container.appendChild(newOption);
+		    }
+
+		    // 2. 삭제 버튼 클릭 시
+		    if (e.target && e.target.closest('.remove-btn')) {
+		        const items = document.querySelectorAll('.option-item');
+		        if(items.length > 1) {
+		            e.target.closest('.option-item').remove();
+		            // 재인덱싱 (필요 시 호출)
+		            const allItems = document.querySelectorAll('#option_container .option-item');
+		            allItems.forEach((item, i) => {
+		                item.querySelector('.opt-weight').name = `optionList[\${i}].product_weight`;
+		                item.querySelector('.opt-price').name = `optionList[\${i}].product_price`;
+		            });
+		        } else {
+		            alert('최소 하나 이상의 옵션은 존재해야 합니다.');
+		        }
+		    }
+		});
+		// 2. [추가된 부분] formContainer 내부의 전송(submit) 이벤트 관리
+		document.getElementById('formContainer').addEventListener('submit', function(e) {
+		    if (e.target && e.target.id === 'productForm') {
+		        // [중요] 일단 브라우저의 기본 이동(404 에러 원인)을 무조건 막습니다.
+		        e.preventDefault(); 
 		
+		        // 1. 유효성 검증 (기존 pName 로직 유지)
+		        const pName = e.target.product_name.value.trim();
+		        if (!pName) {
+		            alert('상품명을 입력해주세요.');
+		            e.target.product_name.focus();
+		            return; // 여기서 중단
+		        }
+		
+		        // 2. 비동기(AJAX) 전송 로직 시작
+		        // FormData는 input type="file"을 포함한 모든 데이터를 자동으로 묶어줍니다.
+		        const formData = new FormData(e.target);
+		        
+		        // e.target.action은 form 태그에 적힌 주소(${path}/product/insertProduct.do)를 가져옵니다.
+		        fetch(e.target.action, {
+		            method: 'POST',
+		            body: formData
+		        })
+		        .then(res => {
+		            if (!res.ok) throw new Error('전송 실패');
+		            // 서버에서 저장 후 성공 문자열이나 JSON을 보낸다고 가정
+		            return res.text(); 
+		        })
+		        .then(data => {
+		            alert('상품 등록이 완료되었습니다!');
+		            loadContent('product'); // 성공 후 리스트 화면으로 자동 전환 (새로고침 없이!)
+		        })
+		        .catch(err => {
+		            console.error(err);
+		            alert('저장 중 오류가 발생했습니다. 컨트롤러 주소를 확인해주세요.');
+		        });
+		    }
+		});
         // 초기 실행
         window.onload = () => loadContent('user');
         
