@@ -19,10 +19,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	                      #{quantity}, #{expiration_date})
 	</insert>
 	
+	<update id="UPDATE_PRODUCT" parameterType="ProductVO">
+			UPDATE product
+				<set>
+			        <if test="product_name != null">product_name = #{product_name},</if>
+			        <if test="product_img != null">product_img = #{product_img},</if>
+			        <if test="origin != null">origin = #{origin},</if>
+			        <if test="brand != null">brand = #{brand},</if>
+			        <if test="roast_dgree != null">roast_dgree = #{roast_dgree},</if>
+			        <if test="is_single_origin != null">is_single_origin = #{is_single_origin},</if>
+			        <if test="is_decafe != null">is_decafe = #{is_decafe},</if>
+			        <if test="manufacturing != null">manufacturing = #{manufacturing},</if>
+			        <if test="origin_price != null">origin_price = #{origin_price},</if>
+			        <if test="sale_price != null">sale_price = #{sale_price},</if>
+			        <if test="quantity != null">quantity = #{quantity},</if>
+			        <if test="release_date != null">release_date = #{release_date},</if>
+			        <if test="expiration_date != null">expiration_date = #{expiration_date}</if>
+			    </set>
+		    WHERE product_code = #{product_code}
+	</update>
+	
 	<insert id="INSERT_PRODUCT_OPTION" parameterType="com.eighty.product.ProductVO$ProductOption">
-	 
 	 insert  into product_option( product_code, product_weight, product_price)
      values(#{product_code}, #{product_weight}, #{product_price})
+	</insert>
+	
+	<insert id="DELETE_PRODUCT_OPTION" parameterType="string">
+		DELETE FROM product_option WHERE product_code = #{product_code}
 	</insert>
 	
 	<select id="MAN" resultType ="String">

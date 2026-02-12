@@ -135,16 +135,24 @@ public class AdminController {
 	        return "login_required"; // 자바스크립트에서 처리할 신호
 	    }
 	    
-	    try {	        
-	        productService.insert(PVO, file);
-	        if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
-	            File licenseFolder = new File(path, "product"); // 설정된 path 사용
+	    try {
+	    	if (file != null && !file.isEmpty() && PVO.getProduct_img() != null) {
+	    		File delFile = new File(path, PVO.getProduct_img());
+	    		if( delFile.exists() ){
+	        		delFile.delete();
+	    		}
+	    		productService.update(PVO, file);
+	    		File licenseFolder = new File(path, "product"); // 설정된 path 사용
 	            if (!licenseFolder.exists()) {
 	                licenseFolder.mkdirs();
 	            }
+	            
 	            File saveFile = new File(path, PVO.getProduct_img());
 	            file.transferTo(saveFile);
-	        }	        
+	    	} else {
+	    		productService.update(PVO, file);
+	    	}
+	    	
 	        return "success"; // 성공 시 문자열 리턴
 	    } catch (Exception e) {
 	        e.printStackTrace();

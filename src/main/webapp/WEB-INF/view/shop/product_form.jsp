@@ -1,9 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<div id="formDataContainer" style="display:none;">
+	<input type="hidden" id="mode" value="${mode}">
+	<c:forEach var="opt" items="${product.optionList}" varStatus="status">
+	    <div class="option-item-group">
+	    	<input type="hidden" class="opt-code" data-idx="${status.index}" value="${opt.product_code}">
+	        <input type="hidden" class="opt-weight" data-idx="${status.index}" value="${opt.product_weight}">
+	        <input type="hidden" class="opt-price" data-idx="${status.index}" value="${opt.product_price}">
+	    </div>
+	</c:forEach>
+</div>
 
 <div class="p-8 bg-white">
-    <form id="productForm" action="${mode == 'edit'? '${pageContext.request.contextPath}/admin/insertProduct.do' : '${pageContext.request.contextPath}/admin/changeProduct.do'}" method="post" enctype="multipart/form-data" class="space-y-6">
-        
+    <form id="productForm" action="${pageContext.request.contextPath}/admin/${mode == 'edit' ? 'changeProduct.do' : 'insertProduct.do'}" method="post" enctype="multipart/form-data" class="space-y-6">
+        <input type="hidden" name="product_code" value="${product.product_code}">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">원두의 종류</label>
@@ -104,11 +116,11 @@
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">상품 출시일</label>
-                <input type="date" name="release_date" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-600">
+                <input type="date" name="release_date" value="${fn:substring(product.release_date, 0, 10)}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-600">
             </div>
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-gray-700">유통기한</label>
-                <input type="date" name="expiration_date" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-600">
+                <input type="date" name="expiration_date" value="${fn:substring(product.expiration_date, 0, 10)}" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm text-gray-600">
             </div>
         </div>
 

@@ -49,6 +49,36 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
+	@Transactional
+	public void update(ProductVO vo, MultipartFile file) {
+		// 0. vo에 product_code 가져오기
+//		ProductVO set = dao.getProduct(vo);
+//		vo.setProduct_code(set.getProduct_code());
+		
+		// 1. 파일 이름 확정 (파일이 있을 경우에만 코드와 조합)
+	    if (file != null && !file.isEmpty()) {
+	        String originalName = file.getOriginalFilename();
+	        String extension = originalName.substring(originalName.lastIndexOf("."));
+	        String uuid = UUID.randomUUID().toString().substring(0, 4);
+	        String saveName = vo.getProduct_code() + "_" + vo.getProduct_name() + "_" + uuid + extension;
+	        
+	        vo.setProduct_img("product/" + saveName);
+	    }
+	    
+	    // 2. 부모 상품 저장
+	    dao.update(vo);
+
+	    // 3. 자식 옵션 저장(기존 옵션은 삭제: 옵션의 수가 바뀔수도 있기 때문에 UPDATE로 처리 안함)
+	    if (vo.getOptionList() != null) {
+	    	dao.deleteOption(vo.getProduct_code());
+	        for (ProductVO.ProductOption option : vo.getOptionList()) {
+	            option.setProduct_code(vo.getProduct_code()); // 생성된 코드로 연결
+	            dao.insertOption(option);
+	        }
+	    }
+	}
+	
+	@Override
     public List<ProductVO.ProductOption> getProductOption(String product_code) {
         return dao.getProductOption(product_code);
     }

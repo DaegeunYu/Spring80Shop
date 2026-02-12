@@ -8,7 +8,9 @@ import com.eighty.shop.SQL_TYPE;
 
 public interface ProductDao {
 	void insert(ProductVO vo);
+	void update(ProductVO vo);
 	void insertOption(ProductVO.ProductOption vo);
+	int deleteOption(String product_code);
 	List<ProductVO.ProductOption> getProductOption(String product_code);
 	String getMaxCode(); // product_code의 최대값 조회시 사용
 	List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
