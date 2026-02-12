@@ -55,7 +55,7 @@
             </div>
 			<div class="image_box">
 				<a href="${path}/product/product_detail.do?product_code=${m.product_code}">
-					<img class="product_image" src="${m.product_img}">
+					<img class="product_image" src="${pageContext.request.contextPath}/resources/files/${m.product_img}">
 				</a>
 			</div>
 			<div class="product_name">

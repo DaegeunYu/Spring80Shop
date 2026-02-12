@@ -6,7 +6,7 @@
 <section>
 	<div align="center">
         <br>
-		<a href=${path}/index.do><img id=login_box_logo src="https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/logo.jpg"></a>
+		<a href=${path}/index.do><img id=login_box_logo src="${pageContext.request.contextPath}/resources/files/common/logo.jpg"></a>
 		
 		<div class="join">
 		<form action="${path}/users/users_formOK.do" method="post" onSubmit="return formOK()">

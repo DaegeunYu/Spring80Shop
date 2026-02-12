@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="REVIEW">
- 
+
 	<select id="SELECT_ONE_REVIEW" resultType="com.eighty.review.ReviewVO">
     SELECT * FROM review 
     	WHERE idx = #{_parameter}
@@ -52,11 +52,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </selectKey>
 	</insert>
 	
-	<update id="UPDATE_REVIEW_STATUS" parameterType="com.eighty.review.ReviewVO">
+	<update id="UPDATE_REVIEW_STATUS" parameterType="ReviewVO">
 	    UPDATE purchase 
 	    SET isReview = 'y' 
-	    WHERE orderCode = #{orderCode} 
-	      AND productCode = #{productCode}
+	    WHERE orderCode = #{orderCode} AND productCode = #{productCode}
 	</update>
+	
+	<select id="getOrderDetailByIdx" parameterType="long" resultType="com.eighty.review.ReviewVO">
+	    SELECT idx, orderCode, productCode
+	    FROM purchase
+	    WHERE idx = #{idx}
+	</select>
+	
+	<delete id="DELETE" parameterType="int">
+	    DELETE FROM review 
+	    WHERE idx = #{idx}
+	</delete>
 	
 </mapper>

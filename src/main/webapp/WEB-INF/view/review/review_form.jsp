@@ -8,17 +8,18 @@
     <h2>리뷰 작성</h2>
     
     <div class="product-info-header">
-        <img src="${product.product_img}" alt="상품이미지">
+        <img src="${pageContext.request.contextPath}/resources/files/${product.product_img}" alt="상품이미지">
         <div class="info-text">
             <p class="brand">${product.brand}</p>
             <p class="name">${product.product_name}</p>
-            <p class="option">선택: ${product.product_weight} / ${product.crushing}</p>
+            <p class="option">선택: ${product.firstWeight} / ${product.crushing}</p>
         </div>
     </div>
 
     <form action="${pageContext.request.contextPath}/review/insertReview.do" method="post" id="reviewForm" enctype="multipart/form-data">
-        <input type="hidden" name="productCode" value="${productCode}">
-        <input type="hidden" name="orderCode" value="${orderCode}">
+        <input type="hidden" name="idx" value="${orderInfo.idx}">
+        <input type="hidden" name="productCode" value="${orderInfo.productCode}">
+        <input type="hidden" name="orderCode" value="${orderInfo.orderCode}">
 
         <div class="rating-section">
             

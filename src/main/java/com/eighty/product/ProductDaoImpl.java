@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -75,6 +76,11 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public ProductVO getProductForReview(ProductVO vo) {
 		return mybatis.selectOne("PRODUCT.getProductForReview", vo);
+	}
+	
+	@Override
+	public int delProduct(@Param("idx") int idx) {
+		return mybatis.delete("PRODUCT.DELETE", idx);
 	}
 
 	

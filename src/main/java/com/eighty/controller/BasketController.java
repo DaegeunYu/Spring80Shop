@@ -19,6 +19,7 @@ import com.eighty.basket.BasketService;
 import com.eighty.basket.BasketVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
+import com.eighty.shop.ParameterValue;
 
 
 @RequestMapping("/basket")
@@ -34,12 +35,14 @@ public class BasketController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	//메서드 자동 실행
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/basket_in.do")

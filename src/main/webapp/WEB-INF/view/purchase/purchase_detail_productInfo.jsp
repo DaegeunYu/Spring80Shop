@@ -13,7 +13,7 @@
                 <input type="hidden" name="crushing"  value="${item.basket.crushing}">
 
                 <div class="purchase_image_box">
-                    <img class="purchase_product_image" src="${item.product.product_img}">
+                    <img class="purchase_product_image" src="${pageContext.request.contextPath}/resources/files/${item.product.product_img}">
                 </div>
 
                 <div class="purchase_product_name">

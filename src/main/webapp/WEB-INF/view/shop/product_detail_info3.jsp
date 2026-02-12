@@ -75,7 +75,7 @@
 		<a class="button" id="addToBasket" href="#">장바구니</a>
 	</div>
 	<div class="icon_box">
-		<img id="like" class="icon" src="${like == 0 ? 'https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_empty.png' : 'https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_full.png'}">
+		<img id="like" class="icon" src="${like == 0 ? '${pageContext.request.contextPath}/resources/files/common/icn_heart_empty.png' : '${pageContext.request.contextPath}/resources/files/common/icn_heart_full.png'}">
 	</div>
 </div>
 <BR>
@@ -234,8 +234,8 @@
 	});
 	
 	document.getElementById('like').addEventListener('click', function() {
-	    const emptyHeart = "https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_empty.png";
-	    const fullHeart = "https://raw.githubusercontent.com/DaegeunYu/Spring80ShopImg/refs/heads/main/icn_heart_full.png";
+	    const emptyHeart = "${pageContext.request.contextPath}/resources/files/common/icn_heart_empty.png";
+	    const fullHeart = "${pageContext.request.contextPath}/resources/files/common/icn_heart_full.png";
 
 	    let isLike = 0;
 	    if (this.src === emptyHeart) {

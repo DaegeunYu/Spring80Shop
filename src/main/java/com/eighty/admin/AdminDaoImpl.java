@@ -20,7 +20,7 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public void insertProduct(ProductVO vo) {
-    	mybatis.insert("PRODUCT.INSERT", vo);
+    	mybatis.insert("PRODUCT.INSERT_PRODUCT", vo);
     }
     
     @Override

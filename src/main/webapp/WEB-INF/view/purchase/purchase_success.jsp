@@ -41,7 +41,7 @@
 			<c:if test="${item.purchase.productCode != 'DELIVERY'}">
 			<div class="purchase_basket_item">
 				<div class="purchase_image_box">
-					<img src="${item.product.product_img}"
+					<img src="${pageContext.request.contextPath}/resources/files/${item.product.product_img}"
 						class="purchase_product_image">
 				</div>
 

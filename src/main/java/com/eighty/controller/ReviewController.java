@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.product.ProductService;
 import com.eighty.review.ReviewService;
 import com.eighty.review.ReviewVO;
+import com.eighty.shop.ParameterValue;
 
 
 @RequestMapping("/review")
@@ -38,11 +41,13 @@ public class ReviewController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(pv.getFilePath());
 		
 	}
 		
@@ -62,12 +67,12 @@ public class ReviewController {
 	}
 	
 	@GetMapping(value="/reviewForm.do")
-	public String reviewForm(@RequestParam("orderCode") String orderCode, 
-	                         @RequestParam("productCode") String productCode, 
+	public String reviewForm(@RequestParam("idx") Long idx,
 	                         Model model) {
-	    model.addAttribute("product", productService.getProductDetail(productCode));
-	    model.addAttribute("orderCode", orderCode);
-	    model.addAttribute("productCode", productCode);
+	    ReviewVO orderInfo = reviewService.getOrderDetailByIdx(idx);
+	    
+	    model.addAttribute("product", productService.getProductDetail(orderInfo.getProductCode()));
+	    model.addAttribute("orderInfo", orderInfo);
 	    return "review/review_form";
 	}
 	
@@ -114,13 +119,29 @@ public class ReviewController {
 	
 	@GetMapping("/reviewDetail.do")
     public String reviewDetail(@RequestParam("idx") int idx, Model model) {
-		System.out.println("리뷰 넘버 : " + idx);
 		ReviewVO review = reviewService.getReview(idx);
-		System.out.println("리뷰 넘버 : " + idx);
-		System.out.println(review);
 	    model.addAttribute("review", review);
         // 별도의 팝업용 JSP 반환
         return "review/review_detail"; 
     }
+	
+	@PostMapping("/deleteReview.do")
+	@ResponseBody
+    public String deleteReview(@RequestParam("idx") int idx, HttpServletRequest request) {
+		try {
+	        ReviewVO review = reviewService.getReview(idx);
+	        if (review.getReviewImg() != null) {
+	        	pv.deletePhysicalFile(review.getReviewImg(), request);
+	        }
+	        
+	        int result = reviewService.delReview(idx);
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
+	
 	
 }

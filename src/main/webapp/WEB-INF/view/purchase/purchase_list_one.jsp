@@ -36,9 +36,14 @@
                         <td><fmt:formatNumber value="${item.orderPrice}" type="number"/>원</td>
                         <td class="status_complete">${item.orderStatus}</td>
                         <td>
-                            <c:if test="${item.isReview eq 'n'}">
-                                <input type="button" class="btn_one_review" onclick="reviewForm('${item.orderCode}', '${item.productCode}')" value="리뷰작성">
-                            </c:if>
+                            <c:choose>
+							    <c:when test="${item.isReview eq 'n'}">
+							        <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
+							    </c:when>
+							    <c:otherwise>
+							        <input type="button" class="btn_review view" onclick="reviewView('${item.idx}')" value="리뷰확인">
+							    </c:otherwise>
+							</c:choose>
                         </td>
                     </tr>
                 </c:if>
@@ -52,6 +57,7 @@
         <p><strong>수령인 :</strong> ${orderInfo.receiverName}</p>
         <p><strong>연락처 :</strong> ${orderInfo.receiverPhone}</p>
         <p><strong>배송지 :</strong> ${orderInfo.address}</p>
+        <p><strong>결제수단 :</strong> ${orderInfo.paymentMethod}</p>
         <hr class="one_hr">
         <div class="one_price_summary">
             최종 결제 금액 <span><fmt:formatNumber value="${totalPrice + delivery}" type="number"/>원</span>
@@ -62,5 +68,16 @@
         <input type="button" class="btn_one_back" onclick="location.href='${path}/purchase/purchaseList.do'" value="목록으로">
     </div>
 </section>
+<script>
+function reviewForm(idx) {
+    location.href="${path}/review/reviewForm.do?idx="+idx;
+}
+function reviewView(idx) {
+	const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+	const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
+	window.open(url, "ReviewDetail_" + idx, options);
+}
+
+</script>
 
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

@@ -23,6 +23,7 @@ import com.eighty.admin.AdminService;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewDTO;
+import com.eighty.shop.ParameterValue;
 import com.eighty.users.UsersVO;
 
 
@@ -39,12 +40,14 @@ public class AdminController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	@PostConstruct  
 	public void init() {
 		// 가독성 때문에 init() 이란 이름 부여
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/product_form.do")
@@ -56,7 +59,7 @@ public class AdminController {
 	@GetMapping("/manager.do")
     public String adminMain(HttpSession session) {
 		if (!"admin".equals(session.getAttribute("userRole"))) {
-		    return "redirect:/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
+		    return "/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
 		}
         return "admin/main"; // 관리자 메인 layout
     }

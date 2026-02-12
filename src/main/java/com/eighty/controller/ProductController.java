@@ -2,6 +2,7 @@ package com.eighty.controller;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.eighty.basket.BasketService;
@@ -19,6 +21,8 @@ import com.eighty.product.LikeProductVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.review.ReviewService;
+import com.eighty.review.ReviewVO;
+import com.eighty.shop.ParameterValue;
 import com.eighty.shop.SQL_TYPE;
 
 
@@ -38,13 +42,15 @@ public class ProductController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	//메서드 자동 실행
 	@PostConstruct  
 	public void init() {
 		// 가독성 때문에 init() 이란 이름 부여
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/product_list.do")
@@ -173,5 +179,25 @@ public class ProductController {
 	    return "success";
 	}
 	
+	@PostMapping("/deleteProduct.do")
+	@ResponseBody
+    public String deleteProduct(@RequestParam("product_code") String product_code, HttpServletRequest request) {
+		try {
+	        ProductVO product = new ProductVO();
+	        product.setProduct_code(product_code);
+	        ProductVO productResult = service.getProduct(product);
+	        
+	        if (productResult.getProduct_img() != null) {
+	        	pv.deletePhysicalFile(productResult.getProduct_img(), request);
+	        }
+	        
+	        int result = service.delProduct(productResult.getIdx());
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
 	
 }

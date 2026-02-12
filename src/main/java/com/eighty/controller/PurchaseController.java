@@ -26,6 +26,7 @@ import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
 import com.eighty.purchase.PurchaseService;
 import com.eighty.purchase.PurchaseVO;
+import com.eighty.shop.ParameterValue;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,11 +49,13 @@ public class PurchaseController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	private ParameterValue pv = new ParameterValue();
+	
 	String path ="";
 			
 	@PostConstruct  
 	public void init() {
-		path = servletContext.getRealPath("/resources/files/");
+		path = servletContext.getRealPath(pv.getFilePath());
 	}
 	
 	@GetMapping(value="/purchaseList.do")

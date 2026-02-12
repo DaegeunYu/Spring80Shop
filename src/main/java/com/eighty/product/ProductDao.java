@@ -2,6 +2,8 @@ package com.eighty.product;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.eighty.shop.SQL_TYPE;
 
 public interface ProductDao {
@@ -15,6 +17,7 @@ public interface ProductDao {
 	int selectReviewCount(String productCode);
 	ProductVO getProductForReview(ProductVO vo);
 	int getPrice(String product_code, String product_weight);
+	int delProduct(@Param("idx") int idx);
   
    	//LIKE
 	void insert(LikeProductVO vo);
