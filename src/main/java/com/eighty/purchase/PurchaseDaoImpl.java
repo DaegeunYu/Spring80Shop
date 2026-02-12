@@ -36,4 +36,9 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public void updatePaymentInfo(PurchaseVO vo) {
 		mybatis.update("PURCHASE.updatePaymentInfo", vo);
 	}
+
+	@Override
+	public int updateProductStock(PurchaseVO item) {
+		return mybatis.update("PURCHASE.updateProductStock", item);
+	}
 }

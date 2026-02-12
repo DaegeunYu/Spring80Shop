@@ -298,6 +298,22 @@ public class PurchaseController {
 	    
 	    service.insertPurchase(purchaseList);
 	    
+	    // 주문 완료 시 재고 차감
+	    for (int i = 0; i < productCode.length; i++) {
+	        // 배송비 행은 제외 
+	        if (!"DELIVERY".equals(productCode[i])) {
+	            
+	            PurchaseVO item = new PurchaseVO();
+	            item.setProductCode(productCode[i]);
+	            item.setOrderCount(productCount[i]);
+	            
+	            String pureWeight = productWeight[i].replaceAll("[^0-9]", ""); 
+	            item.setProductWeight(pureWeight);
+	            
+	            service.updateProductStock(item); 
+	        }
+	    }
+	    
 	    purchaseInfo.addAttribute("orderCode", uniqueOrderCode);
 	    
 	    purchaseInfo.addFlashAttribute("finalPrice", totalProductSum + 5000);
