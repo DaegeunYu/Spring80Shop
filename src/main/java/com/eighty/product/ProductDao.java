@@ -21,6 +21,7 @@ public interface ProductDao {
 	ProductVO getProductForReview(ProductVO vo);
 	int getPrice(String product_code, String product_weight);
 	int delProduct(@Param("idx") int idx);
+	int delProductRecently(@Param("product_code") String product_code);
   
    	//LIKE
 	void insert(LikeProductVO vo);

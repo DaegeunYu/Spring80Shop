@@ -111,7 +111,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public int delProduct(@Param("idx") int idx) {
+	public int delProduct(@Param("idx") int idx, String product_code) {
+		int recent =  dao.delProductRecently(product_code);
 		return dao.delProduct(idx);
 	}
 

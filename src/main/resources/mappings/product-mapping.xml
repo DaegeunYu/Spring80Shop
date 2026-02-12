@@ -105,6 +105,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INNER JOIN product_option AS o ON p.product_code = o.product_code
 		WHERE p.idx = #{idx};
 	</delete>
+	
+	<delete id="DELETE_RECENTLY" parameterType="string">
+	    DELETE FROM product_recently
+		WHERE product_code = #{product_code};
+	</delete>
     
     <!-- 리뷰 작성시 제품정보 불러오기용 -->
     <select id="getProductForReview" parameterType="ProductVO" resultType="ProductVO">

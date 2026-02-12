@@ -98,6 +98,11 @@ public class ProductDaoImpl implements ProductDao {
 	public int delProduct(@Param("idx") int idx) {
 		return mybatis.delete("PRODUCT.DELETE", idx);
 	}
+	
+	@Override
+	public int delProductRecently(@Param("product_code") String product_code) {
+		return mybatis.delete("PRODUCT.DELETE_RECENTLY", product_code);
+	}
 
 	
 	// LIKE

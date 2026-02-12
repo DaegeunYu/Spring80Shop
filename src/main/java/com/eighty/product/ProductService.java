@@ -17,7 +17,7 @@ public interface ProductService {
 	int count(ProductVO vo, SQL_TYPE type);
 	ProductVO getProductDetail(String productCode);
 	int getPrice(String product_code, String product_weight);
-	int delProduct(@Param("idx") int idx);
+	int delProduct(@Param("idx") int idx, String product_code);
    
 	// LIKE
 	void insert(LikeProductVO vo);
