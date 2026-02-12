@@ -54,8 +54,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getUserPurchases() {
-		return dao.getUserPurchases();
+	public List<Map<String, Object>> getProductWeightDistribution() {
+		return dao.getProductWeightDistribution();
 	}
 
 	

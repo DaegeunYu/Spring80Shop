@@ -54,8 +54,8 @@ public class AdminDaoImpl implements AdminDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getUserPurchases() {
-		return mybatis.selectList("PURCHASE.getUserPurchases");
+	public List<Map<String, Object>> getProductWeightDistribution() {
+		return mybatis.selectList("PURCHASE.getProductWeightDistribution");
 	}
 
 }

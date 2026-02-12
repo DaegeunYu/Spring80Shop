@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 차트 실행 -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> <!-- 차트 실행 -->
 
 <title>관리자 페이지</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -53,6 +55,11 @@
 					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
     					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
     					<span class="font-bold">매출 현황</span>
+					</a>
+					
+					<a href="#" onclick="loadContent('product_stats')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
+    					<i class="fas fa-chart-pie w-5 group-hover:scale-110 transition-transform"></i>
+    					<span class="font-bold">상품 판매 분석</span>
 					</a>
 				    
 				    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-6 mb-4 px-2">Registration</p>
@@ -139,6 +146,12 @@
 			        title: '매출 현황',
 			        desc: '결제 완료된 제품의 매출과 주문정보를 분석 합니다.',
 			        path: '${pageContext.request.contextPath}/admin/sales_list.do',
+			        headers: []
+			    },
+			    'product_stats': {
+			        title: '상품 판매 분석',
+			        desc: '상품별 점유율과 판매량 무게별 판매 추이를 분석합니다.',
+			        path: '${pageContext.request.contextPath}/admin/product_sales.do',
 			        headers: []
 			    }
 			    
@@ -272,6 +285,7 @@
 		            	adminTable.classList.add('hidden');
 		                formContainer.classList.remove('hidden');
 		                formContainer.innerHTML = html;
+		                targetArea = formContainer; // 폼 컨테이너에서 스크립트 찾기
 		                
 		                setTimeout(() => {
 		                    const container = document.getElementById('option_container');
@@ -284,6 +298,22 @@
 		            	adminTable.classList.remove('hidden');       
 		                formContainer.classList.add('hidden');
 		                listBody.innerHTML = html;
+		                targetArea = listBody; // 리스트 본문에서 스크립트 찾기
+		                
+		             	// 삽입된 HTML 내의 스크립트를 추출하여 강제 실행 
+		                const scripts = targetArea.querySelectorAll("script");
+		                scripts.forEach(oldScript => {
+		                    const newScript = document.createElement("script");
+		                    // 기존 스크립트의 모든 속성 복사 (src, type 등)
+		                    Array.from(oldScript.attributes).forEach(attr => 
+		                        newScript.setAttribute(attr.name, attr.value)
+		                    );
+		                    // 스크립트 내부의 텍스트 코드 복사 (차트 생성 로직 등)
+		                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+		                    // 노드를 교체하여 브라우저가 스크립트를 즉시 실행하게 함
+		                    oldScript.parentNode.replaceChild(newScript, oldScript);
+		                });
+		                
 		            }
 		        })
 		        .catch(err => {
