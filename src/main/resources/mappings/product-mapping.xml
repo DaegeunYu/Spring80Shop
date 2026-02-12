@@ -44,9 +44,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      values(#{product_code}, #{product_weight}, #{product_price})
 	</insert>
 	
-	<insert id="DELETE_PRODUCT_OPTION" parameterType="string">
+	<delete id="DELETE_PRODUCT_OPTION" parameterType="string">
 		DELETE FROM product_option WHERE product_code = #{product_code}
-	</insert>
+	</delete>
 	
 	<select id="MAN" resultType ="String">
 	   SELECT DISTINCT manufacturing FROM product

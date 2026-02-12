@@ -29,10 +29,9 @@
 	<div class="info_detail">
 		<select name="weight" id="weight">
 		    <option value="not">선택 안함</option>
-		    <option value="200g">200g</option>
-		    <option value="350g">350g</option>
-		    <option value="500g">500g</option>
-		    <option value="1000g">1Kg</option>
+		    <c:forEach var="item" items="${product.optionList}">
+		    	<option value="${item.product_weight}">${item.product_weight}</option>		    	
+		    </c:forEach>
 		 </select>						
 	</div>
 </div>

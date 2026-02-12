@@ -92,6 +92,7 @@ public class ProductController {
 	public String product_detail(HttpSession session, Model model, ProductVO vo){
 		ProductVO product = service.getProduct(vo);
 	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
+	    product.setOptionList(service.getProductOption(vo.getProduct_code()));
 	    
 	    String id = (String) session.getAttribute("id");
 		if (id != null) {
@@ -123,7 +124,7 @@ public class ProductController {
 				basketService.update(rVo);
 			}
 		}
-	    
+		
 	    model.addAttribute("product", product);
 	    model.addAttribute("reviewCount", reviewCount);
 	    return "shop/product_detail";

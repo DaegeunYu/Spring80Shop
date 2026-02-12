@@ -68,15 +68,15 @@
                 <label class="block text-sm font-bold text-gray-700">볶음도</label>
                 <div class="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="roast_dgree" value="S" ${product.roast_dgree == '약배전' ? '' : product.roast_dgree == '중배전' ? '' : 'checked'} class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="roast_dgree" value="강배전" ${product.roast_dgree == '약배전' ? '' : product.roast_dgree == '중배전' ? '' : 'checked'} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">강배전</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="roast_dgree" value="M" ${product.roast_dgree == '중배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="roast_dgree" value="중배전" ${product.roast_dgree == '중배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">중배전</span>
                     </label>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="radio" name="roast_dgree" value="W" ${product.roast_dgree == '약배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
+                        <input type="radio" name="roast_dgree" value="약배전" ${product.roast_dgree == '약배전' ? 'checked' : ''} class="w-4 h-4 text-blue-600">
                         <span class="ml-2 text-sm">약배전</span>
                     </label>
                 </div>
