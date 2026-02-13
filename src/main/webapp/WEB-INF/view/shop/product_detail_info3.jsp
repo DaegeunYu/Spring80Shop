@@ -74,7 +74,10 @@
 		<a class="button" id="addToBasket" href="#">장바구니</a>
 	</div>
 	<div class="icon_box">
-		<img id="like" class="icon" src="${like == 0 ? '${pageContext.request.contextPath}/resources/files/common/icn_heart_empty.png' : '${pageContext.request.contextPath}/resources/files/common/icn_heart_full.png'}">
+		<%-- 변수화하여 가독성 높임 --%>
+	    <c:set var="emptyHeart" value="${pageContext.request.contextPath}/resources/files/common/icn_heart_empty.png" />
+	    <c:set var="fullHeart" value="${pageContext.request.contextPath}/resources/files/common/icn_heart_full.png" />
+	    <img id="like" class="icon" src="${like == 0 ? emptyHeart : fullHeart}" style="cursor:pointer;">
 	</div>
 </div>
 <BR>
@@ -233,11 +236,14 @@
 	});
 	
 	document.getElementById('like').addEventListener('click', function() {
+		// JSP 변수를 JS 변수로 할당
 	    const emptyHeart = "${pageContext.request.contextPath}/resources/files/common/icn_heart_empty.png";
 	    const fullHeart = "${pageContext.request.contextPath}/resources/files/common/icn_heart_full.png";
 
 	    let isLike = 0;
-	    if (this.src === emptyHeart) {
+	    
+	    // src 문자열에 'full'이 포함되어 있는지 확인 (절대 경로 문제 해결)
+	    if (this.src.includes('icn_heart_empty.png')) {
 	        this.src = fullHeart;
 	        isLike = 1;
 	    } else {
@@ -245,10 +251,11 @@
 	        isLike = 0;
 	    }
 	    
+	    // 디바운싱 로직 (기존과 동일)
 	    clearTimeout(likeTimer);
 	    likeTimer = setTimeout(() => {
 	        sendLikeData({
-	            product_code: "${product.product_code}", // 현재 상품 코드
+	            product_code: "${product.product_code}",
 	            is_like: isLike
 	        });
 	    }, 500);
