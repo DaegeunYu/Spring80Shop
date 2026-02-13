@@ -25,7 +25,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
   				join_date DESC
 	</select>
-	
+
+	<update id="updateUser" parameterType="UsersVO">
+	    UPDATE users
+	    SET
+	        user_name = #{user_name},
+	        user_role = #{user_role},
+	        user_email = #{user_email},
+	        user_tel = #{user_tel},
+	        user_add = #{user_add}
+	        
+	        <if test="user_pw != null">
+	            , user_pw = #{user_pw}
+	        </if>
+	        
+	        <if test="user_type == 'personal'">
+	            , user_age = #{user_age}
+	            , user_gender = #{user_gender}
+	            , user_birthday = #{user_birthday}
+	            , recommender_id = #{recommender_id}
+	        </if>
+	        
+	        <if test="user_type == 'business'">
+	            , biz_reg_no = #{biz_reg_no}
+	            , company_name = #{company_name}
+	            , ceo_name = #{ceo_name}
+	            , biz_type = #{biz_type}
+	            <if test="biz_license_file != null">
+	                , biz_license_file = #{biz_license_file}
+	            </if>
+	        </if>
+	    WHERE idx = #{idx}
+	</update>
+
 	<delete id="DELETE" parameterType="UsersVO">
 		DELETE FROM users
 		WHERE user_id = #{user_id};

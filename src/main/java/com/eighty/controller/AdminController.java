@@ -1,8 +1,10 @@
 package com.eighty.controller;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.admin.AdminService;
 import com.eighty.product.ProductService;
@@ -47,6 +48,7 @@ public class AdminController {
 	private UsersService usersService;
 	
 	@Autowired
+
     private PurchaseService purchaseService;
 	
 	@Autowired
@@ -208,19 +210,14 @@ public class AdminController {
 	@PostMapping("/updateUser.do")
 	@ResponseBody
 	public String updateUser(UsersVO UVO, HttpSession session) {
-	    	    
 		String loginId = (String) session.getAttribute("id"); 
 	    if (loginId == null) {
 	        return "login_required"; // 자바스크립트에서 처리할 신호
 	    }
 	    
-	    if ("business".equals(UVO.getUser_role())) {
-//	    	businessService.update(UVO);
-	    } else {
-//	    	usersService.update(UVO);
-	    }
+    	int result = usersService.updateUserAdmin(UVO);
 	    
-        return "success"; // 성공 시 문자열 리턴
+    	return (result > 0) ? "success" : "fail";
 	}
 	
 	@PostMapping("/deleteUser.do")
