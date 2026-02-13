@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.product.ProductVO;
 import com.eighty.shop.ParameterValue;
 import com.eighty.users.BusinessService;
 import com.eighty.users.BusinessVO;
@@ -102,6 +103,22 @@ public class UsersController {
 	        return "users/login";
 	    }
 	}
+	
+	@PostMapping("/deleteUser.do")
+	@ResponseBody
+    public String deleteUser(@RequestParam("user_id") String user_id, HttpServletRequest request) {
+		try {
+	        UsersVO user = new UsersVO();
+	        user.setUser_id(user_id);
+	        
+	        int result = service.delete(user);
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
 	
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session) {	    
