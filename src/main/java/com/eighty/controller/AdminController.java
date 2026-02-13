@@ -42,9 +42,6 @@ public class AdminController {
 	private UsersService usersService;
 	
 	@Autowired
-	private BusinessService businessService;
-	
-	@Autowired
 	private ServletContext servletContext;
 	
 	private ParameterValue pv = new ParameterValue();
@@ -200,19 +197,14 @@ public class AdminController {
 	@PostMapping("/updateUser.do")
 	@ResponseBody
 	public String updateUser(UsersVO UVO, HttpSession session) {
-	    	    
 		String loginId = (String) session.getAttribute("id"); 
 	    if (loginId == null) {
 	        return "login_required"; // 자바스크립트에서 처리할 신호
 	    }
 	    
-	    if ("business".equals(UVO.getUser_role())) {
-//	    	businessService.update(UVO);
-	    } else {
-//	    	usersService.update(UVO);
-	    }
+    	int result = usersService.updateUserAdmin(UVO);
 	    
-        return "success"; // 성공 시 문자열 리턴
+    	return (result > 0) ? "success" : "fail";
 	}
 	
 	@PostMapping("/deleteUser.do")
