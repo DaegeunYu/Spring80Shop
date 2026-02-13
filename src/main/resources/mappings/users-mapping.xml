@@ -5,18 +5,98 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="USERS">
  
-	<insert id="INSERT" parameterType="UsersVO">
-	 
-	 insert  into users(user_id, user_pw, user_name, user_age, user_birthday, 
-	 					user_tel, user_email, user_add, user_role, user_gender, recommender_id)
-     			  values(#{user_id},#{user_pw},#{user_name},#{user_age},#{user_birthday},#{user_tel},#{user_email},#{user_add},
-     					 #{user_role},#{user_gender},#{recommender_id})
+	<insert id="INSERT" parameterType="UsersVO">	 
+	insert  into users(user_id, user_pw, user_name, user_age, user_tel, user_email, user_add, 
+			  user_type, user_role, user_gender, user_birthday, recommender_id,
+			  biz_reg_no, company_name, ceo_name, biz_type, biz_license_file)
+		values(#{user_id}, #{user_pw}, #{user_name}, #{user_age}, #{user_tel}, #{user_email}, #{user_add},
+			 #{user_type}, 'member', #{user_gender}, #{user_birthday}, #{recommender_id},
+			 #{biz_reg_no}, #{company_name}, #{ceo_name}, #{biz_type}, #{biz_license_file})
 	</insert>
 	
-	<select id="getUserById" resultType="UsersVO">
-	    SELECT user_id, user_pw, user_name 
+	<select id="SELECT" resultType="UsersVO">
+		SELECT * FROM users
+			<where>
+		        <if test="_parameter != null and _parameter != ''">
+		            user_role = #{_parameter}
+		        </if>
+	        </where>
+			ORDER BY 
+  				CASE
+  					WHEN user_role = 'admin' THEN 0
+  					WHEN user_role = 'vip' THEN 1
+  					ELSE 2
+ 				END,
+  				join_date DESC
+	</select>
+
+	<update id="UPDATE" parameterType="UsersVO">
+	    UPDATE users
+	    SET
+	        user_name = #{user_name},
+	        user_role = #{user_role},
+	        user_email = #{user_email},
+	        user_tel = #{user_tel},
+	        user_add = #{user_add}
+	        
+	        <if test="user_pw != null and user_pw != ''">
+	            , user_pw = #{user_pw}
+	        </if>
+	        
+	        <if test="user_type == 'personal'">
+	            , user_age = #{user_age}
+	            , user_gender = #{user_gender}
+	            , user_birthday = #{user_birthday}
+	            , recommender_id = #{recommender_id}
+	        </if>
+	        
+	        <if test="user_type == 'business'">
+	            , biz_reg_no = #{biz_reg_no}
+	            , company_name = #{company_name}
+	            , ceo_name = #{ceo_name}
+	            , biz_type = #{biz_type}
+	            <if test="biz_license_file != null">
+	                , biz_license_file = #{biz_license_file}
+	            </if>
+	        </if>
+	    WHERE idx = #{idx}
+	</update>
+
+	<delete id="DELETE" parameterType="UsersVO">
+		DELETE FROM users
+		WHERE user_id = #{user_id};
+	</delete>
+	
+	<select id="getUserById" parameterType="com.eighty.users.UsersVO" resultType="com.eighty.users.UsersVO">
+	    SELECT 
+	        idx, user_id, user_pw, user_name, user_role, user_tel, user_email, user_add
 	    FROM users 
 	    WHERE user_id = #{user_id}
 	</select>
+	
+	<select id="idCheck"  parameterType="String" resultType="int">
+		select count(*) from users where user_id = #{user_id}
+	</select>
+	
+    <select id="getSelectOne" resultType="com.eighty.users.UsersVO">
+        SELECT * FROM users 
+        WHERE user_id = #{user_id}
+    </select>
+	
+    <insert id="insertUsers" parameterType="com.eighty.users.UsersVO">
+        INSERT INTO users (
+            user_id, user_pw, user_name, user_tel, user_email, user_add, user_role
+        ) VALUES (
+            #{user_id}, #{user_pw}, #{user_name}, #{user_tel}, #{user_email}, #{user_add}, 'business'
+        )
+    </insert>
+
+    <insert id="insertBusinessDetail" parameterType="com.eighty.users.BusinessVO">
+        INSERT INTO business_users (
+            businessId, bizRegNo, companyName, ceoName, bizType, bizLicenseFile
+        ) VALUES (
+            #{businessId}, #{bizRegNo}, #{companyName}, #{ceoName}, #{bizType}, #{bizLicenseFile}
+        )
+    </insert>
 	
 </mapper>

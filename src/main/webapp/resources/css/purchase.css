@@ -1,0 +1,444 @@
+@charset "UTF-8";
+
+
+/* 기본 레이아웃 및 컨테이너 */
+#purchase_info {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: left;
+    color: #333;
+    font-family: 'Pretendard', sans-serif;
+}
+
+#purchase_info h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-align: center;
+}
+
+#purchase_info h3 {
+    font-size: 20px;
+    margin: 20px 0 10px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #eeeeee;
+    margin: 30px 0;
+}
+
+/* 배송지 및 메모 영역 (address.jsp) */
+.address_area,
+.delivery_memo_area {
+    padding: 20px;
+    background-color: #fcfcfc;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 배송지 선택 라벨: 버튼 형태로 변경 */
+.address_area label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+/* 선택되었을 때의 스타일 (검정 배경) */
+.address_area label:has(input[type="radio"]:checked) {
+    background-color: #333;
+    color: #fff;
+}
+
+/* 배송지 박스 공통 */
+.addr_box {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.25s ease;
+}
+
+.addr_box p {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+.addr_box input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 우편번호 */
+#sample6_postcode {
+    width: 100px !important;
+    margin-right: 5px;
+}
+
+/* 배송지 초기 상태 제어 */
+#addr_DEFAULT {
+    display: block;
+}
+
+#addr_NEW {
+    display: none;
+    background-color: #fffdf9;
+    border: 1px dashed #db6b30;
+}
+
+/* 주문 상품 정보 */
+.purchase_basket_container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    background-color: #fff;
+    margin-bottom: 30px;
+    border-radius: 8px;         
+    box-sizing: border-box;
+}
+
+/* 개별 상품 */
+.purchase_basket_item {
+    display: flex;
+    align-items: center;
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+
+/* 이미지 영역 */
+.purchase_image_box {
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.purchase_product_image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+}
+
+/* 설명 영역 */
+.purchase_product_name, 
+.purchase_product_infomation {
+    flex: 1; 
+    text-align: center;
+}
+
+.purchase_product_name strong {
+    font-size: 18px;
+    display: block;
+    color: #333;
+}
+
+/* 상세 정보 텍스트 */
+.purchase_product_infomation p 
+{
+    display: flex;
+    margin: 4px 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* 항목명 고정 너비 (중량, 분쇄, 개수 등 라벨 정렬) */
+.purchase_product_infomation p span:first-child {
+    width: 70px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    display: inline-block;
+}
+
+/* 금액 상세 영역  */
+.purchase_summary_box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 25px 20px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.purchase_price_detail {
+    display: flex;
+    margin: 4px 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+}
+.purchase_price_detail_total {
+    font-size: 15px;
+    color: #888;       
+}
+.purchase_delivery_price {
+    font-size: 14px;
+    color: #888;
+}
+
+.purchase_price_total {
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-weight: bold;
+}
+
+/* 최종 금액  */
+.purchase_price_total strong {
+    color: #db6b30;
+    font-size: 22px;
+    margin-left: 10px;
+}
+
+
+/* 결제 수단 및 버튼 (payment.jsp) */
+.payment_area {
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+/* 결제 수단 라벨: 버튼 형태로 변경 */
+.payment_area label {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+/* 실제 라디오 버튼 숨김 */
+.payment_area input[type="radio"] {
+    display: none;
+}
+
+/* 선택되었을 때의 스타일 */
+.payment_area label:has(input[type="radio"]:checked) {
+    background-color: #333;
+    color: #fff;
+}
+
+.payment_info {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px dashed #adb5bd;
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* 결제 버튼 */
+.btn_payment {
+    width: 100%;
+    height: 60px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+.btn_payment:hover {
+    background-color: #000;
+}
+
+/* 배송 메모 */
+#delivery_memo_select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* 직접 입력 컨테이너 초기 상태: 숨김 */
+#direct_memo_div {
+    display: none; 
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+#delivery_memo_direct {
+    width: calc(100% - 24px);
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #db6b30;
+    border-radius: 4px;
+}
+
+/* 주문 완료 페이지 전용 추가 스타일 */
+.success_header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.success_icon_circle {
+    width: 80px;
+    height: 80px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.success_icon_circle span {
+    font-size: 40px;
+    color: #db6b30;
+}
+
+.order_code_text {
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.order_code_text strong {
+    color: #333;
+}
+
+/* 하단 버튼 영역 */
+.success_btn_area {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.btn_white {
+    width: 200px !important;
+    background: #fff !important;
+    color: #333 !important;
+    border: 1px solid #333 !important;
+}
+
+.btn_black {
+    width: 200px !important;
+}
+
+/* 상태별 색상 */
+.status_complete { color: #28a745; }
+.status_wait { color: #ffc107; }
+
+/* ==========================================================================
+    purchase_list.jsp, purchase_list_one.jsp 의 style
+   ========================================================================== */
+
+#purchase_list_main, 
+#purchase_view_one {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+#purchase_list_main > *, 
+#purchase_view_one > * {
+    width: 100%;
+    max-width: 1400px;
+}
+
+/* ==========================================================================
+   [List Page Area] 나의 주문 목록 전용 스타일
+   ========================================================================== */
+.purchase_list_table {
+    background: #fff;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.purchase_list_table th { background: #333; color: #fff; padding: 18px; }
+.purchase_list_table td { padding: 16px; border-bottom: 1px solid #eee; text-align: center; }
+
+.btn_list_view { padding: 6px 15px; cursor: pointer; border: 1px solid #ddd; background: #fff; }
+.btn_list_home { width: 250px; height: 50px; cursor: pointer; background: #fff; border: 1px solid #333; font-weight: bold; }
+
+
+/* ==========================================================================
+   [One Page Area] 주문 상세 내역 전용 스타일
+   ========================================================================== */
+.purchase_one_table {
+    background: #fff;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.purchase_one_table th { background: #444; color: #fff; padding: 18px; }
+.purchase_one_table td { padding: 16px; border-bottom: 1px solid #eee; text-align: center; }
+
+.btn_review.write {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn_review.view {
+    background-color: #f4f4f4;
+    color: #666;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.purchase_one_info_box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+
+.one_price_summary span { color: #db6b30; font-size: 26px; font-weight: bold; }
+.one_bottom_area { display: flex; justify-content: center; }
+
+.btn_one_back { width: 200px; height: 50px; background: #333; color: #fff; cursor: pointer; }
+.btn_one_review { padding: 6px 15px; cursor: pointer; background: #db6b30; color: #fff; border: none; border-radius: 4px; }
+
+
+/* ==========================================================================
+   [Status] 공통 상태 컬러
+   ========================================================================== */
+.status_complete { color: #28a745; font-weight: bold; }

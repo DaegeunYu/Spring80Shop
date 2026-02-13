@@ -8,11 +8,14 @@
 <section>
 	<div align="center">
         <BR>
-		<H2> 구매 페이지 </H2>
+		<H2> 찜 리스트 </H2>
 		<BR>
-		<BR>
-		<div> ${product.product_name} </div>		
+		<div>
+			<c:import url="/WEB-INF/view/like/like_product_content.jsp" /> 
+		</div>		
 	</div>
+	<BR>
+	<c:import url="/WEB-INF/view/like/like_product_paging.jsp" />
 	<BR>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />

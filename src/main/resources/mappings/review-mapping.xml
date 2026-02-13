@@ -4,21 +4,69 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="REVIEW">
- 
-	<select id="SELECT_ONE_REVIEW" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+
+	<select id="SELECT_ONE_REVIEW" resultType="com.eighty.review.ReviewVO">
     SELECT * FROM review 
-    WHERE order_code = #{order_code} 
-      AND product_code = #{product_code}
+    	WHERE idx = #{_parameter}
 	</select>
 	
-	<select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
-    SELECT * FROM review
-	    <where>
-	        <if test="product_code != null and product_code != ''">
-	            AND product_code = #{product_code}
-	        </if>
-	    </where>
-    ORDER BY idx DESC
+	<select id="SELECT_AVG_GRADE" parameterType="String" resultType="double">
+	    SELECT COALESCE(ROUND(AVG(gradePoint), 1), 0.0) 
+	    FROM review 
+	    WHERE productCode = #{productCode}
 	</select>
+	
+	<select id="SELECT_REVIEW_COUNT" parameterType="String" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM review
+	    WHERE productCode = #{productCode}
+	</select>
+
+    <select id="SELECT_REVIEW_LIST" parameterType="com.eighty.review.ReviewVO" resultType="com.eighty.review.ReviewVO">
+        SELECT * FROM review
+        <where>
+            <if test="productCode != null and productCode != ''">
+                AND productCode = #{productCode}
+            </if>
+        </where>
+        ORDER BY idx DESC
+    </select>
+    
+    <select id="SELECT" resultType="com.eighty.review.ReviewDTO">
+	    SELECT  R.idx, R.userId, U.user_name AS userName, R.productCode, R.gradePoint,
+	    		R.reviewTitle, R.reviewContent, R.regDate
+   		FROM review R LEFT JOIN users U ON R.userId = U.user_id
+	    ORDER BY R.idx DESC
+	</select>
+    
+    <insert id="insertReview" parameterType="com.eighty.review.ReviewVO">
+	    INSERT INTO review (
+	        userId, orderCode, productCode, gradePoint, 
+	        reviewTitle, reviewContent, reviewImg, regDate
+	    ) VALUES (
+	        #{userId}, #{orderCode}, #{productCode}, #{gradePoint}, 
+	        #{reviewTitle}, #{reviewContent}, #{reviewImg}, NOW()
+	    )
+	    <selectKey keyProperty="idx" resultType="long" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<update id="UPDATE_REVIEW_STATUS" parameterType="ReviewVO">
+	    UPDATE purchase 
+	    SET isReview = 'y' 
+	    WHERE orderCode = #{orderCode} AND productCode = #{productCode}
+	</update>
+	
+	<select id="getOrderDetailByIdx" parameterType="long" resultType="com.eighty.review.ReviewVO">
+	    SELECT idx, orderCode, productCode
+	    FROM purchase
+	    WHERE idx = #{idx}
+	</select>
+	
+	<delete id="DELETE" parameterType="int">
+	    DELETE FROM review 
+	    WHERE idx = #{idx}
+	</delete>
 	
 </mapper>

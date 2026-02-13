@@ -5,24 +5,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="PRODUCT">
  
-	<insert id="INSERT" parameterType="ProductVO">
+	<insert id="INSERT_PRODUCT" parameterType="ProductVO">
 	 
 	 insert  into product(product_code, product_name, product_img, 
-	                      origin, brand, product_weight,
-	                      roast_dgree, crushing,
-	                      is_single_origin, is_decafe,
+	                      origin, brand, 
+	                      roast_dgree, is_single_origin, is_decafe,
 	                      manufacturing, origin_price, sale_price, 
-	                      quantity, grade_point, expiration_date  )
+	                      quantity, expiration_date)
      values(#{product_code},#{product_name},#{product_img}, 
-	                      #{origin}, #{brand}, #{product_weight},
-	                      #{roast_dgree}, #{crushing},
-	                      #{is_single_origin}, #{is_decafe},
+	                      #{origin}, #{brand}, 
+	                      #{roast_dgree}, #{is_single_origin}, #{is_decafe},
 	                      #{manufacturing}, #{origin_price}, #{sale_price}, 
-	                      #{quantity}, #{grade_point}, #{expiration_date})
+	                      #{quantity}, #{expiration_date})
 	</insert>
 	
+	<update id="UPDATE_PRODUCT" parameterType="ProductVO">
+			UPDATE product
+				<set>
+			        <if test="product_name != null">product_name = #{product_name},</if>
+			        <if test="product_img != null">product_img = #{product_img},</if>
+			        <if test="origin != null">origin = #{origin},</if>
+			        <if test="brand != null">brand = #{brand},</if>
+			        <if test="roast_dgree != null">roast_dgree = #{roast_dgree},</if>
+			        <if test="is_single_origin != null">is_single_origin = #{is_single_origin},</if>
+			        <if test="is_decafe != null">is_decafe = #{is_decafe},</if>
+			        <if test="manufacturing != null">manufacturing = #{manufacturing},</if>
+			        <if test="origin_price != null">origin_price = #{origin_price},</if>
+			        <if test="sale_price != null">sale_price = #{sale_price},</if>
+			        <if test="quantity != null">quantity = #{quantity},</if>
+			        <if test="release_date != null">release_date = #{release_date},</if>
+			        <if test="expiration_date != null">expiration_date = #{expiration_date}</if>
+			    </set>
+		    WHERE product_code = #{product_code}
+	</update>
+	
+	<insert id="INSERT_PRODUCT_OPTION" parameterType="com.eighty.product.ProductVO$ProductOption">
+	 insert  into product_option( product_code, product_weight, product_price)
+     values(#{product_code}, #{product_weight}, #{product_price})
+	</insert>
+	
+	<delete id="DELETE_PRODUCT_OPTION" parameterType="string">
+		DELETE FROM product_option WHERE product_code = #{product_code}
+	</delete>
+	
+	<select id="MAN" resultType ="String">
+	   SELECT DISTINCT manufacturing FROM product
+	</select>
+	
+	<select id="SELECT" resultType ="ProductVO">
+	   SELECT * FROM product
+	   <where>
+	        <if test="_parameter != null and _parameter != ''">
+	            manufacturing = #{_parameter}
+	        </if>
+        </where>
+	</select>
+	
+	<select id="GET_MAX_CODE" resultType="string">
+		select max(product_code) from product	
+	</select>
+	
 	<select id="IS_SINGLE" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{end}
+	   SELECT * FROM product WHERE is_single_origin = #{is_single_origin} order by idx limit #{start}, #{amount}
 	</select>
 	
 	<select id="IS_SINGLE_COUNT" parameterType="ProductVO" resultType ="int">
@@ -30,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="MANUPACT" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{end}
+	   SELECT * FROM product WHERE manufacturing = #{manufacturing} order by idx limit #{start}, #{amount}
 	</select>
 	
 	<select id="MANUPACT_COUNT" parameterType="ProductVO" resultType ="int">
@@ -40,5 +84,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="DETAIL" parameterType="ProductVO" resultType ="ProductVO">
 	   SELECT * FROM product WHERE product_code = #{product_code}
 	</select>
+	
+	<select id="PRICE" parameterType="map" resultType ="int">
+	   SELECT product_price FROM product_option WHERE product_code = #{product_code} AND product_weight = #{product_weight}
+	</select>
+	
+	<select id="OPTION" parameterType="string" resultType ="com.eighty.product.ProductVO$ProductOption">
+	   SELECT * FROM product_option WHERE product_code = #{product_code}
+	</select>
+	
+	<update id="UPDATE_PRODUCT_GRADE" parameterType="map">
+        UPDATE product 
+        SET grade_point = #{avgScore} 
+        WHERE product_code = #{productCode}
+    </update>
+    
+    <delete id="DELETE" parameterType="int">
+	    DELETE p, o
+		FROM product AS p
+		INNER JOIN product_option AS o ON p.product_code = o.product_code
+		WHERE p.idx = #{idx};
+	</delete>
+	
+	<delete id="DELETE_RECENTLY" parameterType="string">
+	    DELETE FROM product_recently
+		WHERE product_code = #{product_code};
+	</delete>
+    
+    <!-- 리뷰 작성시 제품정보 불러오기용 -->
+    <select id="getProductForReview" parameterType="ProductVO" resultType="ProductVO">
+	    SELECT product_code, product_name, product_img, brand
+	    FROM product 
+	    WHERE product_code = #{product_code}
+	</select>
+	
+	
+	<!-- 찜하기 -->
+	<insert id="INSERT_LIKE" parameterType="com.eighty.product.LikeProductVO">
+		insert into product_like(user_id, product_code, is_like)
+		values(#{user_id},#{product_code},#{is_like})
+	</insert>
+	
+	<select id="SELECT_LIKE" parameterType="com.eighty.product.LikeProductVO" resultType ="short">
+		SELECT is_like FROM product_like WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</select>
+	
+	<select id="SELECT_LIKE_COUNT" parameterType="ProductVO" resultType ="long">
+	   SELECT count(*) FROM product_like WHERE user_id = #{user_id} AND is_like = 1
+	</select>
+	
+	<select id="SELECT_LIKE_LIST" parameterType="com.eighty.product.LikeProductVO" resultType ="ProductVO">
+		SELECT p.* FROM product p JOIN product_like l
+		WHERE l.user_id = #{user_id} AND l.product_code = p.product_code AND l.is_like = 1
+		order by p.product_code limit #{start}, #{amount}
+	</select>
+	
+	<update id="UPDATE_LIKE" parameterType="com.eighty.product.LikeProductVO">
+		UPDATE product_like SET is_like = #{is_like} WHERE user_id = #{user_id} AND product_code = #{product_code}
+	</update>
 	
 </mapper>

@@ -2,6 +2,7 @@ package com.eighty.review;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,38 @@ public class ReviewDaoImpl implements ReviewDao {
 	}
 	
 	@Override
-	public ReviewVO getReview(ReviewVO vo) {
-		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", vo);
+	public ReviewVO getReview(@Param("idx") int idx) {
+		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", idx);
+	}
+
+	@Override
+	public double getAverageGrade(String productCode) {
+		return mybatis.selectOne("REVIEW.SELECT_AVG_GRADE", productCode);
+	}
+
+	@Override
+    public void insertReview(ReviewVO vo) {
+        mybatis.insert("REVIEW.insertReview", vo);
+    }
+
+	@Override
+	public int selectReviewCount(String productCode) {
+		return mybatis.selectOne("REVIEW.SELECT_REVIEW_COUNT", productCode);
+	}
+
+	@Override
+	public void updateReviewStatus(ReviewVO vo) {
+		mybatis.update("REVIEW.UPDATE_REVIEW_STATUS", vo);
+		
+	}
+
+	@Override
+	public ReviewVO getOrderDetailByIdx(Long idx) {
+		return mybatis.selectOne("REVIEW.getOrderDetailByIdx", idx);
+	}
+	
+	@Override
+	public int delReview(@Param("idx") int idx) {
+		return mybatis.delete("REVIEW.DELETE", idx);
 	}
 }

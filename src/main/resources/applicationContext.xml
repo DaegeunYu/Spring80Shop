@@ -16,6 +16,10 @@
     
     <context:property-placeholder location="classpath:config/database.properties" />
 
+	<!-- 비밀번호 암호화 설정 -->
+	<bean id="passwordEncoder" 
+      class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
     <!-- 데이터베이스 커넥션 설정 -->
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

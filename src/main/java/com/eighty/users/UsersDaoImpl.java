@@ -16,14 +16,29 @@ public class UsersDaoImpl implements UsersDao {
 	public void insert(UsersVO vo) {
 		mybatis.update("USERS.INSERT", vo);
 	}
-
+	
 	@Override
-	public List<UsersVO> getSelect(UsersVO vo) {
-		return mybatis.selectList("USERS.SELECT", vo);
+	public int delete(UsersVO vo) {
+		return mybatis.delete("USERS.DELETE", vo);
 	}
 
 	@Override
 	public UsersVO loginCheck(UsersVO vo) {
 		return mybatis.selectOne("USERS.getUserById", vo);
+	}
+	
+	@Override
+	public int idCheck(String user_id) {
+		return mybatis.selectOne("USERS.idCheck", user_id);
+	}
+
+	@Override
+	public UsersVO getSelectOne(UsersVO vo) {
+		return mybatis.selectOne("USERS.getSelectOne", vo);
+	}
+	
+	@Override
+	public int updateUserAdmin(UsersVO vo) {
+		return mybatis.update("USERS.UPDATE", vo);
 	}
 }
