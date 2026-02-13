@@ -8,4 +8,6 @@ public interface UsersDao {
    UsersVO loginCheck(UsersVO vo);
    
    public int idCheck(String user_id);	
+   
+   int updateUserAdmin(UsersVO vo);
 }
