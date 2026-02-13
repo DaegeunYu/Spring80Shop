@@ -178,7 +178,7 @@ public class UsersController {
 	    System.out.println("VO 내 나이값: " + vo.getUser_age()); 
 	    
 	
-	    
+	    vo.setUser_type("personal"); // 회원가입 시 기본 personal로 권한 설정
 	    vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 
 	    service.insert(vo);
@@ -186,6 +186,8 @@ public class UsersController {
 	    	// 가입 성공 직후 즉시 로그인
 	 		session.setAttribute("id", vo.getUser_id());
 	 		session.setAttribute("userName", vo.getUser_name());
+	 		session.setAttribute("userType", vo.getUser_type());
+	 		session.setAttribute("userRole", vo.getUser_role());
 	 		
 	 		joinRedirect.addFlashAttribute("msg", vo.getUser_name() + "님, 회원가입을 축하합니다!");
 		
@@ -238,12 +240,16 @@ public class UsersController {
 	            // 5. DB 저장용 경로 (폴더명 포함해서 저장)
 	            bVo.setBizLicenseFile("business_license/" + saveName); 
 	        }
-
+	        
+	        uVo.setUser_type("personal"); // 회원가입 시 기본 personal로 권한 설정
+	        uVo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
+	        
 	        businessService.joinBusiness(uVo, bVo);
 	        
 	        session.setAttribute("id", uVo.getUser_id());
 	        session.setAttribute("userName", bVo.getCompanyName());
-	        session.setAttribute("userRole", "business");
+	        session.setAttribute("userType", uVo.getUser_type());
+	        session.setAttribute("userRole", uVo.getUser_role());
 
 	        joinRedirect.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
 	        return "redirect:/index.do?page=1";
