@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
   				join_date DESC
 	</select>
-	
+
 	<update id="updateUser" parameterType="UsersVO">
 	    UPDATE users
 	    SET
@@ -56,13 +56,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        </if>
 	    WHERE idx = #{idx}
 	</update>
+
+	<delete id="DELETE" parameterType="UsersVO">
+		DELETE FROM users
+		WHERE user_id = #{user_id};
+	</delete>
 	
 	<select id="getUserById" parameterType="com.eighty.users.UsersVO" resultType="com.eighty.users.UsersVO">
-    SELECT 
-        idx, user_id, user_pw, user_name, user_role, user_tel, user_email, user_add
-    FROM users 
-    WHERE user_id = #{user_id}
-</select>
+	    SELECT 
+	        idx, user_id, user_pw, user_name, user_role, user_tel, user_email, user_add
+	    FROM users 
+	    WHERE user_id = #{user_id}
+	</select>
 	
 	<select id="idCheck"  parameterType="String" resultType="int">
 		select count(*) from users where user_id = #{user_id}

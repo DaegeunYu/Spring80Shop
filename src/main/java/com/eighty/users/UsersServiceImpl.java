@@ -1,8 +1,5 @@
 package com.eighty.users;
 
-import java.io.File;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +13,11 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public void insert(UsersVO vo) {
 		dao.insert(vo);
+	}
+	
+	@Override
+	public int delete(UsersVO vo) {
+		return dao.delete(vo);
 	}
 
 	@Override

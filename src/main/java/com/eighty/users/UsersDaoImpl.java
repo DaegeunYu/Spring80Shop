@@ -16,6 +16,11 @@ public class UsersDaoImpl implements UsersDao {
 	public void insert(UsersVO vo) {
 		mybatis.update("USERS.INSERT", vo);
 	}
+	
+	@Override
+	public int delete(UsersVO vo) {
+		return mybatis.delete("USERS.DELETE", vo);
+	}
 
 	@Override
 	public UsersVO loginCheck(UsersVO vo) {
