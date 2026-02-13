@@ -1,6 +1,7 @@
 package com.eighty.purchase;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,10 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	@Override
 	public int updateProductStock(PurchaseVO item) {
 		return mybatis.update("PURCHASE.updateProductStock", item);
+	}
+
+	@Override
+	public int updateOrderApproval(Map<String, Object> params) {
+		return mybatis.update("PURCHASE.updateOrderApproval", params);
 	}
 }

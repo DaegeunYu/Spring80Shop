@@ -2,7 +2,9 @@ package com.eighty.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.eighty.admin.AdminService;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
+import com.eighty.purchase.PurchaseService;
 import com.eighty.review.ReviewDTO;
 import com.eighty.shop.ParameterValue;
 import com.eighty.users.BusinessService;
@@ -41,6 +44,9 @@ public class AdminController {
 	
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+    private PurchaseService purchaseService;
 	
 	@Autowired
 	private BusinessService businessService;
@@ -214,4 +220,35 @@ public class AdminController {
 	        
 	return "admin/product_sales";
 	}
+	
+	@GetMapping("/order_approval.do")
+	public String orderApprovalList(Model model) {
+		// 계좌이체로 주문된 데이터조회
+		List<Map<String, Object>> approvalList = adminService.getPendingBankOrders();
+		
+		model.addAttribute("approvalList", approvalList);
+		
+		return "admin/order_approval"; 
+	}
+	
+	@PostMapping("/approveOrder.do")
+	@ResponseBody
+	public String approveOrder(@RequestParam("orderCode") String orderCode) {
+	    try {
+	        // 관리자 승인에 필요한 메타데이터 구성
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("orderCode", orderCode);
+	        params.put("approvalId", "ADM" + System.currentTimeMillis()); // 관리자 승인 식별자
+	        params.put("approvalDate", new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+
+	        // DB 업데이트 및 재고 차감
+	        int result = purchaseService.updateOrderApproval(params);
+
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+	}
+	
 }

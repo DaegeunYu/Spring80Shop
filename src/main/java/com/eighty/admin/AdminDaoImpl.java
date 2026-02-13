@@ -58,4 +58,9 @@ public class AdminDaoImpl implements AdminDao {
 		return mybatis.selectList("PURCHASE.getProductWeightDistribution");
 	}
 
+	@Override
+	public List<Map<String, Object>> getPendingBankOrders() {
+		return mybatis.selectList("PURCHASE.getPendingBankOrders");
+	}
+
 }
