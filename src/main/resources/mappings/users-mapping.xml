@@ -5,12 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="USERS">
  
-	<insert id="INSERT" parameterType="UsersVO">
-	 
-	 insert  into users(user_id, user_pw, user_name, user_age, user_birthday, 
-	 					user_tel, user_email, user_add, user_role, user_gender, recommender_id)
-     			  values(#{user_id},#{user_pw},#{user_name},#{user_age},#{user_birthday},#{user_tel},#{user_email},#{user_add},
-     					 #{user_role},#{user_gender},#{recommender_id})
+	<insert id="INSERT" parameterType="UsersVO">	 
+	insert  into users(user_id, user_pw, user_name, user_age, user_tel, user_email, user_add, 
+			  user_type, user_role, user_gender, user_birthday, recommender_id,
+			  biz_reg_no, company_name, ceo_name, biz_type, biz_license_file)
+		values(#{user_id}, #{user_pw}, #{user_name}, #{user_age}, #{user_tel}, #{user_email}, #{user_add},
+			 #{user_type}, 'member', #{user_gender}, #{user_birthday}, #{recommender_id},
+			 #{biz_reg_no}, #{company_name}, #{ceo_name}, #{biz_type}, #{biz_license_file})
 	</insert>
 	
 	<select id="SELECT" resultType="UsersVO">
