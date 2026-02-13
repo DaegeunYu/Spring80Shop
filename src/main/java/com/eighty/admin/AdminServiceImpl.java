@@ -58,5 +58,10 @@ public class AdminServiceImpl implements AdminService {
 		return dao.getProductWeightDistribution();
 	}
 
+	@Override
+	public List<Map<String, Object>> getPendingBankOrders() {
+		return dao.getPendingBankOrders();
+	}
+
 	
 }

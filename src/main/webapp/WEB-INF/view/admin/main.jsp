@@ -52,6 +52,11 @@
 				        <span class="font-bold">리뷰 관리</span>
 				    </a>
 				    
+				    <a href="#" onclick="loadContent('order_approval', this)" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
+       	 				<i class="fas fa-file-invoice-dollar w-5 group-hover:scale-110 transition-transform"></i>
+        				<span class="font-bold">입금 승인 관리</span>
+    				</a>
+				    
 					<a href="#" onclick="loadContent('sales')" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl transition-all hover:bg-gray-50 group">
     					<i class="fas fa-chart-line w-5 group-hover:scale-110 transition-transform"></i>
     					<span class="font-bold">매출 현황</span>
@@ -160,6 +165,12 @@
 			        title: '상품 판매 분석',
 			        desc: '상품별 점유율과 판매량 무게별 판매 추이를 분석합니다.',
 			        path: '${pageContext.request.contextPath}/admin/product_sales.do',
+			        headers: []
+			    },
+			    'order_approval': {
+			        title: '입금 승인 관리',
+			        desc: '계좌이체 주문의 입금 여부를 확인하고 승인 처리합니다.',
+			        path: '${pageContext.request.contextPath}/admin/order_approval.do',
 			        headers: []
 			    }
 			    

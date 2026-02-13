@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         paidAmount = #{paidAmount}, pgStatus = 'PAID', orderStatus = 'PAID' WHERE orderCode = #{orderCode}
 	</update>
 
-	<!-- 관리자페이지 전체 매출 / 주문수량 -->
+	<!-- 관리자페이지 전체 매출 -->
 	<select id="getOverallSummary" resultType="map">
     	SELECT IFNULL(SUM(paidAmount), 0) AS GROSS_SALES,  <!-- 총 매출 계산, IFNULL(..., 0) 입력값이 없을경우 0, GROSS_SALES 총 매출  -->
         
@@ -80,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM purchase p WHERE p.pgStatus = 'PAID'
 	</select>
 	
+	<!-- 관리자페이지 제품별 판매량/매출 통계 -->
 	<select id="getProductStats" resultType="map">
     	SELECT p.product_name AS productName, IFNULL(SUM(pc.productWeight * pc.orderCount), 0) AS TOTAL_WEIGHT
 		FROM product p LEFT OUTER JOIN purchase pc ON p.product_code = pc.productCode
@@ -87,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY TOTAL_WEIGHT DESC
 	</select>
 	
+	<!-- 관리자페이지 상품별 규격판매 통계 -->
 	<select id="getProductWeightDistribution" resultType="map">
     SELECT 
         p.product_name AS productName,
@@ -96,6 +98,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     LEFT OUTER JOIN purchase pc ON p.product_code = pc.productCode
     GROUP BY p.product_name, pc.productWeight
     ORDER BY p.product_name ASC, pc.productWeight ASC
+	</select>
+	
+	
+	<!-- 결제 완료 후 재고수량 차감 -->
+	<update id="updateProductStock" parameterType="com.eighty.purchase.PurchaseVO">
+    UPDATE product 
+    SET quantity = CAST(
+        CAST(quantity AS UNSIGNED) - (CAST(#{productWeight} AS UNSIGNED) * CAST(#{orderCount} AS UNSIGNED)) 
+        AS CHAR
+    )
+    WHERE product_code = #{productCode}
+    AND CAST(quantity AS UNSIGNED) >= (CAST(#{productWeight} AS UNSIGNED) * CAST(#{orderCount} AS UNSIGNED))
+	</update>
+	
+	<!-- 계좌 결제 승인 후 DB업데이트 -->
+	<update id="updateOrderApproval" parameterType="map">
+    UPDATE purchase 
+    SET 
+        orderStatus = '결제완료',
+        approvalId = #{approvalId},
+        approvalDate = #{approvalDate},
+        pgStatus = 'PAID'
+    WHERE orderCode = #{orderCode}
+    AND orderStatus = '결제대기'
+	</update>
+	
+	<select id="getPendingBankOrders" resultType="map">
+    SELECT orderCode, MAX(userId) as userId, 
+        CASE 
+            WHEN COUNT(*) > 1 THEN CONCAT(MAX(productName), ' 외 ', COUNT(*) - 1, '건')
+            ELSE MAX(productName)
+        END as productName,
+        SUM(paidAmount) as paidAmount, 
+        MAX(orderDate) as orderDate,
+        MAX(orderStatus) as orderStatus
+    FROM purchase
+    WHERE orderStatus = '결제대기' 
+      AND paymentMethod = 'BANK'
+    GROUP BY orderCode
+    ORDER BY orderDate DESC
 	</select>
 
 </mapper>
