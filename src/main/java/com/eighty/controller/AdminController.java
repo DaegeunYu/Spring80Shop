@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,6 +178,27 @@ public class AdminController {
 	    }
 	}
 	
+	@PostMapping("/deleteProduct.do")
+	@ResponseBody
+    public String deleteProduct(@RequestParam("product_code") String product_code, HttpServletRequest request) {
+		try {
+	        ProductVO product = new ProductVO();
+	        product.setProduct_code(product_code);
+	        ProductVO productResult = productService.getProduct(product);
+	        
+	        if (productResult.getProduct_img() != null) {
+	        	pv.deletePhysicalFile(productResult.getProduct_img(), request);
+	        }
+	        
+	        int result = productService.delProduct(productResult.getIdx(), productResult.getProduct_code());
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
+	
 	@PostMapping("/updateUser.do")
 	@ResponseBody
 	public String updateUser(UsersVO UVO, HttpSession session) {
@@ -194,6 +216,22 @@ public class AdminController {
 	    
         return "success"; // 성공 시 문자열 리턴
 	}
+	
+	@PostMapping("/deleteUser.do")
+	@ResponseBody
+    public String deleteUser(@RequestParam("user_id") String user_id, HttpServletRequest request) {
+		try {
+	        UsersVO user = new UsersVO();
+	        user.setUser_id(user_id);
+	        
+	        int result = usersService.delete(user);
+	        
+	        return (result > 0) ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";
+	    }
+    }
 	
 	@GetMapping("/sales_list.do") 
 	public String getSalesList(Model model) {
