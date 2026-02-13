@@ -17,10 +17,10 @@
 				<tr>
 				<td>
 				<div class="login-type-container">
-				    <input type="radio" name="userType" value="member" id="member" checked>
-				    <label for="member" class="type-label left">일반회원</label>
+				    <input type="radio" name="user_type" value="personal" id="personal" checked>
+				    <label for="personal" class="type-label left">일반회원</label>
 				
-				    <input type="radio" name="userType" value="business" id="business">
+				    <input type="radio" name="user_type" value="business" id="business">
 				    <label for="business" class="type-label right">법인회원</label>
 				</div>
 				<br>
