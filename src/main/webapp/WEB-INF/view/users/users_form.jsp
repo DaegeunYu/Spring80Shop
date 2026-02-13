@@ -30,7 +30,7 @@
 				</tr>
 				<tr>
 					<td><input type="text" id="user_birthday" name="user_birthday" 
-              			placeholder="예: 20260101" maxlength="8" placeholder="생년월일" required > 
+              			placeholder="생년월일 작성 예: 20260101" maxlength="8" required > 
        					<small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
        				</td>
 				</tr>
