@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.product.ProductVO;
 import com.eighty.shop.ParameterValue;
 import com.eighty.users.BusinessService;
 import com.eighty.users.BusinessVO;

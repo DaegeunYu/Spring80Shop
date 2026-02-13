@@ -571,7 +571,7 @@
             }
         	
             $.ajax({
-                url: "${pageContext.request.contextPath}/product/deleteProduct.do",
+                url: "${pageContext.request.contextPath}/admin/deleteProduct.do",
                 type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
                 data: { "product_code": product_code },
                 success: function(response) {
@@ -583,6 +583,35 @@
                             window.close();
                         } else {
                         	loadContent('product');
+                        }
+                    } else {
+                        alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                }
+            });
+    	}
+        
+        function deleteUser(user_id) {
+        	if (!confirm("정말 이 사용자를 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
+                return; // 사용자가 '취소'를 누르면 중단
+            }
+        	
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/deleteUser.do",
+                type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
+                data: { "user_id": user_id },
+                success: function(response) {
+                    if (response === "success") {
+                        alert("사용자가 정상적으로 삭제되었습니다.");
+                        // 팝업창에서 삭제했다면 부모창 새로고침 후 팝업 닫기
+                        if (window.opener) {
+                            window.opener.loadContent('user');; 
+                            window.close();
+                        } else {
+                        	loadContent('user');
                         }
                     } else {
                         alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");
