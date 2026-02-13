@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.eighty.product.ProductVO;
 import com.eighty.shop.ParameterValue;
-import com.eighty.users.BusinessService;
-import com.eighty.users.BusinessVO;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
@@ -34,9 +31,6 @@ public class UsersController {
 	
 	@Autowired
 	private UsersService service;
-	
-	@Autowired
-    private BusinessService businessService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -76,7 +70,7 @@ public class UsersController {
 	*/
 	
 	@PostMapping("/loginSuccess.do")
-	public String loginSuccess(UsersVO vo, String userType, HttpSession session, Model model) {
+	public String loginSuccess(UsersVO vo, String user_type, HttpSession session, Model model) {
 	    UsersVO loginUser = service.loginCheck(vo);
 
 	    // 1. 유저 존재 및 비밀번호 검증
@@ -86,10 +80,11 @@ public class UsersController {
 	    }
 
 	    // 2. 선택한 유형과 실제 권한 비교
-	    if (userType.equals(loginUser.getUser_role()) || "admin".equals(loginUser.getUser_role())) {
+	    if (user_type.equals(loginUser.getUser_type()) || "admin".equals(loginUser.getUser_role())) {	    	
 	        session.setAttribute("id", loginUser.getUser_id());
 	        session.setAttribute("userName", loginUser.getUser_name());
 	        session.setAttribute("userRole", loginUser.getUser_role());
+	        session.setAttribute("userType", loginUser.getUser_type());
 
 	        // [복구 부분] 이전 페이지 정보가 있다면 해당 페이지로 이동
 	        String prevPage = (String) session.getAttribute("prevPage");
@@ -209,11 +204,11 @@ public class UsersController {
 	}
 	
 	@PostMapping("/businessJoin.do")
-	public String businessJoin(UsersVO uVo, BusinessVO bVo, 
+	public String businessJoin(UsersVO vo,
 	                           @RequestParam("file") MultipartFile file, 
 	                           Model model, HttpSession session, RedirectAttributes joinRedirect) {
 	    try {
-	        uVo.setUser_pw(passwordEncoder.encode(uVo.getUser_pw()));
+	        vo.setUser_pw(passwordEncoder.encode(vo.getUser_pw()));
 
 	        if (file != null && !file.isEmpty()) {
 	            // 1. 상세 폴더 경로 설정 (resources/files/business_license)
@@ -225,7 +220,7 @@ public class UsersController {
 	            }
 
 	            // 3. 파일명 조립: 사업자번호_오늘날짜.확장자 (예: 123-45-67890_20260204.jpg)
-	            String bizRegNo = bVo.getBizRegNo(); // JSP name="bizRegNo" 값 가져오기
+	            String bizRegNo = vo.getBiz_reg_no(); // JSP name="bizRegNo" 값 가져오기
 	            String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
 	            
 	            // 확장자 추출 (.jpg, .png 등)
@@ -238,20 +233,20 @@ public class UsersController {
 	            file.transferTo(new File(licenseFolder, saveName));
 	            
 	            // 5. DB 저장용 경로 (폴더명 포함해서 저장)
-	            bVo.setBizLicenseFile("business_license/" + saveName); 
+	            vo.setBiz_license_file("business_license/" + saveName); 
 	        }
 	        
-	        uVo.setUser_type("business"); // 회원가입 시 기본 business로 권한 설정
-	        uVo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
+	        vo.setUser_type("business"); // 회원가입 시 기본 business로 권한 설정
+	        vo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 	        
-	        businessService.joinBusiness(uVo, bVo);
+	        service.insert(vo);
 	        
-	        session.setAttribute("id", uVo.getUser_id());
-	        session.setAttribute("userName", bVo.getCompanyName());
-	        session.setAttribute("userType", uVo.getUser_type());
-	        session.setAttribute("userRole", uVo.getUser_role());
+	        session.setAttribute("id", vo.getUser_id());
+	        session.setAttribute("userName", vo.getCompany_name());
+	        session.setAttribute("userType", vo.getUser_type());
+	        session.setAttribute("userRole", vo.getUser_role());
 
-	        joinRedirect.addFlashAttribute("msg", bVo.getCompanyName() + "님, 법인 가입을 축하합니다!");
+	        joinRedirect.addFlashAttribute("msg", vo.getCompany_name() + "님, 법인 가입을 축하합니다!");
 	        return "redirect:/index.do?page=1";
 
 	    } catch (Exception e) {
@@ -262,7 +257,7 @@ public class UsersController {
 	}
 
 	
-	@PostMapping("/admin/updateUser.do")
+	@PostMapping("/updateUser.do")
 	@ResponseBody
 	public String updateUser(UsersVO vo, @RequestParam(value = "upload_file", required = false) MultipartFile uploadFile, HttpServletRequest request) {
 	    try {

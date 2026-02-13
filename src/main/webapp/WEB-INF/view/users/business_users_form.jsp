@@ -25,17 +25,20 @@
                         <td><input type="password" id="user_pw2" placeholder="비밀번호 확인" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="companyName" placeholder="상호명" required></td>
+                        <td><input type="text" name="company_name" placeholder="상호명" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="ceoName" placeholder="대표자명" required></td>
+                        <td><input type="text" name="ceo_name" placeholder="대표자명" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="bizRegNo" placeholder="사업자 번호 (000-00-00000)" required></td>
+                        <td><input type="text" name="user_name" placeholder="영업 담당자명" required></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="biz_reg_no" placeholder="사업자 번호 (000-00-00000)" required></td>
                     </tr>
                     <tr>
                         <td>
-						    <select name="bizType" class="biz-select">
+						    <select name="biz_type" class="biz-select">
 						        <option value="" disabled selected>사업자 유형 선택</option>
 						        <option value="간이사업자">간이사업자</option>
 						        <option value="일반사업자">일반사업자</option>

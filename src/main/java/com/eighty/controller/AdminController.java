@@ -2,7 +2,6 @@ package com.eighty.controller;
 
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -29,7 +28,6 @@ import com.eighty.product.ProductVO;
 import com.eighty.purchase.PurchaseService;
 import com.eighty.review.ReviewDTO;
 import com.eighty.shop.ParameterValue;
-import com.eighty.users.BusinessService;
 import com.eighty.users.UsersService;
 import com.eighty.users.UsersVO;
 
@@ -48,11 +46,7 @@ public class AdminController {
 	private UsersService usersService;
 	
 	@Autowired
-
     private PurchaseService purchaseService;
-	
-	@Autowired
-	private BusinessService businessService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -87,7 +81,6 @@ public class AdminController {
 		model.addAttribute("user", vo);
 		return "users/user_form";
 	}
-	
 	
 	@GetMapping("/manager.do")
     public String adminMain(HttpSession session) {
@@ -206,19 +199,6 @@ public class AdminController {
 	        return "error";
 	    }
     }
-
-	@PostMapping("/updateUser.do")
-	@ResponseBody
-	public String updateUser(UsersVO UVO, HttpSession session) {
-		String loginId = (String) session.getAttribute("id"); 
-	    if (loginId == null) {
-	        return "login_required"; // 자바스크립트에서 처리할 신호
-	    }
-	    
-    	int result = usersService.updateUserAdmin(UVO);
-	    
-    	return (result > 0) ? "success" : "fail";
-	}
 	
 	@PostMapping("/deleteUser.do")
 	@ResponseBody

@@ -115,7 +115,6 @@
 			        path: '${pageContext.request.contextPath}/admin/user_list.do',
 			        headers: ['아이디', '이름', '이메일', '타입', '권한', '가입일', '관리'],
 			        filters: [
-			            { id: 'typeFilter', label: '회원 타입', options: ['전체', 'personal', 'business'] },
 			            { id: 'roleFilter', label: '권한 등급', options: ['전체', 'admin', 'vip', 'member'] }
 			        ]
 			    },
