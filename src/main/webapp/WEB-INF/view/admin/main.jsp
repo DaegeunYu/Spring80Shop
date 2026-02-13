@@ -473,6 +473,42 @@
 		        }
 		    }
 		});
+		// user_form 제출 처리
+		document.addEventListener('submit', function(e) {
+		    if (e.target && e.target.id === 'userForm') {
+		        e.preventDefault(); // 기본 폼 제출 동작(새로고침) 막기
+
+		        const form = e.target;
+		        const formData = new FormData(form);
+		        const url = form.action;
+
+		        // 법인 회원일 경우 숫자 필드 에러 방지를 위한 자동 보정 (필요시)
+		        const role = form.querySelector('select[name="user_role"]').value;
+		        if (role === 'business') {
+		            if (!formData.get('user_age')) formData.set('user_age', '0');
+		        }
+
+		        // Ajax 요청 전송 (Fetch API 예시)
+		        fetch(url, {
+		            method: 'POST',
+		            body: new URLSearchParams(formData)
+		        })
+		        .then(response => response.text()) // Controller에서 "success"를 String으로 반환할 때
+		        .then(data => {
+		            if (data.trim() === "success") {
+		                alert("사용자 정보가 성공적으로 수정되었습니다.");
+		                // 사용자 리스트 페이지로 이동 (replace는 뒤로가기를 방지합니다)
+		                loadContent('user');
+		            } else {
+		                alert("수정에 실패했습니다. 응답: " + data);
+		            }
+		        })
+		        .catch(error => {
+		            console.error('Error:', error);
+		            alert("서버 통신 중 오류가 발생했습니다.");
+		        });
+		    }
+		});
         // 초기 실행
         window.onload = () => loadContent('user');
         
@@ -546,7 +582,7 @@
             }
         	
             $.ajax({
-                url: "${pageContext.request.contextPath}/product/deleteProduct.do",
+                url: "${pageContext.request.contextPath}/admin/deleteProduct.do",
                 type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
                 data: { "product_code": product_code },
                 success: function(response) {
@@ -558,6 +594,35 @@
                             window.close();
                         } else {
                         	loadContent('product');
+                        }
+                    } else {
+                        alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                }
+            });
+    	}
+        
+        function deleteUser(user_id) {
+        	if (!confirm("정말 이 사용자를 삭제하시겠습니까?\n삭제 후에는 복구할 수 없습니다.")) {
+                return; // 사용자가 '취소'를 누르면 중단
+            }
+        	
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/deleteUser.do",
+                type: "POST", // 데이터 삭제/수정은 POST 방식이 안전합니다.
+                data: { "user_id": user_id },
+                success: function(response) {
+                    if (response === "success") {
+                        alert("사용자가 정상적으로 삭제되었습니다.");
+                        // 팝업창에서 삭제했다면 부모창 새로고침 후 팝업 닫기
+                        if (window.opener) {
+                            window.opener.loadContent('user');; 
+                            window.close();
+                        } else {
+                        	loadContent('user');
                         }
                     } else {
                         alert("삭제 실패: 권한이 없거나 오류가 발생했습니다.");

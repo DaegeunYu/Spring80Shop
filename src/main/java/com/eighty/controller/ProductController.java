@@ -180,25 +180,4 @@ public class ProductController {
 	    return "success";
 	}
 	
-	@PostMapping("/deleteProduct.do")
-	@ResponseBody
-    public String deleteProduct(@RequestParam("product_code") String product_code, HttpServletRequest request) {
-		try {
-	        ProductVO product = new ProductVO();
-	        product.setProduct_code(product_code);
-	        ProductVO productResult = service.getProduct(product);
-	        
-	        if (productResult.getProduct_img() != null) {
-	        	pv.deletePhysicalFile(productResult.getProduct_img(), request);
-	        }
-	        
-	        int result = service.delProduct(productResult.getIdx(), productResult.getProduct_code());
-	        
-	        return (result > 0) ? "success" : "fail";
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "error";
-	    }
-    }
-	
 }

@@ -1,7 +1,5 @@
 package com.eighty.users;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +12,11 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public void insert(UsersVO vo) {
 		dao.insert(vo);
+	}
+	
+	@Override
+	public int delete(UsersVO vo) {
+		return dao.delete(vo);
 	}
 
 	@Override

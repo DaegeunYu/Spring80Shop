@@ -8,7 +8,7 @@ public class UsersVO {
 	private String user_id; // 유저 & 법인 ID
 	private String user_pw; // 유저 & 법인 비밀번호
 	private String user_name; // 이름 & 법인 상호명
-	private int user_age; // 나이 & 법인은 입력안함
+	private Integer user_age; // 나이 & 법인은 입력안함
 	private String user_birthday; // 생일 & 법인은 입력안함
 	private String user_tel; // 전화번호 & 회사연락처
 	private String user_email; // 이메일 & 회사이메일
