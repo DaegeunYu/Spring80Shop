@@ -22,7 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		        </if>
 	        </where>
 			ORDER BY 
-  				CASE WHEN user_role = 'admin' THEN 0 ELSE 1 END, 
+  				CASE
+  					WHEN user_role = 'admin' THEN 0
+  					WHEN user_role = 'vip' THEN 1
+  					ELSE 2
+ 				END,
   				join_date DESC
 	</select>
 
