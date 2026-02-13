@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <form id="userForm" action="${pageContext.request.contextPath}/admin/updateUser.do" method="post" enctype="multipart/form-data" class="space-y-8">
+    <form id="userForm" action="${pageContext.request.contextPath}/users/updateUser.do" method="post" enctype="multipart/form-data" class="space-y-8">
         <input type="hidden" name="idx" value="${user.idx}">
         <input type="hidden" name="user_type" value="${user.user_type}">
 

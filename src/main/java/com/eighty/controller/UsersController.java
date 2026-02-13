@@ -262,7 +262,7 @@ public class UsersController {
 	}
 
 	
-	@PostMapping("/admin/updateUser.do")
+	@PostMapping("/updateUser.do")
 	@ResponseBody
 	public String updateUser(UsersVO vo, @RequestParam(value = "upload_file", required = false) MultipartFile uploadFile, HttpServletRequest request) {
 	    try {

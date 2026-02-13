@@ -88,7 +88,6 @@ public class AdminController {
 		return "users/user_form";
 	}
 	
-	
 	@GetMapping("/manager.do")
     public String adminMain(HttpSession session) {
 		if (!"admin".equals(session.getAttribute("userRole"))) {
@@ -206,19 +205,6 @@ public class AdminController {
 	        return "error";
 	    }
     }
-
-	@PostMapping("/updateUser.do")
-	@ResponseBody
-	public String updateUser(UsersVO UVO, HttpSession session) {
-		String loginId = (String) session.getAttribute("id"); 
-	    if (loginId == null) {
-	        return "login_required"; // 자바스크립트에서 처리할 신호
-	    }
-	    
-    	int result = usersService.updateUserAdmin(UVO);
-	    
-    	return (result > 0) ? "success" : "fail";
-	}
 	
 	@PostMapping("/deleteUser.do")
 	@ResponseBody

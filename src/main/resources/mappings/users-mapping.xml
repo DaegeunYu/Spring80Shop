@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        user_tel = #{user_tel},
 	        user_add = #{user_add}
 	        
-	        <if test="user_pw != null">
+	        <if test="user_pw != null and user_pw != ''">
 	            , user_pw = #{user_pw}
 	        </if>
 	        
