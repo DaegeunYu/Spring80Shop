@@ -1,6 +1,7 @@
 package com.eighty.controller;
 
 import java.io.File;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -254,5 +255,41 @@ public class UsersController {
 	    }
 	}
 
+	
+	@PostMapping("/admin/updateUser.do")
+	@ResponseBody
+	public String updateUser(UsersVO vo, @RequestParam(value = "upload_file", required = false) MultipartFile uploadFile, HttpServletRequest request) {
+	    try {
+	        // 1. 파일 업로드 처리 (법인회원이고 파일이 새로 첨부된 경우)
+	        if (uploadFile != null && !uploadFile.isEmpty()) {
+	        	
+	        	String originalName = uploadFile.getOriginalFilename();
+	        	String extension = originalName.substring(originalName.lastIndexOf("."));
+	        	String uuid = UUID.randomUUID().toString().substring(0, 4);
+	        	String saveName = vo.getBiz_reg_no() + "_" + uuid + extension;
+	        	
+	            File licenseFolder = new File(path, "business"); // 설정된 path 사용
+	            if (!licenseFolder.exists()) licenseFolder.mkdirs();
+	            
+	            File saveFile = new File(path, saveName);
+	            uploadFile.transferTo(saveFile);
+
+	            // DB에 저장할 상대 경로 설정
+	            vo.setBiz_license_file("business/" + saveName);
+	        }
+
+	        // 2. 패스워드 암호화
+	        String encodePw = passwordEncoder.encode(vo.getUser_pw());
+		    vo.setUser_pw(encodePw);
+	        
+	        // 3. 서비스 호출
+	        int result = service.updateUserAdmin(vo);
+
+	        return result > 0 ? "success" : "fail";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error: " + e.getMessage();
+	    }
+	}
 
 }

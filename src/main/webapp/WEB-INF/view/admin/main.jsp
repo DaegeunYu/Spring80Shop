@@ -410,86 +410,38 @@
 		        });
 		    }
 		});
-		// 3. user_form 제어
-		document.addEventListener('change', function(e) {
-		    if (e.target && e.target.name === 'user_role') {
-		        const role = e.target.value;
-		        const isBusiness = (role === 'business');
-		        const form = e.target.closest('form');
-		        if (!form) return;
-
-		        // 1. 이름/상호명 변경 (기존 로직 동일)
-		        const nameInput = form.querySelector('input[name="user_name"]');
-		        if (nameInput) {
-		            const label = nameInput.closest('div').querySelector('label');
-		            label.textContent = isBusiness ? '법인 상호명' : '이름';
-		        }
-
-		        // 2. 나이/생년월일/추천인 필드 제어 (ID 기반 권장)
-		        const targetIds = ['input_age', 'input_birthday', 'input_recommender'];
-		        targetIds.forEach(id => {
-		            const el = document.getElementById(id);
-		            if (el) {
-		                el.readOnly = isBusiness;
-		                if (isBusiness) {
-		                    el.classList.add('bg-gray-100', 'text-gray-400', 'cursor-not-allowed');
-		                    el.value = '';
-		                } else {
-		                    el.classList.remove('bg-gray-100', 'text-gray-400', 'cursor-not-allowed');
-		                    el.classList.add('bg-white');
-		                }
-		            }
-		        });
-
-		        // 3. [성별 영역 핵심 수정]
-		        const genderContainer = document.getElementById('gender_container');
-		        const radioGroup = document.getElementById('gender_radio_group');
-		        const businessMsg = document.getElementById('business_only_msg');
-
-		        if (isBusiness) {
-		            // 법인일 때: 메시지 SHOW, 라디오 HIDE
-		            if(businessMsg) businessMsg.classList.remove('hidden');
-		            if(radioGroup) radioGroup.classList.add('hidden');
-		            genderContainer.classList.add('bg-gray-100', 'opacity-60');
-		            genderContainer.querySelectorAll('input').forEach(i => i.disabled = true);
-		        } else {
-		            // 일반일 때: 메시지 HIDE, 라디오 SHOW
-		            if(businessMsg) businessMsg.classList.add('hidden');
-		            if(radioGroup) radioGroup.classList.remove('hidden');
-		            genderContainer.classList.remove('bg-gray-100', 'opacity-60');
-		            genderContainer.classList.add('bg-gray-50');
-		            genderContainer.querySelectorAll('input').forEach(i => i.disabled = false);
-		        }
-		    }
-		});
 		// user_form 제출 처리
 		document.addEventListener('submit', function(e) {
 		    if (e.target && e.target.id === 'userForm') {
-		        e.preventDefault(); // 기본 폼 제출 동작(새로고침) 막기
-
+		        e.preventDefault();
+		
+		        if(!confirm("정보를 수정하시겠습니까?")) return;
+		
 		        const form = e.target;
-		        const formData = new FormData(form);
+		        const formData = new FormData(form); // 파일 데이터를 포함하여 생성
 		        const url = form.action;
-
-		        // 법인 회원일 경우 숫자 필드 에러 방지를 위한 자동 보정 (필요시)
-		        const role = form.querySelector('select[name="user_role"]').value;
-		        if (role === 'business') {
-		            if (!formData.get('user_age')) formData.set('user_age', '0');
+		
+		        // 개인회원 나이값 빈값일 때 보정 (Integer 에러 방지)
+		        const userType = formData.get('user_type');
+		        if (userType === 'personal' && !formData.get('user_age')) {
+		            formData.set('user_age', '0');
 		        }
-
-		        // Ajax 요청 전송 (Fetch API 예시)
+		
 		        fetch(url, {
 		            method: 'POST',
-		            body: new URLSearchParams(formData)
+		            body: formData // URLSearchParams가 아닌 FormData 객체 그대로 전달
 		        })
-		        .then(response => response.text()) // Controller에서 "success"를 String으로 반환할 때
+		        .then(response => response.text())
 		        .then(data => {
 		            if (data.trim() === "success") {
-		                alert("사용자 정보가 성공적으로 수정되었습니다.");
-		                // 사용자 리스트 페이지로 이동 (replace는 뒤로가기를 방지합니다)
-		                loadContent('user');
+		                alert("성공적으로 업데이트되었습니다.");
+		                if(typeof loadContent === 'function') {
+		                    loadContent('user');
+		                } else {
+		                    location.reload();
+		                }
 		            } else {
-		                alert("수정에 실패했습니다. 응답: " + data);
+		                alert("수정 실패: " + data);
 		            }
 		        })
 		        .catch(error => {

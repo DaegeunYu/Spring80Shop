@@ -36,4 +36,9 @@ public class UsersDaoImpl implements UsersDao {
 	public UsersVO getSelectOne(UsersVO vo) {
 		return mybatis.selectOne("USERS.getSelectOne", vo);
 	}
+	
+	@Override
+	public int updateUserAdmin(UsersVO vo) {
+		return mybatis.update("USERS.UPDATE", vo);
+	}
 }
