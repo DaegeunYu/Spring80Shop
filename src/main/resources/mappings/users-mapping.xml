@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   				join_date DESC
 	</select>
 
-	<update id="updateUser" parameterType="UsersVO">
+	<update id="UPDATE" parameterType="UsersVO">
 	    UPDATE users
 	    SET
 	        user_name = #{user_name},

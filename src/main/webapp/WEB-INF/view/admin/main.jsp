@@ -108,9 +108,10 @@
 			        title: '사용자 리스트',
 			        desc: '시스템 권한별로 유저 정보를 관리합니다.',
 			        path: '${pageContext.request.contextPath}/admin/user_list.do',
-			        headers: ['아이디', '이름', '이메일', '권한', '가입일', '관리'],
+			        headers: ['아이디', '이름', '이메일', '타입', '권한', '가입일', '관리'],
 			        filters: [
-			            { id: 'roleFilter', label: '전체 선택', options: ['전체', 'admin', 'business', 'member'] }
+			            { id: 'typeFilter', label: '회원 타입', options: ['전체', 'personal', 'business'] },
+			            { id: 'roleFilter', label: '권한 등급', options: ['전체', 'admin', 'vip', 'member'] }
 			        ]
 			    },
 			    'product': {
