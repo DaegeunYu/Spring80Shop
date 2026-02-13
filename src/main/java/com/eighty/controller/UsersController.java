@@ -241,7 +241,7 @@ public class UsersController {
 	            bVo.setBizLicenseFile("business_license/" + saveName); 
 	        }
 	        
-	        uVo.setUser_type("personal"); // 회원가입 시 기본 personal로 권한 설정
+	        uVo.setUser_type("business"); // 회원가입 시 기본 business로 권한 설정
 	        uVo.setUser_role("member"); // 회원가입 시 기본 member로 권한 설정
 	        
 	        businessService.joinBusiness(uVo, bVo);
