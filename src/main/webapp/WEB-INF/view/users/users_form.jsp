@@ -3,21 +3,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
-<section>
-	<div align="center">
+<section id="sign_form"> <div align="center">
         <br>
-		<a href=${path}/index.do><img id=login_box_logo src="${pageContext.request.contextPath}/resources/files/common/logo.jpg"></a>
+		<a href="${path}/index.do"><img id="login_box_logo" src="${pageContext.request.contextPath}/resources/files/common/logo.jpg"></a>
 		
-		<div class="join">
-		<form action="${path}/users/users_formOK.do" method="post" onSubmit="return formOK()">
-			<table id="users_join">
-				<tr>
-					<td><H2> 80's MEMBER JOIN </H2></td>
+		<div class="join-card"> <form action="${path}/users/users_formOK.do" method="post" onSubmit="return formOK()">
+			<table id="join_table"> <tr>
+					<td><H2 class="join-title"> 80's MEMBER JOIN </H2></td>
 				</tr>
 				
 				<tr>
-					<td><input type="text" id="user_id" name="user_id" placeholder="아이디" required>
-					<button id="idCheck">아이디 중복 확인</button></td>
+					<td>
+                        <input type="text" id="user_id" name="user_id" placeholder="아이디" required>
+					    <button type="button" id="idCheck" class="btn-full gray-btn">아이디 중복 확인</button>
+                    </td>
 				</tr>
 				<tr>
 					<td><input type="password" id="user_pw" name="user_pw" placeholder="비밀번호" required></td>
@@ -30,9 +29,9 @@
 				</tr>
 				<tr>
 					<td><input type="text" id="user_birthday" name="user_birthday" 
-              			placeholder="생년월일 작성 예: 20260101" maxlength="8" required > 
-       					<small style="color: gray;"><br>(8자리 숫자로 입력해 주세요)</small>
-       				</td>
+                            placeholder="생년월일 작성 예: 20260101" maxlength="8" required > 
+                        <div class="file-label">(8자리 숫자로 입력해 주세요)</div>
+                    </td>
 				</tr>
 				<tr>
 					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호" maxlength="13" required></td>
@@ -43,33 +42,35 @@
 				<tr>
 					<td><input type="hidden" id="user_add" name="user_add" required>
 						<input type="text" id="sample6_postcode" placeholder="우편번호">
-						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-						<input type="text" id="sample6_address" placeholder="주소"><br>
+						<input type="button" class="btn-full gray-btn" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+						<input type="text" id="sample6_address" placeholder="주소">
 						<input type="text" id="sample6_detailAddress" placeholder="상세주소">
 						<input type="text" id="sample6_extraAddress" placeholder="참고항목">
-					
 					</td>
 				</tr>
 				<tr>
 					<td class="gender_row">
-       					 <label>성별</label>
-       					 <select name="user_gender">
-        				    <option value="M">남</option>
-           					<option value="W">여</option>
-        </select>
-    </td>
+                        <label>성별</label>
+                        <select name="user_gender" class="biz-select">
+                            <option value="M">남</option>
+                            <option value="W">여</option>
+                        </select>
+                    </td>
 				</tr>
 				<tr>
 					<td><input type="text" id="recommender_id" name="recommender_id" placeholder="추천자 아이디"></td>
 				</tr>
-				<tr><td colspan="2" align="center"><input type="submit" value="회원가입" ></td></tr>
+				<tr>
+                    <td align="center">
+                        <br>
+                        <input type="submit" value="회원가입" class="btn-full dark-btn">
+                    </td>
+                </tr>
 			</table>
 		</form>
 		</div>
-		
 		<BR> 
 	</div>
-	<BR>
 </section>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
