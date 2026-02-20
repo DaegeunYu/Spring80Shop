@@ -10,6 +10,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.basket.BasketVO;
@@ -59,9 +60,13 @@ public class PurchaseController {
 	}
 	
 	@GetMapping(value="/purchaseList.do")
-	public String purchaseList(HttpSession session, Model model) {
-		String userId = (String) session.getAttribute("id");
-	    if(userId == null) return "redirect:/users/login.do";
+	public String purchaseList(@AuthenticationPrincipal User user, Model model) {
+		if(user == null) {
+	        return "redirect:/users/login.do";
+	    }
+		
+		String userId = user.getUsername(); // 시큐리티의 username(ID) 추출
+		
 	    List<PurchaseVO> list = service.getPurchaseListSummary(userId);
 	    model.addAttribute("purchaseList", list);
 	    
@@ -70,10 +75,10 @@ public class PurchaseController {
 	
 	@GetMapping(value="/purchaseListOne.do")
 	public String getpurchaseListOne(
-	    @SessionAttribute(name = "id") String loginId, 
-	    PurchaseVO vo,
-	    Model model) {
-	    vo.setUserId(loginId);
+		@AuthenticationPrincipal User user, PurchaseVO vo, Model model) {
+		if(user == null) return "redirect:/users/login.do";
+		
+	    vo.setUserId(user.getUsername());
 	    List<PurchaseVO> list = service.getPurchaseListOne(vo);
 	    model.addAttribute("purchaseList", list);
 	    model.addAttribute("orderInfo", list.get(0));
@@ -81,19 +86,20 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping("/purchase.do")
-	public String purchaseForm(HttpSession session, Model model, 
+	public String purchaseForm(@AuthenticationPrincipal User user, HttpSession session, Model model, 
 							   String product_code, String product_count,
 							   @RequestParam(value="crushing", required=false) String crushing,
 	                           @RequestParam(value="product_weight", required=false) String product_weight,
 							   @RequestParam(value="jsonPayload", required=false) String basketJson) {
-	    // 로그인한 사용자 확인
-	    String id = (String) session.getAttribute("id");
-	    if (id == null) {
+	    
+	    if (user == null) {
 	    	//마지막으로 본 페이지
 	    	String detailUrl = "/product/product_detail.do?product_code=" + product_code;
 	        session.setAttribute("prevPage", detailUrl);
 	        return "redirect:/users/login.do";// 비 로그인 시 로그인페이지로 이동
-	    } 
+	    }
+	    // 로그인한 사용자 확인
+	    String id = user.getUsername();
 	    //사용자 정보
         UsersVO buyer = new UsersVO();
         buyer.setUser_id(id);//유저 조회 대상 지정
@@ -146,13 +152,13 @@ public class PurchaseController {
             b.setProduct_weight(product_weight);
             
             Map<String,Object> map = new HashMap<String,Object>();
-            map.put("basket", b);   
-            map.put("product", p); 
+            map.put("basket", b);
+            map.put("product", p);
             purchaseList.add(map);
         }
 
         model.addAttribute("purchaseList", purchaseList);
-        model.addAttribute("total_price", total_price); 
+        model.addAttribute("total_price", total_price);
         model.addAttribute("final_total_price", total_price + 5000); //배송비 5000원 추가
         
         // 결제창 호출 시 사용할 임시 주문번호 생성 (purchase_detail_payment.jsp의 ${orderCode}로 전달됨)
@@ -162,8 +168,9 @@ public class PurchaseController {
 	}
 	
 	@PostMapping("/purchase_basket_list.do")
-    public String purchase_basket_list(@RequestParam("jsonPayload") String jsonPayload, HttpSession session, Model model) {
-		String id = (String) session.getAttribute("id");
+    public String purchase_basket_list(@AuthenticationPrincipal User user, @RequestParam("jsonPayload") String jsonPayload, Model model) {
+		if (user == null) return "redirect:/users/login.do";
+		
 		
 		try {
 	        // 1. JSON 문자열을 List<BasketVO>로 변환
@@ -171,7 +178,7 @@ public class PurchaseController {
 	        List<BasketVO> voList = mapper.readValue(jsonPayload, new TypeReference<List<BasketVO>>(){});
 	        
 	        UsersVO buyer = new UsersVO();
-	        buyer.setUser_id(id);
+	        buyer.setUser_id(user.getUsername());
 	        model.addAttribute("users", uservice.getSelectOne(buyer));
 	        model.addAttribute("purchaseList", voList);
 	        
@@ -187,7 +194,7 @@ public class PurchaseController {
     }
 	
 	@PostMapping("/purchase_insert.do")
-	public String insertPurchase(
+	public String insertPurchase(@AuthenticationPrincipal User user,
 			@RequestParam("product_code") String[] productCode,
 	        @RequestParam("productWeight") String[] productWeight,
 	        @RequestParam("product_count") String[] productCount,
@@ -201,10 +208,9 @@ public class PurchaseController {
 	        @RequestParam("paidAmount") int paidAmount,
 	        @RequestParam("pgStatus") String pgStatus,
 	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
-	        HttpSession session,
 	        RedirectAttributes purchaseInfo) {
-
-	    String userId = (String) session.getAttribute("id");
+		if (user == null) return "redirect:/users/login.do";
+	    String userId = user.getUsername();
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
 	    // 외부에서 넘어온 번호가 없으면(계좌이체 등) 난수 새로 생성, 있으면 그대로 사용
@@ -230,18 +236,18 @@ public class PurchaseController {
 	    item.setOrderStatus(paymentStatus);
 	    item.setIsReview("n");
 
-	    // 개별 상품 정보 
+	    // 개별 상품 정보
 	    item.setProductCode(productCode[i]);
 	    item.setProductWeight(productWeight[i]);
 	    item.setCrushing(crushing[i]);
-	    item.setOrderCount(productCount[i]); 
+	    item.setOrderCount(productCount[i]);
 	    
 	    // 포트원 결제 상세 정보
         item.setReceiptId(receiptId);
         item.setApprovalId(approvalId);
         item.setApprovalDate(approvalDate);
         item.setPaidAmount(paidAmount);
-        item.setPgStatus(pgStatus); 
+        item.setPgStatus(pgStatus);
         item.setCancelAmount(0); //환불금액
 	    
 	    ProductVO searchVO = new ProductVO();
@@ -325,12 +331,11 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("/purchase_success.do")
-	public String purchaseSuccess(
+	public String purchaseSuccess(@AuthenticationPrincipal User user, 
 	        @RequestParam("orderCode") String orderCode, 
-	        HttpSession session, 
 	        Model model) {
 	    
-	    String userId = (String) session.getAttribute("id");
+	    String userId = user.getUsername();
 	    
 	    // 1. 이번 주문번호와 아이디를 조건으로 설정 (방금 결제한 내역만 필터링)
 	    PurchaseVO searchVO = new PurchaseVO();

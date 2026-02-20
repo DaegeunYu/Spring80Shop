@@ -9,24 +9,27 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
-<context:component-scan base-package="com.eighty.controller" />
+	<context:component-scan base-package="com.eighty" />
+	
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
-<!-- 어노테이션 기반 MVC 설정 -->
-<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 
-<!-- ✅ 정적 리소스(css, js, image 등) 접근 허용 -->
-<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 
-<bean id="viewResolver" 
-      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-   <property name="prefix"  value="/WEB-INF/view/"></property>
-   <property name="suffix"  value=".jsp"></property>
-</bean>
+	<bean id="viewResolver" 
+	      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	   <property name="prefix"  value="/WEB-INF/view/"></property>
+	   <property name="suffix"  value=".jsp"></property>
+	</bean>
 
-<!-- 10MB  -->
-<bean id="multipartResolver" 
-      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-  <property name="maxUploadSize"  value="10485760" />
-</bean>
+	<bean id="multipartResolver" 
+	      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	  <property name="maxUploadSize"  value="10485760" />
+	</bean>
 
 </beans>

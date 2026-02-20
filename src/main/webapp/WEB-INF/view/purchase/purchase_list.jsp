@@ -59,7 +59,7 @@
     </table>
 
     <div class="list_bottom_area">
-        <input type="button" class="btn_list_home" onclick="location.href='index.do'" value="쇼핑 계속하기">
+        <input type="button" class="btn_list_home" onclick="location.href='<c:url value="/index.do"/>'" value="쇼핑 계속하기">
     </div>
 </section>
 

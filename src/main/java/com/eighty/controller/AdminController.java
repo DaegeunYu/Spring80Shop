@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,11 +84,14 @@ public class AdminController {
 	}
 
 	@GetMapping("/manager.do")
-	public String adminMain(HttpSession session) {
-		if (!"admin".equals(session.getAttribute("userRole"))) {
-			return "/admin/access-denied"; // 권한 없음 페이지로 리다이렉트
-		}
-		return "admin/main"; // 관리자 메인 layout
+	public String adminMain() {
+		// 모든 검증은 시큐리티에서 진행
+		return "admin/main";
+	}
+
+	@GetMapping("/access-denied.do")
+	public String accessDenied() {
+		return "admin/access-denied";
 	}
 
 	@GetMapping("/user_list.do")
@@ -120,9 +125,9 @@ public class AdminController {
 	@PostMapping("/insertProduct.do")
 	@ResponseBody
 	public String insertProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file,
-			HttpSession session) {
+			@AuthenticationPrincipal User user) {
 
-		String loginId = (String) session.getAttribute("id");
+		String loginId = user.getUsername();
 		if (loginId == null) {
 			return "login_required"; // 자바스크립트에서 처리할 신호
 		}
@@ -147,9 +152,9 @@ public class AdminController {
 	@PostMapping("/changeProduct.do")
 	@ResponseBody
 	public String changeProduct(ProductVO PVO, @RequestParam("product_img_file") MultipartFile file,
-			HttpSession session) {
+			@AuthenticationPrincipal User user) {
 
-		String loginId = (String) session.getAttribute("id");
+		String loginId = user.getUsername();
 		if (loginId == null) {
 			return "login_required"; // 자바스크립트에서 처리할 신호
 		}
@@ -202,7 +207,7 @@ public class AdminController {
 
 	@PostMapping("/deleteUser.do")
 	@ResponseBody
-	public String deleteUser(@RequestParam("user_id") String user_id, HttpServletRequest request) {
+	public String deleteUser(@RequestParam("user_id") String user_id) {
 		try {
 			UsersVO user = new UsersVO();
 			user.setUser_id(user_id);
@@ -270,36 +275,36 @@ public class AdminController {
 	@PostMapping("/approveBulkOrders.do")
 	@ResponseBody
 	public String approveBulkOrders(@RequestParam(value = "orderCodes") List<String> orderCodes) {
-	    if (orderCodes == null || orderCodes.isEmpty()) {
-	        return "fail";
-	    }
+		if (orderCodes == null || orderCodes.isEmpty()) {
+			return "fail";
+		}
 
-	    try {
-	        int totalResult = 0;
-	        long baseTime = System.nanoTime(); // 나노초 단위로 고유성 확보
-	        String now = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
+		try {
+			int totalResult = 0;
+			long baseTime = System.nanoTime(); // 나노초 단위로 고유성 확보
+			String now = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 
-	        for (int i = 0; i < orderCodes.size(); i++) {
-	            Map<String, Object> params = new HashMap<String, Object>();
-	            params.put("orderCode", orderCodes.get(i));
-	            // 고유 식별자: 나노초 + 인덱스로 절대 중복 방지
-	            params.put("approvalId", "ADM_B" + baseTime + "_" + i);
-	            params.put("approvalDate", now);
+			for (int i = 0; i < orderCodes.size(); i++) {
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("orderCode", orderCodes.get(i));
+				// 고유 식별자: 나노초 + 인덱스로 절대 중복 방지
+				params.put("approvalId", "ADM_B" + baseTime + "_" + i);
+				params.put("approvalDate", now);
 
-	            // 각 주문 건에 대해 승인 처리 실행
-	            totalResult += purchaseService.updateOrderApproval(params);
-	        }
+				// 각 주문 건에 대해 승인 처리 실행
+				totalResult += purchaseService.updateOrderApproval(params);
+			}
 
-	        // 로그 기록: 실제 처리된 건수 확인용
-	        System.out.println("일괄 승인 요청: " + orderCodes.size() + "건 / 실제 처리: " + totalResult + "건");
+			// 로그 기록: 실제 처리된 건수 확인용
+			System.out.println("일괄 승인 요청: " + orderCodes.size() + "건 / 실제 처리: " + totalResult + "건");
 
-	        // 한 건이라도 처리가 되었다면 화면을 갱신시키기 위해 success 반환
-	        return (totalResult > 0) ? "success" : "fail";
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "error";
-	    }
+			// 한 건이라도 처리가 되었다면 화면을 갱신시키기 위해 success 반환
+			return (totalResult > 0) ? "success" : "fail";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
 
 }

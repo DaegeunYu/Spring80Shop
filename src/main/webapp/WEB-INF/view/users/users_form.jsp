@@ -145,10 +145,10 @@ $('#idCheck').click(function(e) {
 	
 	// 아이디 정규식 검사 (소문자+숫자 조합, 6~16자)
 	var userId = document.getElementById("user_id").value;
-	var regId = /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,16}$/;
+	var regId = /^(?=.*[a-z])[a-z\d]{6,16}$/;
 
 	if (!regId.test(userId)) {
-		   alert("아이디는 영문 소문자와 숫자를 조합하여 6~16자로 입력해주세요.");
+		   alert("아이디는 영문 소문자 또는 숫자를 조합하여 6~16자로 입력해주세요.");
 		   document.getElementById("user_id").focus();
 		   return false;
 	}

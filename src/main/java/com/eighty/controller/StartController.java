@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,8 @@ public class StartController {
 	}
 	
 	@GetMapping(value="/index.do")
-	public String index(HttpSession session, Model model, ProductVO vo) {
-		String id = (String) session.getAttribute("id");
+	public String index(@AuthenticationPrincipal User user, Model model, ProductVO vo) {
+		String id = user.getUsername();
 		
 		if (id != null ) {
 			RecentVO rVo = new RecentVO();

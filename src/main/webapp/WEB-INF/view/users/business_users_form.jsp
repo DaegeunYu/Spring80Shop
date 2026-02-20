@@ -2,6 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
+<script type="text/javascript">
+    window.onload = function() {
+        var errorMsg = "${msg}"; // 가입 실패 시 model.addAttribute("msg", ...)로 전달된 값
+        if (errorMsg && errorMsg !== "" && errorMsg !== "null") {
+            alert(errorMsg);
+        }
+    };
+</script>
+
 <section id="sign_form">
     <div align="center">
         <br>

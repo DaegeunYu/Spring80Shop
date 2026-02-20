@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,12 +91,12 @@ public class ProductController {
 	}
 	
 	@GetMapping(value="/product_detail.do")
-	public String product_detail(HttpSession session, Model model, ProductVO vo){
+	public String product_detail(@AuthenticationPrincipal User user, Model model, ProductVO vo){
 		ProductVO product = service.getProduct(vo);
 	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
 	    product.setOptionList(service.getProductOption(vo.getProduct_code()));
 	    
-	    String id = (String) session.getAttribute("id");
+	    String id = user.getUsername();
 		if (id != null) {
 			RecentVO rVo = new RecentVO();
 			rVo.setUser_id(id);
@@ -140,8 +142,8 @@ public class ProductController {
 	
 	// Like
 	@GetMapping(value="/like_product.do")
-	public String like_product(HttpSession session, Model model, LikeProductVO vo){
-		String id = (String) session.getAttribute("id");
+	public String like_product(@AuthenticationPrincipal User user, Model model, LikeProductVO vo){
+		String id = user.getUsername();
 		vo.setUser_id(id);
 		
 		long count = service.getLikeCount(vo);
@@ -173,8 +175,8 @@ public class ProductController {
 	
 	@PostMapping("/update_like.do")
 	@ResponseBody
-	public String update_like(HttpSession session, @RequestBody LikeProductVO vo) {
-		String id = (String) session.getAttribute("id");
+	public String update_like(@AuthenticationPrincipal User user, @RequestBody LikeProductVO vo) {
+		String id = user.getUsername();
 		vo.setUser_id(id);
 	    service.update(vo);
 	    return "success";

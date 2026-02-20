@@ -82,5 +82,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT * FROM users 
         WHERE user_id = #{user_id}
     </select>
-	
+    
+    <select id="selectUserForLogin" parameterType="map" resultType="com.eighty.users.UsersVO">
+	    SELECT 
+	        idx, user_id, user_pw, user_name, user_age, user_tel, 
+	        user_email, user_add, user_type, user_role, user_gender
+	    FROM users 
+	    WHERE user_id = #{user_id} AND user_type = #{user_type}
+	</select>	
 </mapper>

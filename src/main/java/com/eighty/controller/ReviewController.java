@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,8 +81,8 @@ public class ReviewController {
 	@PostMapping("/insertReview.do")
 	public String insertReview(ReviewVO reviewVO, 
 	                           @RequestParam("review_file") MultipartFile file, RedirectAttributes rttr,
-	                           HttpSession session) {
-	    String loginId = (String) session.getAttribute("id"); 
+	                           @AuthenticationPrincipal User user) {
+	    String loginId = user.getUsername(); 
 	    
 	    if (loginId == null) {
 	        return "redirect:/users/login.do"; 
