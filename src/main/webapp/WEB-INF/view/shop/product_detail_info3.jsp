@@ -133,6 +133,15 @@
 	        });
 	        
 	        if (!response.ok) throw new Error('네트워크 응답 에러');
+	        
+	        const result = await response.text();
+	        
+	        if (result === "login_required") {
+	            alert("로그인이 필요한 서비스입니다.");
+	            location.href = "${path}/users/login.do";
+	            return;
+	        }
+	        
 	        console.log("서버 반영 완료:", data.is_like);
 	    } catch (error) {
 	        console.error("좋아요 반영 실패:", error);

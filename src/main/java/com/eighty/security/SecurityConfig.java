@@ -35,18 +35,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         
 		http.authorizeRequests()
-		.antMatchers("/admin/**").hasAuthority("admin") // 관리자 전용 메뉴는 (ADMIN 권한이 있어야만 접근 가능)
-		.antMatchers("/index.do?page=1", 
+		.antMatchers("/resources/**", "/css/**", "/js/**", "/images/**").permitAll()		
+		.antMatchers(
+				"/index.do", 
+				"/product/**",
 				"/users/login.do",
+				"/users/sign_up.do",
 				"/users/users_formOK.do",
 				"/users/users_form.do",
-				"/users/sign_up.do",
 				"/users/idCheck.do",
 				"/users/business_users_form.do",
-				"/users/businessJoin.do",
-				"/resources/**").permitAll() // 해당 경로를 통해서는 누구나 접근 가능
+				"/users/businessJoin.do").permitAll() // 해당 경로를 통해서는 누구나 접근 가능
+		// 권한별 접근 제어
+		.antMatchers("/admin/**").hasAuthority("admin") // 관리자 전용 메뉴는 (ADMIN 권한이 있어야만 접근 가능)
 		.antMatchers("/purchase/**").authenticated() // 해당 경로는 로그인 해야 이용가능!
-		.anyRequest().authenticated() // 나머지는 로그인 필수
+		 // 그외 로그인 필수
+		.anyRequest().authenticated()
 		.and()
 		.exceptionHandling()
         .accessDeniedPage("/admin/access-denied.do") 

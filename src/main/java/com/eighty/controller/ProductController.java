@@ -96,8 +96,9 @@ public class ProductController {
 	    int reviewCount = reviewService.getReviewCount(vo.getProduct_code());
 	    product.setOptionList(service.getProductOption(vo.getProduct_code()));
 	    
-	    String id = user.getUsername();
-		if (id != null) {
+	    
+		if (user != null) {
+			String id = user.getUsername();
 			RecentVO rVo = new RecentVO();
 			rVo.setUser_id(id);
 			rVo.setProduct_code(product.getProduct_code());
@@ -176,9 +177,16 @@ public class ProductController {
 	@PostMapping("/update_like.do")
 	@ResponseBody
 	public String update_like(@AuthenticationPrincipal User user, @RequestBody LikeProductVO vo) {
-		String id = user.getUsername();
-		vo.setUser_id(id);
+		// 로그인 여부 확인
+	    if (user == null) {
+	        return "login_required";
+	    }
+
+	    // 로그인 된 경우에만 로직 수행
+	    String id = user.getUsername();
+	    vo.setUser_id(id);
 	    service.update(vo);
+	    
 	    return "success";
 	}
 	
