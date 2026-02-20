@@ -57,7 +57,7 @@ public class UsersController {
 	    String referer = request.getHeader("Referer");
 	    
 	    // 이전 페이지가 있고, 로그인 페이지 자체가 아니라면 세션에 저장
-	    if (referer != null && !referer.contains("/login.do")) {
+	    if (referer != null && referer.contains("/product_detail.do")) { //상품 정보 페이지 일 때만 적용
 	        session.setAttribute("prevPage", referer);
 	    }
 		return "users/login";

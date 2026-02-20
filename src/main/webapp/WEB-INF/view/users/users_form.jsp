@@ -34,7 +34,7 @@
                     </td>
 				</tr>
 				<tr>
-					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호" maxlength="13" required></td>
+					<td><input type="text" id="user_tel" name="user_tel" placeholder="전화번호 작성 예: 01012345678" maxlength="11" required></td>
 				</tr>
 				<tr>
 					<td><input type="text" id="user_email" name="user_email" placeholder="이메일" required></td>
