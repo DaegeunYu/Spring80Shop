@@ -79,7 +79,7 @@
 
 
 
-var idCheck = false; // 아이디 중복 확인 여부 확인 전역변수
+
 
 // 카카오 주소 API
 function sample6_execDaumPostcode() {
@@ -129,6 +129,15 @@ function sample6_execDaumPostcode() {
         }
     }).open();
 }
+
+var idCheck = false; // 아이디 중복 확인 여부 확인 전역변수
+
+// 아이디 중복 체크 후 입력칸에 변화가 생기면 상태 초기화
+$(function() {
+    $('#user_id').on('input', function() {
+        idCheck = false;
+    });
+});
 	
 // 아이디 중복체크
 $('#idCheck').click(function(e) {
