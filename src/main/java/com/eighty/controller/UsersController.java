@@ -246,8 +246,10 @@ public class UsersController {
 	        }
 
 	        // 2. 패스워드 암호화
-	        String encodePw = passwordEncoder.encode(vo.getUser_pw());
-		    vo.setUser_pw(encodePw);
+	        if (vo.getUser_pw() != null && !vo.getUser_pw().equals("")) {
+	        	String encodePw = passwordEncoder.encode(vo.getUser_pw());
+        		vo.setUser_pw(encodePw);
+	        }
 	        
 	        // 3. 서비스 호출
 	        int result = service.updateUserAdmin(vo);
