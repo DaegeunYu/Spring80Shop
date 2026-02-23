@@ -27,6 +27,11 @@ public class ReviewServiceImpl implements ReviewService {
 	public ReviewVO getReview(@Param("idx") int idx) {
 		return dao.getReview(idx);
 	}
+	
+	@Override
+	public ReviewVO getReview2(@Param("idx") int idx) {
+		return dao.getReview2(idx);
+	}
 
 	@Override
 	public double getAverageGrade(String productCode) {

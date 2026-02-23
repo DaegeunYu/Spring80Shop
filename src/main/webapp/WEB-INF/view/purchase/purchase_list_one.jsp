@@ -43,7 +43,7 @@
 							        <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
 							    </c:when>
 							    <c:otherwise>
-							        <input type="button" class="btn_review view" onclick="reviewView('${item.idx}')" value="리뷰확인">
+							        <input type="button" class="btn_review view" onclick="reviewView('${item.idx}', '${item.productCode}', '${item.orderCode}')" value="리뷰확인">
 							    </c:otherwise>
 							</c:choose>
                         </td>
@@ -76,7 +76,7 @@ function reviewForm(idx) {
     location.href="${path}/review/reviewForm.do?idx="+idx;
 }
 function reviewView(idx) {
-	const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+	const url = "${pageContext.request.contextPath}/review/reviewDetail2.do?idx=" + idx;
 	const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
 	window.open(url, "ReviewDetail_" + idx, options);
 }

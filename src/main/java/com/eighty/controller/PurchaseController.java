@@ -75,6 +75,8 @@ public class PurchaseController {
 	    List<PurchaseVO> list = service.getPurchaseListSummary(userId);
 	    model.addAttribute("purchaseList", list);
 	    
+	    
+	    
 	    return "purchase/purchase_list";
 	}
 	
