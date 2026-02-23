@@ -22,6 +22,11 @@ public class ReviewDaoImpl implements ReviewDao {
 	public ReviewVO getReview(@Param("idx") int idx) {
 		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW", idx);
 	}
+	
+	@Override
+	public ReviewVO getReview2(@Param("idx") int idx) {
+		return mybatis.selectOne("REVIEW.SELECT_ONE_REVIEW_PURIDX", idx);
+	}
 
 	@Override
 	public double getAverageGrade(String productCode) {

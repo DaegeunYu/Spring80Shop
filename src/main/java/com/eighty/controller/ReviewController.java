@@ -127,6 +127,14 @@ public class ReviewController {
         return "review/review_detail"; 
     }
 	
+	@GetMapping("/reviewDetail2.do")
+	public String reviewDetail2(@RequestParam("idx") int idx, Model model) {
+		ReviewVO review = reviewService.getReview2(idx);
+	    model.addAttribute("review", review);
+        // 별도의 팝업용 JSP 반환
+        return "review/review_detail"; 
+    }
+	
 	@PostMapping("/deleteReview.do")
 	@ResponseBody
     public String deleteReview(@RequestParam("idx") int idx, HttpServletRequest request) {
