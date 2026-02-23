@@ -73,12 +73,13 @@
 	<div class="purchase_summary_box">
 		<div class="purchase_price_detail">
 			<span>상품 합계 : </span> <span class="purchase_price_detail_total">
-				<fmt:formatNumber value="${finalPrice - 5000}" pattern="#,###" />원
+				<fmt:formatNumber value="${finalPrice - deliveryPrice}" pattern="#,###" />원
 			</span>
 		</div>
 		<div class="purchase_price_detail">
 			<span>배송비 : </span> <span class="purchase_delivery_price">
-				5,000원</span>
+				<fmt:formatNumber value="${deliveryPrice}" pattern="#,###" />원
+			</span>
 		</div>
 		<div class="purchase_price_detail">
 			<span>결제 상태 : </span> <span class="purchase_price_detail_total">

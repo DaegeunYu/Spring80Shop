@@ -38,7 +38,7 @@
         			<span><fmt:formatNumber value="${total_price}" pattern="#,###" /> 원</span>
    				</div>
        			<div class="purchase_delivery_price">
-           			<span>배송비 : 5,000원</span>
+           			<span>배송비 : <fmt:formatNumber value="${delivery_price}" pattern="#,###" />원</span>
        			</div>
        			<div class="purchase_price_total">
            			<span>총 결제 금액 : </span>
@@ -69,15 +69,15 @@ document.addEventListener("DOMContentLoaded", async function() {
             default:            crushingKor = decodeURIComponent(crushingRaw);
         }
         
-        const crushingDisplay = document.querySelector('.purchase_product_infomation p:nth-child(2) span:last-child');
-        if(crushingDisplay) crushingDisplay.innerText = crushingKor;
-        
-        const hiddenCrushing = document.querySelector('input[name="crushing"]');
-        if(hiddenCrushing) hiddenCrushing.value = crushingKor;
-        
+        const items = document.querySelectorAll('.purchase_basket_item');
+        items.forEach(item => {
+            const crushingDisplay = item.querySelector('.purchase_product_infomation p:nth-child(2) span:last-child');
+            const hiddenCrushing = item.querySelector('input[name="crushing"]');
+            
+            if(crushingDisplay) crushingDisplay.innerText = crushingKor;
+            if(hiddenCrushing) hiddenCrushing.value = crushingKor;
+        });
     }
-
-  
 });
 </script>
   

@@ -72,6 +72,10 @@
 </div>
 
 <script type="text/javascript">
+
+//OrderAmountDTO의 배송비 입력값 적용 
+const SERVER_DELIVERY_FEE = <%= com.eighty.purchase.OrderAmountDTO.POLICY_DELIVERY_FEE %>;
+
 	document.addEventListener('DOMContentLoaded', function() {
 		const allCheck = document.getElementById('all_check');
 	    const itemChecks = document.querySelectorAll('input[name="select_item"]');
@@ -87,7 +91,6 @@
 	    // [함수] 가격 및 개수 계산 및 화면 업데이트
 	    function updateCalculations() {
 	        const checkedItems = document.querySelectorAll('input[name="select_item"]:checked');
-	        let deliveryFee = 0;
 	        let sumPrice = 0;
 	        let totalCount = checkedItems.length;
 
@@ -100,7 +103,7 @@
 
 	        // 상품이 0개면 배송비도 0원, 있으면 5,000원
 	        
-	        deliveryFee = (totalCount === 0) ? 0 : 5000;
+	        let deliveryFee = (totalCount === 0) ? 0 : SERVER_DELIVERY_FEE;
 	        const finalTotal = sumPrice + deliveryFee;
 
 	        // 화면에 천단위 콤마 적용하여 출력
