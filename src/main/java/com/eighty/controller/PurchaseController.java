@@ -85,6 +85,16 @@ public class PurchaseController {
 		
 	    vo.setUserId(user.getUsername());
 	    List<PurchaseVO> list = service.getPurchaseListOne(vo);
+	    int delivery = 0;
+	    if (list != null && !list.isEmpty()) {
+	        for (PurchaseVO p : list) {
+	            if ("DELIVERY".equals(p.getProductCode())) {
+	                delivery = p.getPaidAmount(); 
+	                break;
+	            }
+	        }
+	    }
+	    model.addAttribute("delivery_price", delivery);
 	    model.addAttribute("purchaseList", list);
 	    model.addAttribute("orderInfo", list.get(0));
 	    return "purchase/purchase_list_one";

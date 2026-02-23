@@ -60,9 +60,10 @@
         <p><strong>연락처 :</strong> ${orderInfo.receiverPhone}</p>
         <p><strong>배송지 :</strong> ${orderInfo.address}</p>
         <p><strong>결제수단 :</strong> ${orderInfo.paymentMethod}</p>
+        <p><strong>배송비 :</strong> <fmt:formatNumber value="${delivery_price}" type="number"/>원</p>
         <hr class="one_hr">
         <div class="one_price_summary">
-            최종 결제 금액 <span><fmt:formatNumber value="${totalPrice + delivery}" type="number"/>원</span>
+            최종 결제 금액 <span><fmt:formatNumber value="${totalPrice + delivery_price}" type="number"/>원</span>
         </div>
     </div>
 
