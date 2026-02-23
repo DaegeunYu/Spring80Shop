@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.basket.BasketService;
 import com.eighty.basket.BasketVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
@@ -44,6 +45,9 @@ public class PurchaseController {
 	
 	@Autowired
 	private UsersService uservice;
+	
+	@Autowired
+	private BasketService basketService;
 	
 	@Autowired
 	private ProductService proservice;
@@ -315,6 +319,18 @@ public class PurchaseController {
 	    }
 	    
 	    service.insertPurchase(purchaseList);
+	    
+	    // 결제 완료 또는 계좌이체 대기 상태가 되었을 때 해당 사용자의 장바구니 삭제
+	    BasketVO basketVO = new BasketVO();
+	    basketVO.setUser_id(userId); // 현재 로그인한 사용자 ID 설정
+	    
+	    // 사용자의 전체 장바구니 목록을 가져옴
+	    List<BasketVO> userBasketList = basketService.getProductList(basketVO);
+	    
+	    if (userBasketList != null && !userBasketList.isEmpty()) {
+	        // BasketController에서 사용했던 삭제 서비스 호출
+	        basketService.delete(userBasketList); 
+	    }
 	    
 	    // 신용카드 주문 완료 시 재고 차감
 	    if ("PAID".equals(pgStatus)) {
