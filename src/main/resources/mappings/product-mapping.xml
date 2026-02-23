@@ -61,6 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
 	</select>
 	
+	<select id="DETAIL" parameterType="ProductVO" resultType ="ProductVO">
+	   SELECT * FROM product WHERE product_code = #{product_code}
+	</select>
+	
 	<select id="GET_MAX_CODE" resultType="string">
 		select max(product_code) from product	
 	</select>
@@ -79,10 +83,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="MANUPACT_COUNT" parameterType="ProductVO" resultType ="int">
 	   SELECT count(*) FROM product WHERE manufacturing = #{manufacturing}
-	</select>
-	
-	<select id="DETAIL" parameterType="ProductVO" resultType ="ProductVO">
-	   SELECT * FROM product WHERE product_code = #{product_code}
 	</select>
 	
 	<select id="PRICE" parameterType="map" resultType ="int">

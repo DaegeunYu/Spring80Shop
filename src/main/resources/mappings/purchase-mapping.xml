@@ -141,5 +141,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     GROUP BY orderCode
     ORDER BY orderDate DESC
 	</select>
+	
+		
+	<select id="DETAIL" parameterType="PurchaseVO" resultType ="PurchaseVO">
+	   SELECT * FROM purchase WHERE orderCode = #{orderCode} and  productCode = #{productCode}
+	</select>
 
 </mapper>

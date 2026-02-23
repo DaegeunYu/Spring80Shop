@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eighty.product.ProductService;
-import com.eighty.product.ProductVO;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
@@ -85,4 +84,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 	    
 	    return result; 
 	}
+
+	@Override
+	public PurchaseVO getProductDetail(PurchaseVO vo) {
+		vo.setOrderCode(vo.getOrderCode());
+	    vo.setProductCode(vo.getProductCode());
+	    return dao.getProduct(vo);
+	}
+	
 }
