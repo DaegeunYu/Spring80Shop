@@ -12,4 +12,6 @@ public interface PurchaseService {
 	   
 	   void updatePaymentInfo(PurchaseVO vo); // 결제 완료 후 포트원 영수증 정보를 DB에 업데이트하는 기능
 	   boolean verifyPayment(String paymentId, int expectedPrice);
+	   
+	   PurchaseVO getProductDetail(PurchaseVO vo);
 }

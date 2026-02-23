@@ -47,4 +47,10 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	public int updateOrderApproval(Map<String, Object> params) {
 		return mybatis.update("PURCHASE.updateOrderApproval", params);
 	}
+	
+	@Override
+	public PurchaseVO getProduct(PurchaseVO vo) {
+		return mybatis.selectOne("PURCHASE.DETAIL", vo);
+	}
+	
 }

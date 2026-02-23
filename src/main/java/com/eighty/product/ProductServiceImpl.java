@@ -98,12 +98,6 @@ public class ProductServiceImpl implements ProductService {
 		return dao.count(vo, type);
 	}
 
-	@Override
-	public ProductVO getProductDetail(String productCode) {
-		ProductVO vo = new ProductVO();
-	    vo.setProduct_code(productCode);
-	    return dao.getProduct(vo);
-	}
 	
 	@Override
 	public int getPrice(String product_code, String product_weight) {
@@ -115,7 +109,6 @@ public class ProductServiceImpl implements ProductService {
 		int recent =  dao.delProductRecently(product_code);
 		return dao.delProduct(idx);
 	}
-
 	
 	// LIKE
 	@Override
@@ -141,5 +134,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void update(LikeProductVO vo) {
 		dao.update(vo);
+	}
+
+	@Override
+	public ProductVO getProductDetail(String productCode) {
+		ProductVO vo = new ProductVO();
+	    vo.setProduct_code(productCode);
+		return dao.getProduct(vo);
 	}
 }

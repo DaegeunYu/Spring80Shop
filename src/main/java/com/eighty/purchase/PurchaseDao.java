@@ -10,5 +10,6 @@ public interface PurchaseDao {
 	   int updateProductStock(PurchaseVO item); // 주문 시 재고 차감
 	   int updateOrderApproval(java.util.Map<String, Object> params); // 입금 확인 시 관리자 승인 
 	   	
-	   void updatePaymentInfo(PurchaseVO vo); // 결제 완료 후 포트원 영수증 정보를 DB에 업데이트하는 기능 
+	   void updatePaymentInfo(PurchaseVO vo); // 결제 완료 후 포트원 영수증 정보를 DB에 업데이트하는 기능
+	   PurchaseVO getProduct(PurchaseVO vo);
 }

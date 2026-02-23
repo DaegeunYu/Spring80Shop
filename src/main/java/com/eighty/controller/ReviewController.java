@@ -9,7 +9,6 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eighty.product.ProductService;
+import com.eighty.purchase.PurchaseService;
+import com.eighty.purchase.PurchaseVO;
 import com.eighty.review.ReviewService;
 import com.eighty.review.ReviewVO;
 import com.eighty.shop.ParameterValue;
@@ -39,6 +40,9 @@ public class ReviewController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private PurchaseService purchaseService;
 	
 	@Autowired
 	private ServletContext servletContext;
@@ -70,8 +74,20 @@ public class ReviewController {
 	
 	@GetMapping(value="/reviewForm.do")
 	public String reviewForm(@RequestParam("idx") Long idx,
-	                         Model model) {
+	                         Model model, PurchaseVO purvo) {
 	    ReviewVO orderInfo = reviewService.getOrderDetailByIdx(idx);
+	    
+	    if (orderInfo != null) {
+	    	purvo.setOrderCode(orderInfo.getOrderCode());
+	    	purvo.setProductCode(orderInfo.getProductCode());
+	    }
+	    
+	    PurchaseVO purchaseInfo = purchaseService.getProductDetail(purvo);
+	    
+	    model.addAttribute("purchase", purchaseInfo);
+	    if (purchaseInfo != null) {
+	        System.out.println("weight ==> " + purchaseInfo.getProductWeight());
+	    }
 	    
 	    model.addAttribute("product", productService.getProductDetail(orderInfo.getProductCode()));
 	    model.addAttribute("orderInfo", orderInfo);
@@ -124,7 +140,7 @@ public class ReviewController {
 		ReviewVO review = reviewService.getReview(idx);
 	    model.addAttribute("review", review);
         // 별도의 팝업용 JSP 반환
-        return "review/review_detail"; 
+        return "review/review_detail";
     }
 	
 	@PostMapping("/deleteReview.do")
