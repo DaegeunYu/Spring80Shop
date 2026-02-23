@@ -10,6 +10,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.eighty.basket.BasketService;
 import com.eighty.basket.BasketVO;
 import com.eighty.product.ProductService;
 import com.eighty.product.ProductVO;
+import com.eighty.purchase.OrderAmountDTO; 
 import com.eighty.purchase.PurchaseService;
 import com.eighty.purchase.PurchaseVO;
 import com.eighty.shop.ParameterValue;
@@ -44,6 +47,9 @@ public class PurchaseController {
 	private UsersService uservice;
 	
 	@Autowired
+	private BasketService basketService;
+	
+	@Autowired
 	private ProductService proservice;
 	
 	@Autowired
@@ -59,9 +65,13 @@ public class PurchaseController {
 	}
 	
 	@GetMapping(value="/purchaseList.do")
-	public String purchaseList(HttpSession session, Model model) {
-		String userId = (String) session.getAttribute("id");
-	    if(userId == null) return "redirect:/users/login.do";
+	public String purchaseList(@AuthenticationPrincipal User user, Model model) {
+		if(user == null) {
+	        return "redirect:/users/login.do";
+	    }
+		
+		String userId = user.getUsername(); // 시큐리티의 username(ID) 추출
+		
 	    List<PurchaseVO> list = service.getPurchaseListSummary(userId);
 	    model.addAttribute("purchaseList", list);
 	    
@@ -70,10 +80,10 @@ public class PurchaseController {
 	
 	@GetMapping(value="/purchaseListOne.do")
 	public String getpurchaseListOne(
-	    @SessionAttribute(name = "id") String loginId, 
-	    PurchaseVO vo,
-	    Model model) {
-	    vo.setUserId(loginId);
+		@AuthenticationPrincipal User user, PurchaseVO vo, Model model) {
+		if(user == null) return "redirect:/users/login.do";
+		
+	    vo.setUserId(user.getUsername());
 	    List<PurchaseVO> list = service.getPurchaseListOne(vo);
 	    model.addAttribute("purchaseList", list);
 	    model.addAttribute("orderInfo", list.get(0));
@@ -81,19 +91,20 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping("/purchase.do")
-	public String purchaseForm(HttpSession session, Model model, 
+	public String purchaseForm(@AuthenticationPrincipal User user, HttpSession session, Model model, 
 							   String product_code, String product_count,
 							   @RequestParam(value="crushing", required=false) String crushing,
 	                           @RequestParam(value="product_weight", required=false) String product_weight,
 							   @RequestParam(value="jsonPayload", required=false) String basketJson) {
-	    // 로그인한 사용자 확인
-	    String id = (String) session.getAttribute("id");
-	    if (id == null) {
+	    
+	    if (user == null) {
 	    	//마지막으로 본 페이지
 	    	String detailUrl = "/product/product_detail.do?product_code=" + product_code;
 	        session.setAttribute("prevPage", detailUrl);
 	        return "redirect:/users/login.do";// 비 로그인 시 로그인페이지로 이동
-	    } 
+	    }
+	    // 로그인한 사용자 확인
+	    String id = user.getUsername();
 	    //사용자 정보
         UsersVO buyer = new UsersVO();
         buyer.setUser_id(id);//유저 조회 대상 지정
@@ -146,14 +157,18 @@ public class PurchaseController {
             b.setProduct_weight(product_weight);
             
             Map<String,Object> map = new HashMap<String,Object>();
-            map.put("basket", b);   
-            map.put("product", p); 
+            map.put("basket", b);
+            map.put("product", p);
             purchaseList.add(map);
         }
 
+        // OrderAmountDTO를 통한 금액 확정 (배송비 정책 포함)
+        OrderAmountDTO amount = new OrderAmountDTO(total_price);
+
         model.addAttribute("purchaseList", purchaseList);
-        model.addAttribute("total_price", total_price); 
-        model.addAttribute("final_total_price", total_price + 5000); //배송비 5000원 추가
+        model.addAttribute("total_price", amount.getTotalProductPrice());
+        model.addAttribute("delivery_price", amount.getDeliveryFee());
+        model.addAttribute("final_total_price", amount.getFinalPaidAmount()); // DTO 기반 최종 결제 금액
         
         // 결제창 호출 시 사용할 임시 주문번호 생성 (purchase_detail_payment.jsp의 ${orderCode}로 전달됨)
         String orderCode = "ORD" + new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
@@ -162,16 +177,16 @@ public class PurchaseController {
 	}
 	
 	@PostMapping("/purchase_basket_list.do")
-    public String purchase_basket_list(@RequestParam("jsonPayload") String jsonPayload, HttpSession session, Model model) {
-		String id = (String) session.getAttribute("id");
+    public String purchase_basket_list(@AuthenticationPrincipal User user, @RequestParam("jsonPayload") String jsonPayload, Model model) {
+		if (user == null) return "redirect:/users/login.do";
 		
 		try {
-	        // 1. JSON 문자열을 List<BasketVO>로 변환
+	        // JSON 문자열을 List<BasketVO>로 변환
 	        ObjectMapper mapper = new ObjectMapper();
 	        List<BasketVO> voList = mapper.readValue(jsonPayload, new TypeReference<List<BasketVO>>(){});
 	        
 	        UsersVO buyer = new UsersVO();
-	        buyer.setUser_id(id);
+	        buyer.setUser_id(user.getUsername());
 	        model.addAttribute("users", uservice.getSelectOne(buyer));
 	        model.addAttribute("purchaseList", voList);
 	        
@@ -187,7 +202,7 @@ public class PurchaseController {
     }
 	
 	@PostMapping("/purchase_insert.do")
-	public String insertPurchase(
+	public String insertPurchase(@AuthenticationPrincipal User user,
 			@RequestParam("product_code") String[] productCode,
 	        @RequestParam("productWeight") String[] productWeight,
 	        @RequestParam("product_count") String[] productCount,
@@ -201,10 +216,9 @@ public class PurchaseController {
 	        @RequestParam("paidAmount") int paidAmount,
 	        @RequestParam("pgStatus") String pgStatus,
 	        PurchaseVO buyerInfo, // JSP의 receiverName, receiverPhone, address, orderMemo 등을 자동 수신
-	        HttpSession session,
 	        RedirectAttributes purchaseInfo) {
-
-	    String userId = (String) session.getAttribute("id");
+		if (user == null) return "redirect:/users/login.do";
+	    String userId = user.getUsername();
 	    List<PurchaseVO> purchaseList = new java.util.ArrayList<PurchaseVO>();
 
 	    // 외부에서 넘어온 번호가 없으면(계좌이체 등) 난수 새로 생성, 있으면 그대로 사용
@@ -227,21 +241,27 @@ public class PurchaseController {
 	    
 	    // 결제 상태 정보
 	    item.setPaymentMethod(paymentMethod);
-	    item.setOrderStatus(paymentStatus);
 	    item.setIsReview("n");
+	    if ("PAID".equals(pgStatus)) {
+	        item.setOrderStatus("결제완료"); // 결제 성공 시 '결제완료'만 저장
+	    } else if ("READY".equals(pgStatus)) {
+	        item.setOrderStatus("결제대기"); // 가상계좌 등 대기 시 '결제대기'만 저장
+	    } else {
+	        item.setOrderStatus(paymentStatus); // 예외 상황 대비
+	    }
 
-	    // 개별 상품 정보 
+	    // 개별 상품 정보
 	    item.setProductCode(productCode[i]);
 	    item.setProductWeight(productWeight[i]);
 	    item.setCrushing(crushing[i]);
-	    item.setOrderCount(productCount[i]); 
+	    item.setOrderCount(productCount[i]);
 	    
 	    // 포트원 결제 상세 정보
         item.setReceiptId(receiptId);
         item.setApprovalId(approvalId);
         item.setApprovalDate(approvalDate);
         item.setPaidAmount(paidAmount);
-        item.setPgStatus(pgStatus); 
+        item.setPgStatus(pgStatus);
         item.setCancelAmount(0); //환불금액
 	    
 	    ProductVO searchVO = new ProductVO();
@@ -261,8 +281,10 @@ public class PurchaseController {
 	    purchaseList.add(item);
 	    }
 	    
-	    // 배송비 전용 행 추가 로직 (장바구니 다수장품 동시 구매 시 배송비 한번만 적용)
-	    int deliveryFee = 5000; // 배송비 설정
+	    // 배송비 전용 행 추가 로직 (OrderAmountDTO를 통한 배송비 산출)
+	    OrderAmountDTO amountDto = new OrderAmountDTO(totalProductSum);
+	    int deliveryFee = amountDto.getDeliveryFee(); 
+
 	    if (deliveryFee > 0) {
 	        PurchaseVO deliveryRow = new PurchaseVO();
 	        
@@ -290,13 +312,25 @@ public class PurchaseController {
 	        deliveryRow.setCrushing("N/A");
 	        deliveryRow.setOrderCount("1"); // 배송 횟수 계산용
 	        deliveryRow.setOrderPrice("0");
-	        deliveryRow.setPaidAmount(deliveryFee); // 배송비 금액만 입력
+	        deliveryRow.setPaidAmount(deliveryFee); // DTO에서 결정된 배송비 입력
 
 	        // 리스트에 추가
 	        purchaseList.add(deliveryRow);
 	    }
 	    
 	    service.insertPurchase(purchaseList);
+	    
+	    // 결제 완료 또는 계좌이체 대기 상태가 되었을 때 해당 사용자의 장바구니 삭제
+	    BasketVO basketVO = new BasketVO();
+	    basketVO.setUser_id(userId); // 현재 로그인한 사용자 ID 설정
+	    
+	    // 사용자의 전체 장바구니 목록을 가져옴
+	    List<BasketVO> userBasketList = basketService.getProductList(basketVO);
+	    
+	    if (userBasketList != null && !userBasketList.isEmpty()) {
+	        // BasketController에서 사용했던 삭제 서비스 호출
+	        basketService.delete(userBasketList); 
+	    }
 	    
 	    // 신용카드 주문 완료 시 재고 차감
 	    if ("PAID".equals(pgStatus)) {
@@ -318,29 +352,30 @@ public class PurchaseController {
 	    
 	    purchaseInfo.addAttribute("orderCode", uniqueOrderCode);
 	    
-	    purchaseInfo.addFlashAttribute("finalPrice", totalProductSum + 5000);
+	    purchaseInfo.addFlashAttribute("finalPrice", amountDto.getFinalPaidAmount()); // DTO 기반 최종금액
+	    purchaseInfo.addFlashAttribute("deliveryPrice", amountDto.getDeliveryFee()); // 배송비 추가
+	    purchaseInfo.addFlashAttribute("total_price", totalProductSum); // 순수 상품가 추가
 	    purchaseInfo.addFlashAttribute("receiverName", buyerInfo.getReceiverName());
 
 	    return "redirect:/purchase/purchase_success.do";
 	}
 	
 	@GetMapping("/purchase_success.do")
-	public String purchaseSuccess(
+	public String purchaseSuccess(@AuthenticationPrincipal User user, 
 	        @RequestParam("orderCode") String orderCode, 
-	        HttpSession session, 
 	        Model model) {
 	    
-	    String userId = (String) session.getAttribute("id");
+	    String userId = user.getUsername();
 	    
-	    // 1. 이번 주문번호와 아이디를 조건으로 설정 (방금 결제한 내역만 필터링)
+	    // 이번 주문번호와 아이디를 조건으로 설정 (방금 결제한 내역만 필터링)
 	    PurchaseVO searchVO = new PurchaseVO();
 	    searchVO.setOrderCode(orderCode);
 	    searchVO.setUserId(userId); 
 
-	    // 2. DB에서 이번 주문 건만 가져옴 (상품이 여러 개면 여러 줄이 나옴)
+	    // DB에서 이번 주문 건만 가져옴 (상품이 여러 개면 여러 줄이 나옴)
 	    List<PurchaseVO> dbPurchaseList = service.getPurchaseList(searchVO); 
 	    
-	    // 3. purchase.do와 동일한 Map 구조 생성
+	    // purchase.do와 동일한 Map 구조 생성
 	    List<Map<String, Object>> successMapList = new ArrayList<Map<String, Object>>();
 	    
 	    if (dbPurchaseList != null && !dbPurchaseList.isEmpty()) {
@@ -358,7 +393,15 @@ public class PurchaseController {
 	            successMapList.add(map);
 	        }
 	        
-	        // 4. JSP로 전송
+	        int delivery = 0;
+	        for(PurchaseVO p : dbPurchaseList) {
+	            if("DELIVERY".equals(p.getProductCode())) {
+	                delivery = p.getPaidAmount();
+	            }
+	        }
+	        model.addAttribute("deliveryPrice", delivery);
+	        
+	        // JSP로 전송
 	        model.addAttribute("orderItems", successMapList); // 상품 리스트 (Map 리스트)
 	        model.addAttribute("orderInfo", dbPurchaseList.get(0)); // 공통 배송지/결제 정보
 	    } else {
@@ -373,10 +416,13 @@ public class PurchaseController {
     @PostMapping("/purchase_success.do")
     public String completePayment(@RequestBody Map<String, Object> data) {
         String paymentId = (String) data.get("paymentId");
+        int amount = Integer.parseInt(data.get("amount").toString());
         System.out.println("==> 결제 검증 수신 (Success 주소 활용): " + paymentId);
         
-        // 무조건 success 문자열 반환하여 JS의 submit() 유도
-        return "success"; 
+        // 서비스 계층의 verifyPayment를 통한 실제 금액 검증 실행
+        boolean isValid = service.verifyPayment(paymentId, amount);
+        
+        return isValid ? "success" : "fail"; 
     }
 	
 }

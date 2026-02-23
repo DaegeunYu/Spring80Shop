@@ -21,3 +21,4 @@
 	</div>
 </section>
 <c:import url="/WEB-INF/view/include/bottom.jsp" />
+<script>alert('관리자만 접근 가능합니다'); history.back();</script>

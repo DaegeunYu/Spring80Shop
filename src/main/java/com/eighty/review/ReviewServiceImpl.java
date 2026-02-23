@@ -30,14 +30,15 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public double getAverageGrade(String productCode) {
-		return dao.getAverageGrade(productCode);
+		double avg = dao.getAverageGrade(productCode);
+		return Math.round(avg * 10) / 10.0;
 	}
 
 	@Override
 	@Transactional
 	public void insertReview(ReviewVO vo) {
 		dao.insertReview(vo);
-        double avg = dao.getAverageGrade(vo.getProductCode());
+		double avg = getAverageGrade(vo.getProductCode());
         productDao.updateProductGrade(vo.getProductCode(), String.valueOf(avg));
         dao.updateReviewStatus(vo);
     }
@@ -53,7 +54,15 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 	
 	@Override
+	@Transactional
 	public int delReview(@Param("idx") int idx) {
-		return dao.delReview(idx);
+		ReviewVO vo = dao.getReview(idx);
+		int result = dao.delReview(idx);
+		if(vo != null) {
+            double avg = getAverageGrade(vo.getProductCode());
+            productDao.updateProductGrade(vo.getProductCode(), String.valueOf(avg));
+        }
+        return result;
 	}
+	
 }

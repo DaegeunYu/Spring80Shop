@@ -2,6 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:import url="/WEB-INF/view/include/top.jsp" />
 
+<script type="text/javascript">
+    window.onload = function() {
+        var errorMsg = "${msg}"; // 가입 실패 시 model.addAttribute("msg", ...)로 전달된 값
+        if (errorMsg && errorMsg !== "" && errorMsg !== "null") {
+            alert(errorMsg);
+        }
+    };
+</script>
+
 <section id="sign_form">
     <div align="center">
         <br>
@@ -25,17 +34,20 @@
                         <td><input type="password" id="user_pw2" placeholder="비밀번호 확인" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="companyName" placeholder="상호명" required></td>
+                        <td><input type="text" name="company_name" placeholder="상호명" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="ceoName" placeholder="대표자명" required></td>
+                        <td><input type="text" name="ceo_name" placeholder="대표자명" required></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="bizRegNo" placeholder="사업자 번호 (000-00-00000)" required></td>
+                        <td><input type="text" name="user_name" placeholder="영업 담당자명" required></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="biz_reg_no" placeholder="사업자 번호 (000-00-00000)" required></td>
                     </tr>
                     <tr>
                         <td>
-						    <select name="bizType" class="biz-select">
+						    <select name="biz_type" class="biz-select">
 						        <option value="" disabled selected>사업자 유형 선택</option>
 						        <option value="간이사업자">간이사업자</option>
 						        <option value="일반사업자">일반사업자</option>

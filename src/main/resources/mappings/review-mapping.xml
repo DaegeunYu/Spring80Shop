@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="SELECT_AVG_GRADE" parameterType="String" resultType="double">
-	    SELECT COALESCE(ROUND(AVG(gradePoint), 1), 0.0) 
+	    SELECT COALESCE(ROUND(AVG(CAST(gradePoint AS DECIMAL(10,1))), 1), 0.0) 
 	    FROM review 
 	    WHERE productCode = #{productCode}
 	</select>

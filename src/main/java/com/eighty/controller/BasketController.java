@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,8 +48,8 @@ public class BasketController {
 	}
 	
 	@GetMapping(value="/basket_in.do")
-	public String basket_in(HttpSession session, Model model, BasketVO vo) {
-		String id = (String) session.getAttribute("id");
+	public String basket_in(@AuthenticationPrincipal User user, Model model, BasketVO vo) {
+		String id = user.getUsername();
 		ProductVO pVo = new ProductVO();
 		
 		pVo.setProduct_code(vo.getProduct_code());
@@ -65,8 +67,8 @@ public class BasketController {
 	}
 	
 	@GetMapping(value="/basket_list.do")
-	public String basket_list(HttpSession session, Model model, BasketVO vo){
-		String id = (String) session.getAttribute("id");
+	public String basket_list(@AuthenticationPrincipal User user, Model model, BasketVO vo){
+		String id = user.getUsername();
 		vo.setUser_id(id);
 		model.addAttribute("basket_list", service.getProductList(vo));
 		return "basket/basket_list";

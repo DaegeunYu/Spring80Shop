@@ -2,10 +2,54 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0.1; url=index.do?page=1">
-<title>페이지 이동 중....</title>
+<meta http-equiv="refresh" content="1.5; url=index.do?page=1">
+<title>쇼핑몰로 이동 중</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8f9fa; /* 부드러운 화이트 배경 */
+        font-family: 'Pretendard', -apple-system, sans-serif;
+        color: #333;
+    }
+
+    /* 로딩 스피너 애니메이션 */
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db; /* 쇼핑몰 포인트 컬러 (파랑) */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .message {
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: -0.5px;
+    }
+
+    .sub-message {
+        font-size: 0.9rem;
+        color: #888;
+        margin-top: 8px;
+    }
+</style>
 </head>
 <body>
-	<p>2초 후 이동합니다.</p>
+    <div class="loader"></div>
+    <div class="message">안전하고 즐거운 쇼핑을 위해 페이지를 불러오고 있습니다.</div>
+    <div class="sub-message">오늘도 당신의 일상이 반짝이기를. 곧 연결해 드릴게요.</div>
 </body>
 </html>

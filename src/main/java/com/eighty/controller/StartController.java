@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,18 +33,20 @@ public class StartController {
 	}
 	
 	@GetMapping(value="/index.do")
-	public String index(HttpSession session, Model model, ProductVO vo) {
-		String id = (String) session.getAttribute("id");
-		
-		if (id != null ) {
+	public String index(@AuthenticationPrincipal User user, Model model, ProductVO vo) {
+		if (user != null ) {
+			String id = user.getUsername();
 			RecentVO rVo = new RecentVO();
 			rVo.setUser_id(id);
-			List<RecentVO> list = new ArrayList<RecentVO>();
-			list = basketService.getProductList(rVo);
-			if (!list.isEmpty()) {
+			List<RecentVO> list = basketService.getProductList(rVo);
+			
+			if (list != null && !list.isEmpty()) {
 				model.addAttribute("recent_product_list", list);
 				vo.setAmount(4);
 			}
+		}	else {
+	        // 비회원일 때의 기본값 설정
+	        vo.setAmount(8);
 		}
 		
 		vo.setManufacturing("(주)80s");

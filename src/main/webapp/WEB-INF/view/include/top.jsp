@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  
 <c:set var="path" scope="request" 
    value="${pageContext.request.contextPath}" /> 
@@ -31,35 +32,36 @@
 		</div>
 		
 		<div class="user">
-			<!--  비회원  -->
-			<c:choose>			
-				<c:when test="${empty id}">
-					<a href="${path}/users/sign_up.do"> 회원가입 </a>
-					<a href="${path}/users/login.do"> 로그인</a> 
-				</c:when>			
+			<!--  비회원  -->	
+			<sec:authorize access="isAnonymous()">
+				<a href="${path}/users/sign_up.do"> 회원가입 </a>
+				<a href="${path}/users/login.do"> 로그인</a> 
+			</sec:authorize>				
 				
-				<c:otherwise>
-					<!--  관리자  -->
-					<c:if test="${userRole eq 'admin'}">
-						<a href="${path}/admin/manager.do"> 관리자 페이지 </a>
-					</c:if>
+			<!--  관리자  -->
+			<sec:authorize access="isAuthenticated()">
+				<sec:authorize access="hasAuthority('admin')">
+					<a href="${path}/admin/manager.do"> 관리자 페이지 </a>
+				</sec:authorize>
 					
-					<!--  법인 회원  -->
-					<c:if test="${userRole eq 'business'}">
-					</c:if>
-					<div class="mypage-container">
-						<!--  회원  -->
-						<div class="mypage-trigger"><a> 마이페이지 </a></div>
-						<ul class="submenu">
-							<!--  공통 메뉴  -->
-							<li><a href="${path}/basket/basket_list.do">장바구니</a></li>
-							<li><a href="${path}/purchase/purchaseList.do">구매 내역</a></li>
-							<li><a href="${path}/product/like_product.do?page=1">찜 리스트</a></li>
-						</ul>
-					</div>
-					<a href="${path}/users/logout.do"> ${id}(로그아웃)</a>
-				</c:otherwise>
-			</c:choose>
+				<!--  법인 회원  -->
+				<c:if test="${user_Type eq 'business'}">
+				</c:if>
+						
+				<div class="mypage-container">
+				<!--  회원  -->
+				<div class="mypage-trigger"><a> 마이페이지 </a></div>
+					<ul class="submenu">
+						<!--  공통 메뉴  -->
+						<li><a href="${path}/basket/basket_list.do">장바구니</a></li>
+						<li><a href="${path}/purchase/purchaseList.do">구매 내역</a></li>
+						<li><a href="${path}/product/like_product.do?page=1">찜 리스트</a></li>
+					</ul>
+				</div>
+				<a href="${path}/users/logout.do"> 
+					<strong><sec:authentication property="principal.username"/></strong>(로그아웃)
+				</a>
+			</sec:authorize>
 		</div>
 	</div>
 </nav>

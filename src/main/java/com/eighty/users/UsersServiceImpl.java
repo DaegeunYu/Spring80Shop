@@ -47,4 +47,9 @@ public class UsersServiceImpl implements UsersService {
 
         return dao.updateUserAdmin(vo);
     }
+
+	@Override
+	public UsersVO selectUserForLogin(String user_id, String user_type) {
+		return dao.selectUserForLogin(user_id, user_type);
+	}
 }

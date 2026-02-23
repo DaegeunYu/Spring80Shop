@@ -25,6 +25,8 @@
         </thead>
         <tbody>
             <c:set var="totalPrice" value="0" />
+            <c:set var="delivery" value="0" />
+            
             <c:forEach var="item" items="${purchaseList}">
                 <c:if test="${item.productCode ne 'DELIVERY'}">
                     <c:set var="totalPrice" value="${totalPrice + item.orderPrice}" />
@@ -47,7 +49,7 @@
                         </td>
                     </tr>
                 </c:if>
-                <c:if test="${item.productCode eq 'DELIVERY'}"><c:set var="delivery" value="${item.paidAmount}" /></c:if>
+                <c:if test="${item.productCode eq 'DELIVERY'}"><c:set var="delivery" value="${item.orderPrice}" /></c:if>
             </c:forEach>
         </tbody>
     </table>
