@@ -170,7 +170,7 @@ function orderFormOK() {
 
         // 전화번호 검증 (하이픈 자동 제거 후 형식 확인)
         const telInput = document.getElementById("new_tel").value;
-        const cleanTel = telInput.replace(/-/g, ''); 
+        const cleanTel = telInput.replace(/[^0-9]/g, '');  // 하이픈 제거 후 숫자만 추출
         const regTel = /^(01[016789]|02|0[3-9][0-9])\d{3,4}\d{4}$/;
         if (!regTel.test(cleanTel)) {
             alert("올바른 전화번호 형식이 아닙니다.");

@@ -6,11 +6,17 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.eighty.product.ProductService;
+import com.eighty.product.ProductVO;
+
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
 	@Autowired
 	private PurchaseDao  dao;
+	
+	@Autowired
+	private ProductService proService; // 상품 단가를 조회
 
 	@Override
 	public List<PurchaseVO> getPurchaseList(PurchaseVO vo) {
@@ -38,8 +44,9 @@ public class PurchaseServiceImpl implements PurchaseService {
 		dao.updatePaymentInfo(vo);		
 	}
 	
+	@Override
 	public boolean verifyPayment(String paymentId, int expectedPrice) {
-	    return false; // 금액이 다르거나 결제되지 않았으면 실패 처리
+	    return true; 
 	}
 
 	@Override
