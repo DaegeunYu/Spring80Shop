@@ -39,12 +39,20 @@
                         <td class="status_complete">${item.orderStatus}</td>
                         <td>
                             <c:choose>
-							    <c:when test="${item.isReview eq 'n'}">
-							        <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
-							    </c:when>
-							    <c:otherwise>
-							        <input type="button" class="btn_review view" onclick="reviewView('${item.idx}', '${item.productCode}', '${item.orderCode}')" value="리뷰확인">
-							    </c:otherwise>
+							    <%-- 결제대기 상태일 때 --%>
+						        <c:when test="${item.orderStatus eq '결제대기'}">
+						            <span class="status_pending">결제진행중</span>
+						        </c:when>
+						        
+						        <%-- 결제완료이면서 리뷰를 작성하지 않았을 때 --%>
+						        <c:when test="${item.orderStatus eq '결제완료' and item.isReview eq 'n'}">
+						            <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
+						        </c:when>
+						        
+						        <%-- 결제완료이면서 리뷰를 이미 작성했을 때 (isReview eq 'y') --%>
+						        <c:when test="${item.orderStatus eq '결제완료' and item.isReview eq 'y'}">
+						            <input type="button" class="btn_review view" onclick="reviewView('${item.idx}', '${item.productCode}', '${item.orderCode}')" value="리뷰확인">
+						        </c:when>
 							</c:choose>
                         </td>
                     </tr>
