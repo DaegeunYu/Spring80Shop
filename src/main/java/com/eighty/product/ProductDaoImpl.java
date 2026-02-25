@@ -63,10 +63,6 @@ public class ProductDaoImpl implements ProductDao {
 		}
 	}
 	
-	@Override
-	public ProductVO getProduct(ProductVO vo) {
-		return mybatis.selectOne("PRODUCT.DETAIL", vo);
-	}
 	
 	@Override
 	public void updateProductGrade(String productCode, String avgScore) {
@@ -134,5 +130,10 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public String getMaxCode() {
 		return mybatis.selectOne("PRODUCT.GET_MAX_CODE");
+	}
+
+	@Override
+	public ProductVO getProduct(ProductVO vo) {
+		return mybatis.selectOne("PRODUCT.DETAIL", vo);
 	}
 }

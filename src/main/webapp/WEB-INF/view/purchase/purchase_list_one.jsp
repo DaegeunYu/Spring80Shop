@@ -39,12 +39,20 @@
                         <td class="status_complete">${item.orderStatus}</td>
                         <td>
                             <c:choose>
-							    <c:when test="${item.isReview eq 'n'}">
-							        <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
-							    </c:when>
-							    <c:otherwise>
-							        <input type="button" class="btn_review view" onclick="reviewView('${item.idx}')" value="리뷰확인">
-							    </c:otherwise>
+							    <%-- 결제대기 상태일 때 --%>
+						        <c:when test="${item.orderStatus eq '결제대기'}">
+						            <span class="status_pending">결제진행중</span>
+						        </c:when>
+						        
+						        <%-- 결제완료이면서 리뷰를 작성하지 않았을 때 --%>
+						        <c:when test="${item.orderStatus eq '결제완료' and item.isReview eq 'n'}">
+						            <input type="button" class="btn_review write" onclick="reviewForm('${item.idx}')" value="리뷰작성">
+						        </c:when>
+						        
+						        <%-- 결제완료이면서 리뷰를 이미 작성했을 때 (isReview eq 'y') --%>
+						        <c:when test="${item.orderStatus eq '결제완료' and item.isReview eq 'y'}">
+						            <input type="button" class="btn_review view" onclick="reviewView('${item.idx}', '${item.productCode}', '${item.orderCode}')" value="리뷰확인">
+						        </c:when>
 							</c:choose>
                         </td>
                     </tr>
@@ -60,9 +68,10 @@
         <p><strong>연락처 :</strong> ${orderInfo.receiverPhone}</p>
         <p><strong>배송지 :</strong> ${orderInfo.address}</p>
         <p><strong>결제수단 :</strong> ${orderInfo.paymentMethod}</p>
+        <p><strong>배송비 :</strong> <fmt:formatNumber value="${delivery_price}" type="number"/>원</p>
         <hr class="one_hr">
         <div class="one_price_summary">
-            최종 결제 금액 <span><fmt:formatNumber value="${totalPrice + delivery}" type="number"/>원</span>
+            최종 결제 금액 <span><fmt:formatNumber value="${totalPrice + delivery_price}" type="number"/>원</span>
         </div>
     </div>
 
@@ -75,7 +84,7 @@ function reviewForm(idx) {
     location.href="${path}/review/reviewForm.do?idx="+idx;
 }
 function reviewView(idx) {
-	const url = "${pageContext.request.contextPath}/review/reviewDetail.do?idx=" + idx;
+	const url = "${pageContext.request.contextPath}/review/reviewDetail2.do?idx=" + idx;
 	const options = "width=700, height=800, top=100, left=200, resizable=yes, scrollbars=yes";
 	window.open(url, "ReviewDetail_" + idx, options);
 }

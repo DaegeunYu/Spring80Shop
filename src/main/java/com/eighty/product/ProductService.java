@@ -14,11 +14,10 @@ public interface ProductService {
 	List<ProductVO.ProductOption> getProductOption(String product_code);
 	List<ProductVO> getProductList(ProductVO vo, SQL_TYPE type);
 	ProductVO getProduct(ProductVO vo);
-	int count(ProductVO vo, SQL_TYPE type);
-	ProductVO getProductDetail(String productCode);
+	int count(ProductVO vo, SQL_TYPE type);	
 	int getPrice(String product_code, String product_weight);
 	int delProduct(@Param("idx") int idx, String product_code);
-   
+	ProductVO getProductDetail(String productCode);
 	// LIKE
 	void insert(LikeProductVO vo);
 	Long getLikeCount(LikeProductVO vo);

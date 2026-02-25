@@ -19,8 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getPurchaseListOne" resultType="com.eighty.purchase.PurchaseVO">
-    	SELECT * FROM purchase
-    	where orderCode = #{orderCode}
+    	SELECT p.*, 
+           (SELECT SUM(paidAmount) FROM purchase WHERE orderCode = p.orderCode) AS paidAmount
+    FROM purchase p
+    WHERE p.orderCode = #{orderCode}
 	</select>
 	
 	<select id="getPurchaseListSummary" resultType="com.eighty.purchase.PurchaseVO">
@@ -138,6 +140,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       AND paymentMethod = 'BANK'
     GROUP BY orderCode
     ORDER BY orderDate DESC
+	</select>
+	
+		
+	<select id="DETAIL" parameterType="PurchaseVO" resultType ="PurchaseVO">
+	   SELECT * FROM purchase WHERE orderCode = #{orderCode} and  productCode = #{productCode}
 	</select>
 
 </mapper>
